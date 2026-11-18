@@ -6,7 +6,7 @@ from __future__ import annotations
 from enum import Enum
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 # ---------------------------------------------------------------------------
@@ -74,6 +74,7 @@ class CardOutput(BaseModel):
     headline: Headline | None = None
     metrics: list[Metric] = []
     series: list[Series] = []
+    related_series: dict[str, list[Series]] = {}
 
     signal: float = 0.0          # s in [-1, 1]
     label: SignalLabel = SignalLabel.neutral
@@ -122,6 +123,10 @@ class AggregateResult(BaseModel):
 
 
 class VerdictOutput(BaseModel):
+    # ``model_used`` is part of the public response contract. Permit that
+    # field name without Pydantic treating the ``model_`` prefix as reserved.
+    model_config = ConfigDict(protected_namespaces=())
+
     headline: str
     summary: str
     key_drivers: list[dict[str, str]] = []

@@ -5,36 +5,1285 @@
     "as_of": "2025-01-28",
     "horizon_days": 20,
     "recorded_at": "2025-01-28T14:00:00Z",
-    "fixture_version": "1"
+    "fixture_version": "1",
+    "event_evidence": {
+      "markers": {
+        "C5": [
+          {
+            "date": "2025-01-28",
+            "adjusted_price": 89.318,
+            "daily_percentage_move": -11.3,
+            "robust_score": -8.0
+          }
+        ]
+      },
+      "explanations": {
+        "2025-01-28": {
+          "explanation": "NVIDIA's adjusted closing price fell sharply on the selected day. Its move was larger than the technology-sector and broad-market moves shown alongside it, so this is classified as company led. The demo links the move to the dated AI-competition context without claiming that evidence proves causation. The comparison describes co-movement, not proof of causation.",
+          "classification": "company_led",
+          "citations": [
+            {
+              "number": 1,
+              "title": "yfinance NVDA",
+              "url": "https://finance.yahoo.com/quote/NVDA",
+              "type": "price_data"
+            },
+            {
+              "number": 1,
+              "title": "yfinance SMH",
+              "url": "https://finance.yahoo.com/quote/SMH",
+              "type": "price_data"
+            },
+            {
+              "number": 1,
+              "title": "yfinance sector benchmark",
+              "url": "https://finance.yahoo.com/quote/XLK",
+              "type": "price_data"
+            }
+          ]
+        }
+      }
+    }
   },
   "events": [
-    { "type": "query_parsed", "delay_ms": 390, "data": { "parsed": { "ticker": "NVDA", "event_type": "AI competitive shock", "as_of": "2025-01-28", "horizon_days": 20, "intent": "analysis" }, "latency_ms": 371 } },
-    { "type": "scope_check", "delay_ms": 160, "data": { "in_scope": true, "ticker": "NVDA", "reason": "ticker in covered universe", "refusal_message": "" } },
-    { "type": "card_start", "delay_ms": 100, "data": { "card_id": "C1", "title": "USD Strength" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C2", "title": "Rates & Inflation" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C3", "title": "Oil & Energy" } },
-    { "type": "card_done", "delay_ms": 310, "data": { "card": { "id": "C1", "title": "USD Strength", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:03Z", "latency_ms": 291, "headline": { "label": "DXY Index", "value": 107.9, "unit": "", "delta": 0.6 }, "metrics": [{ "name": "Level", "value": 107.9, "unit": "", "note": "" }, { "name": "20d change", "value": 0.6, "unit": "%", "note": "" }, { "name": "1y percentile", "value": 76, "unit": "%ile", "note": "" }], "series": [], "signal": -0.14, "label": "neutral", "weight": 0.6, "quality": 0.91, "reasoning": ["DXY marginally stronger at the 76th percentile; a small headwind for NVDA's international revenue.", "NVDA's USD exposure prior is 0.6; meaningful but secondary to the AI demand narrative.", "Currency effect is overwhelmed by the fundamental question of DeepSeek's impact on data-centre GPU demand."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -0.5, "rho": -0.28, "d": -1 }, "contribution": -0.04 }, "sources": [{ "name": "FRED DTWEXBGS", "url": "https://fred.stlouisfed.org/series/DTWEXBGS", "retrieved_at": "2025-01-28T14:01:00Z" }], "warnings": [] } } },
-    { "type": "card_done", "delay_ms": 400, "data": { "card": { "id": "C2", "title": "Rates & Inflation", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:05Z", "latency_ms": 381, "headline": { "label": "10y Treasury", "value": 4.54, "unit": "%", "delta": 8 }, "metrics": [{ "name": "10y yield", "value": 4.54, "unit": "%", "note": "" }, { "name": "20d change", "value": 8, "unit": "bp", "note": "" }, { "name": "CPI YoY", "value": 2.9, "unit": "%", "note": "" }], "series": [], "signal": -0.31, "label": "headwind", "weight": 0.6, "quality": 0.95, "reasoning": ["Yields at 4.54% are elevated; high-growth tech stocks like NVDA are more sensitive to discount rates.", "NVDA's rates exposure prior is 0.6 (valuation sensitivity).", "The 8bp rise over 20 days is a mild incremental headwind on top of the AI narrative shock.", "CPI at 2.9% suggests the Fed is not in a rush to cut — rates stay higher for longer."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -1.0, "rho": -0.44, "d": -1 }, "contribution": -0.10 }, "sources": [{ "name": "FRED DGS10", "url": "https://fred.stlouisfed.org/series/DGS10", "retrieved_at": "2025-01-28T14:01:04Z" }], "warnings": [] } } },
-    { "type": "card_done", "delay_ms": 270, "data": { "card": { "id": "C3", "title": "Oil & Energy", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:07Z", "latency_ms": 251, "headline": { "label": "WTI Crude", "value": 73.6, "unit": "$/bbl", "delta": -1.4 }, "metrics": [{ "name": "WTI price", "value": 73.6, "unit": "$/bbl", "note": "" }, { "name": "20d change", "value": -1.4, "unit": "%", "note": "" }], "series": [], "signal": 0.06, "label": "neutral", "weight": 0.3, "quality": 0.92, "reasoning": ["Oil mildly lower; a negligible tailwind for NVDA's fab energy costs.", "Not a material driver for a semiconductor company in an AI competitive shock event."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": 0.2, "rho": 0.08, "d": 1 }, "contribution": 0.01 }, "sources": [{ "name": "FRED DCOILWTICO", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "retrieved_at": "2025-01-28T14:01:06Z" }], "warnings": [] } } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C4", "title": "Market Regime & Volatility" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C5", "title": "Sector Relative Strength" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C6", "title": "Cross-Sector Dependency" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C7", "title": "Geopolitical & Policy Risk" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C8", "title": "Financial Health" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C9", "title": "Earnings & Growth" } },
-    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C10", "title": "Valuation & Price Momentum" } },
-    { "type": "card_done", "delay_ms": 500, "data": { "card": { "id": "C4", "title": "Market Regime & Volatility", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:09Z", "latency_ms": 481, "headline": { "label": "VIX", "value": 18.6, "unit": "", "delta": 3.1 }, "metrics": [{ "name": "VIX level", "value": 18.6, "unit": "", "note": "" }, { "name": "VIX percentile (1y)", "value": 42, "unit": "%ile", "note": "" }, { "name": "SPY 20d return", "value": 1.8, "unit": "%", "note": "" }, { "name": "NVDA beta (1y)", "value": 1.68, "unit": "", "note": "" }], "series": [], "signal": 0.12, "label": "neutral", "weight": 0.7, "quality": 0.98, "reasoning": ["VIX at 18.6 is mid-range (42nd percentile) — the market is not panicking broadly.", "SPY is up 1.8% over 20 days; the broader market is positive, so NVDA's drop is not macro-driven.", "NVDA's high beta (1.68) means market moves amplify both up and down — but the market isn't the story here.", "The disconnect between SPY (+1.8%) and NVDA's sharp fall confirms this is company/sector-specific, not macro."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": 0.4, "rho": 0.52, "d": 1 }, "contribution": 0.04 }, "sources": [{ "name": "FRED VIXCLS", "url": "https://fred.stlouisfed.org/series/VIXCLS", "retrieved_at": "2025-01-28T14:01:08Z" }], "warnings": [] } } },
-    { "type": "card_done", "delay_ms": 450, "data": { "card": { "id": "C5", "title": "Sector Relative Strength", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:11Z", "latency_ms": 431, "headline": { "label": "NVDA vs XLK (20d)", "value": -18.4, "unit": "%" }, "metrics": [{ "name": "NVDA 20d", "value": -16.9, "unit": "%", "note": "" }, { "name": "XLK 20d", "value": 1.5, "unit": "%", "note": "" }, { "name": "SMH 20d", "value": -8.2, "unit": "%", "note": "" }, { "name": "SPY 20d", "value": 1.8, "unit": "%", "note": "" }, { "name": "Driver classification", "value": "Company-driven", "unit": "", "note": "" }], "series": [], "signal": -0.88, "label": "headwind", "weight": 0.75, "quality": 0.98, "reasoning": ["NVDA has underperformed XLK by 18.4pp — a massive company-specific gap.", "SMH (semiconductors) is down 8.2%, so there is a sector component, but NVDA is down twice as much.", "Classification: 'company-driven' with sector amplification. DeepSeek's efficient training raises questions about NVDA-specific GPU demand, not all chips.", "The sector component (SMH -8.2%) confirms some spill-over to peers, but NVDA is the epicentre."], "math": { "formula": "s = clip(alpha_vs_sector / threshold, -1, 1)", "inputs": { "alpha_vs_sector": -18.4, "alpha_vs_spy": -18.7, "threshold": 5.0 }, "contribution": -0.30 }, "sources": [{ "name": "yfinance NVDA", "url": "https://finance.yahoo.com/quote/NVDA", "retrieved_at": "2025-01-28T14:01:10Z" }, { "name": "yfinance SMH", "url": "https://finance.yahoo.com/quote/SMH", "retrieved_at": "2025-01-28T14:01:10Z" }], "warnings": [] } } },
-    { "type": "card_done", "delay_ms": 580, "data": { "card": { "id": "C6", "title": "Cross-Sector Dependency", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:14Z", "latency_ms": 561, "headline": { "label": "SMH 20d", "value": -8.2, "unit": "%" }, "metrics": [{ "name": "SMH 20d", "value": -8.2, "unit": "%", "note": "" }, { "name": "Corr NVDA-SMH (252d)", "value": 0.78, "unit": "", "note": "" }], "series": [], "signal": -0.52, "label": "headwind", "weight": 0.65, "quality": 0.88, "reasoning": ["SMH is down 8.2% — the TSM→NVDA supplier edge and broader semis are under pressure.", "NVDA's correlation with SMH (0.78) means sector weakness amplifies company headwinds.", "If DeepSeek's approach reduces GPU intensity per AI model, the entire AI hardware supply chain (TSM, HBM makers) faces demand re-rating.", "Downstream: hyperscaler capex plans (MSFT, AMZN, GOOGL) may be revised down — a secondary ripple."], "math": { "formula": "s = sum(strength_i × move_i × sign_i) / n, clipped to [-1,1]", "inputs": { "smh_move": -8.2, "smh_strength": 0.78 }, "contribution": -0.15 }, "sources": [{ "name": "yfinance SMH", "url": "https://finance.yahoo.com/quote/SMH", "retrieved_at": "2025-01-28T14:01:12Z" }, { "name": "data/dependencies.json (curated)", "url": "", "retrieved_at": "2025-01-28T14:01:12Z" }], "warnings": ["Dependency edges are curated judgment; citations TODO."] } } },
-    { "type": "card_done", "delay_ms": 360, "data": { "card": { "id": "C7", "title": "Geopolitical & Policy Risk", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:16Z", "latency_ms": 341, "headline": { "label": "GPR Index", "value": 128.4, "unit": "", "delta": 6.2 }, "metrics": [{ "name": "GPR level", "value": 128.4, "unit": "", "note": "" }, { "name": "GPR 1y percentile", "value": 68, "unit": "%ile", "note": "" }, { "name": "NVDA geopolitical exposure", "value": "High", "unit": "", "note": "" }], "series": [], "signal": -0.48, "label": "headwind", "weight": 0.78, "quality": 0.86, "reasoning": ["GPR at 128.4 (68th percentile) — elevated geopolitical risk context.", "NVDA's geopolitical exposure prior is 0.7: US export controls on H100/H200 to China limit addressable market.", "DeepSeek is a Chinese AI lab — the narrative reinforces concern that China is achieving AI parity with fewer NVDA chips.", "Policy risk: US may tighten export controls further in response, reducing NVDA's China revenue ceiling."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -1.5, "rho": -0.38, "d": -1 }, "contribution": -0.16 }, "sources": [{ "name": "GPR Index (Caldara & Iacoviello 2022)", "url": "https://www.matteoiacoviello.com/gpr.htm", "retrieved_at": "2025-01-28T14:01:15Z" }], "warnings": ["Recent GPR values are preliminary and subject to revision."] } } },
-    { "type": "card_done", "delay_ms": 870, "data": { "card": { "id": "C8", "title": "Financial Health", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:21Z", "latency_ms": 851, "headline": { "label": "Interest Coverage", "value": 68.4, "unit": "x", "delta": 42.1 }, "metrics": [{ "name": "Current ratio", "value": 4.17, "unit": "x", "note": "" }, { "name": "Debt/Equity", "value": 0.42, "unit": "x", "note": "" }, { "name": "Interest coverage", "value": 68.4, "unit": "x", "note": "" }, { "name": "Operating margin", "value": 54.1, "unit": "%", "note": "" }, { "name": "Cash", "value": 34.8, "unit": "$B", "note": "" }], "series": [], "signal": 0.88, "label": "tailwind", "weight": 0.78, "quality": 0.93, "reasoning": ["Interest coverage of 68.4x and operating margin of 54.1% — exceptional financial health.", "Current ratio at 4.17x and $34.8B cash give NVDA enormous financial flexibility.", "Even if GPU demand softens, NVDA can weather the adjustment from a position of strength.", "The DeepSeek shock is a demand narrative risk, not a financial stress risk — balance sheet is irrelevant to the bear case."], "math": { "formula": "s = 0.5 × band_score + 0.5 × pct_vs_5y, clipped [-1,1]", "inputs": { "interest_coverage": 68.4, "band_score": 1.0, "pct_vs_5y": 0.98 }, "contribution": 0.31 }, "sources": [{ "name": "SEC EDGAR XBRL (CIK 0001045810)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json", "retrieved_at": "2025-01-28T14:01:18Z" }], "warnings": [] } } },
-    { "type": "card_done", "delay_ms": 740, "data": { "card": { "id": "C9", "title": "Earnings & Growth", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:24Z", "latency_ms": 721, "headline": { "label": "Revenue YoY", "value": 122.4, "unit": "%" }, "metrics": [{ "name": "Revenue YoY", "value": 122.4, "unit": "%", "note": "" }, { "name": "Diluted EPS YoY", "value": 147.0, "unit": "%", "note": "" }, { "name": "Last earnings abnormal return", "value": 8.1, "unit": "%", "note": "" }], "series": [], "signal": 0.92, "label": "tailwind", "weight": 0.8, "quality": 0.94, "reasoning": ["Revenue up 122% YoY and EPS up 147% — the AI buildout has driven extraordinary growth.", "Last earnings day: +8.1% abnormal return; market has been rewarding NVDA's execution.", "The DeepSeek shock raises the question: does this growth rate decelerate? The answer depends on whether hyperscalers revise capex.", "Near-term earnings (next 2 quarters) are likely unaffected — data centres already ordered Blackwell GPUs."], "math": { "formula": "s = clip(0.4×rev_score + 0.4×eps_score + 0.2×abn_ret_score, -1,1)", "inputs": { "rev_yoy": 122.4, "eps_yoy": 147.0, "abnormal_return": 8.1 }, "contribution": 0.33 }, "sources": [{ "name": "SEC EDGAR XBRL (CIK 0001045810)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json", "retrieved_at": "2025-01-28T14:01:22Z" }], "warnings": [] } } },
-    { "type": "card_done", "delay_ms": 520, "data": { "card": { "id": "C10", "title": "Valuation & Price Momentum", "status": "done", "as_of": "2025-01-28", "fetched_at": "2025-01-28T14:01:26Z", "latency_ms": 501, "headline": { "label": "P/E (TTM)", "value": 42.8, "unit": "x", "delta": -12.4 }, "metrics": [{ "name": "P/E TTM", "value": 42.8, "unit": "x", "note": "" }, { "name": "P/E 5y percentile", "value": 48, "unit": "%ile", "note": "" }, { "name": "52-week range position", "value": 62, "unit": "%", "note": "" }, { "name": "50d MA trend", "value": "Below", "unit": "", "note": "" }, { "name": "200d MA trend", "value": "Above", "unit": "", "note": "" }], "series": [], "signal": -0.18, "label": "neutral", "weight": 0.75, "quality": 0.96, "reasoning": ["P/E at 42.8x compressed from recent highs — in the 48th percentile of NVDA's 5-year history.", "Still expensive on an absolute basis but the growth rate (122% revenue) partially justifies it.", "52-week range at 62% — the stock has fallen from highs but is not at the bottom.", "Below 50-day MA (momentum headwind) but above 200-day MA (longer-term trend intact)."], "math": { "formula": "s = 0.5×pe_pct_score + 0.3×range_score + 0.2×ma_score, clipped [-1,1]", "inputs": { "pe_pct": 48, "range_pct": 62, "below_50ma": true, "above_200ma": true }, "contribution": -0.06 }, "sources": [{ "name": "yfinance NVDA", "url": "https://finance.yahoo.com/quote/NVDA", "retrieved_at": "2025-01-28T14:01:25Z" }], "warnings": [] } } },
-    { "type": "aggregate", "delay_ms": 480, "data": { "result": { "composite_signal": 0.14, "evidence_strength": 0.58, "coverage": 0.93, "scenarios": [{ "name": "Tailwind-dominant", "score": 0.38, "ci_low": 0.29, "ci_high": 0.47, "rationale": "Strong fundamentals (C8, C9) and eventual demand confirmation absorb the shock.", "watch_for": "Hyperscaler capex guidance unchanged; Blackwell sell-through data." }, { "name": "Mixed", "score": 0.42, "ci_low": 0.33, "ci_high": 0.51, "rationale": "Demand narrative uncertainty keeps stock range-bound while fundamentals remain strong.", "watch_for": "Analyst capex revision cycle; NVDA February earnings guidance." }, { "name": "Headwind-dominant", "score": 0.20, "ci_low": 0.13, "ci_high": 0.28, "rationale": "DeepSeek model efficiency represents a structural reduction in GPU intensity per AI dollar.", "watch_for": "Data centre capex cuts; additional Chinese AI efficiency breakthroughs." }], "card_contributions": { "C1": -0.04, "C2": -0.10, "C3": 0.01, "C4": 0.04, "C5": -0.30, "C6": -0.15, "C7": -0.16, "C8": 0.31, "C9": 0.33, "C10": -0.06 } } } },
-    { "type": "verdict_delta", "delay_ms": 300, "data": { "delta": "The DeepSeek shock is primarily company/sector-specific [C5], not macro-driven [C4]. " } },
-    { "type": "verdict_delta", "delay_ms": 100, "data": { "delta": "NVDA's fundamentals are exceptional [C8, C9] but the market is repricing the demand trajectory — " } },
-    { "type": "verdict_delta", "delay_ms": 100, "data": { "delta": "the central question is whether hyperscaler GPU capex revises lower, which is not yet knowable." } },
-    { "type": "verdict_done", "delay_ms": 400, "data": { "verdict": { "headline": "DeepSeek shock is company/sector-specific — NVDA's fundamentals are intact but demand narrative is under pressure", "summary": "The DeepSeek news is a company and sector-specific shock [C5], not a macro event [C4]. SPY is up 1.8% over 20 days while NVDA has fallen sharply — a 18.4pp underperformance vs XLK that places this firmly in the company-driven category, with semiconductor sector amplification (SMH -8.2%). The bull case rests on NVDA's extraordinary fundamentals [C8, C9]: 122% revenue growth, 54% operating margins, and $34.8B cash make this a question of demand narrative, not financial survival. The bear case is a structural one: if DeepSeek proves that frontier AI can be trained with fewer H100-class GPUs, the market is right to reprice the long-term demand trajectory, particularly given export control risks [C7].", "key_drivers": [{ "card": "C5", "point": "NVDA -16.9% vs XLK +1.5% over 20 days. Classification: company-driven with sector amplification. This is the answer to the question." }, { "card": "C6", "point": "SMH -8.2% confirms sector-wide repricing of AI hardware, not just NVDA-specific." }, { "card": "C7", "point": "GPR at 68th percentile; DeepSeek reinforces export control narrative — China AI parity threat." }], "counter_evidence": [{ "card": "C8", "point": "Interest coverage 68.4x and operating margin 54% — NVDA can sustain the adjustment from a position of exceptional strength." }, { "card": "C9", "point": "Revenue +122% YoY; near-term Blackwell orders already placed — earnings impact is a 2026 story, not a 20-day story." }], "scenarios": [{ "name": "Mixed", "score": 0.42, "rationale": "Most likely: stock range-bound as strong fundamentals compete with demand narrative uncertainty.", "watch_for": "Hyperscaler capex guidance; NVDA February earnings call." }, { "name": "Tailwind-dominant", "score": 0.38, "rationale": "Demand confirmation absorbs shock; NVDA recovers as AI buildout continues.", "watch_for": "Capex confirmation from MSFT, AMZN, GOOGL earnings." }, { "name": "Headwind-dominant", "score": 0.20, "rationale": "DeepSeek efficiency is structural; GPU intensity per AI dollar falls persistently.", "watch_for": "More Chinese AI breakthroughs; data centre capex cuts." }], "confidence_statement": "Evidence strength: 0.58 (moderate — strong fundamental vs weak demand-narrative split). Composite signal: +0.14 (barely positive). The distribution is flat — this is a genuinely uncertain situation.", "data_gaps": ["C6: Dependency edges are curated judgment; citations TODO.", "C7: GPR values are preliminary."], "disclaimer": "This output is for informational and analytical purposes only. It does not constitute investment advice, a recommendation to buy or sell any security, or a price target.", "references": [{ "name": "FRED VIXCLS", "url": "https://fred.stlouisfed.org/series/VIXCLS", "retrieved_at": "2025-01-28T14:01:08Z" }, { "name": "yfinance NVDA", "url": "https://finance.yahoo.com/quote/NVDA", "retrieved_at": "2025-01-28T14:01:10Z" }, { "name": "SEC EDGAR XBRL (CIK 0001045810)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json", "retrieved_at": "2025-01-28T14:01:18Z" }], "is_fallback": true, "model_used": "template (demo mode)", "is_fallback_model": false } } },
-    { "type": "done", "delay_ms": 100, "data": { "run_id": "fixture-nvda-2025-01-28", "total_ms": 8100 } }
+    {
+      "type": "query_parsed",
+      "delay_ms": 390,
+      "data": {
+        "parsed": {
+          "ticker": "NVDA",
+          "event_type": "AI competitive shock",
+          "as_of": "2025-01-28",
+          "horizon_days": 20,
+          "intent": "analysis"
+        },
+        "latency_ms": 371
+      }
+    },
+    {
+      "type": "scope_check",
+      "delay_ms": 160,
+      "data": {
+        "in_scope": true,
+        "ticker": "NVDA",
+        "reason": "ticker in covered universe",
+        "refusal_message": ""
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 100,
+      "data": {
+        "card_id": "C1",
+        "title": "USD Strength"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C2",
+        "title": "Rates & Inflation"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C3",
+        "title": "Oil & Energy"
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 310,
+      "data": {
+        "card": {
+          "id": "C1",
+          "title": "USD Strength",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:03Z",
+          "latency_ms": 291,
+          "headline": {
+            "label": "DXY Index",
+            "value": 107.9,
+            "unit": "",
+            "delta": 0.6
+          },
+          "metrics": [
+            {
+              "name": "Level",
+              "value": 107.9,
+              "unit": "",
+              "note": ""
+            },
+            {
+              "name": "20d change",
+              "value": 0.6,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "1y percentile",
+              "value": 76,
+              "unit": "%ile",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": -0.14,
+          "label": "neutral",
+          "weight": 0.6,
+          "quality": 0.91,
+          "reasoning": [
+            "DXY marginally stronger at the 76th percentile; a small headwind for NVDA's international revenue.",
+            "NVDA's USD exposure prior is 0.6; meaningful but secondary to the AI demand narrative.",
+            "Currency effect is overwhelmed by the fundamental question of DeepSeek's impact on data-centre GPU demand."
+          ],
+          "math": {
+            "formula": "s = d \u00d7 tanh(z / 2)",
+            "inputs": {
+              "z": -0.5,
+              "rho": -0.28,
+              "d": -1
+            },
+            "contribution": -0.04
+          },
+          "sources": [
+            {
+              "name": "FRED DTWEXBGS",
+              "url": "https://fred.stlouisfed.org/series/DTWEXBGS",
+              "retrieved_at": "2025-01-28T14:01:00Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 400,
+      "data": {
+        "card": {
+          "id": "C2",
+          "title": "Rates & Inflation",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:05Z",
+          "latency_ms": 381,
+          "headline": {
+            "label": "10y Treasury",
+            "value": 4.54,
+            "unit": "%",
+            "delta": 8
+          },
+          "metrics": [
+            {
+              "name": "10y yield",
+              "value": 4.54,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "20d change",
+              "value": 8,
+              "unit": "bp",
+              "note": ""
+            },
+            {
+              "name": "CPI YoY",
+              "value": 2.9,
+              "unit": "%",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": -0.31,
+          "label": "headwind",
+          "weight": 0.6,
+          "quality": 0.95,
+          "reasoning": [
+            "Yields at 4.54% are elevated; high-growth tech stocks like NVDA are more sensitive to discount rates.",
+            "NVDA's rates exposure prior is 0.6 (valuation sensitivity).",
+            "The 8bp rise over 20 days is a mild incremental headwind on top of the AI narrative shock.",
+            "CPI at 2.9% suggests the Fed is not in a rush to cut \u2014 rates stay higher for longer."
+          ],
+          "math": {
+            "formula": "s = d \u00d7 tanh(z / 2)",
+            "inputs": {
+              "z": -1.0,
+              "rho": -0.44,
+              "d": -1
+            },
+            "contribution": -0.1
+          },
+          "sources": [
+            {
+              "name": "FRED DGS10",
+              "url": "https://fred.stlouisfed.org/series/DGS10",
+              "retrieved_at": "2025-01-28T14:01:04Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 270,
+      "data": {
+        "card": {
+          "id": "C3",
+          "title": "Oil & Energy",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:07Z",
+          "latency_ms": 251,
+          "headline": {
+            "label": "WTI Crude",
+            "value": 73.6,
+            "unit": "$/bbl",
+            "delta": -1.4
+          },
+          "metrics": [
+            {
+              "name": "WTI price",
+              "value": 73.6,
+              "unit": "$/bbl",
+              "note": ""
+            },
+            {
+              "name": "20d change",
+              "value": -1.4,
+              "unit": "%",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": 0.06,
+          "label": "neutral",
+          "weight": 0.3,
+          "quality": 0.92,
+          "reasoning": [
+            "Oil mildly lower; a negligible tailwind for NVDA's fab energy costs.",
+            "Not a material driver for a semiconductor company in an AI competitive shock event."
+          ],
+          "math": {
+            "formula": "s = d \u00d7 tanh(z / 2)",
+            "inputs": {
+              "z": 0.2,
+              "rho": 0.08,
+              "d": 1
+            },
+            "contribution": 0.01
+          },
+          "sources": [
+            {
+              "name": "FRED DCOILWTICO",
+              "url": "https://fred.stlouisfed.org/series/DCOILWTICO",
+              "retrieved_at": "2025-01-28T14:01:06Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C4",
+        "title": "Market Regime & Volatility"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C5",
+        "title": "Sector Relative Strength"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C6",
+        "title": "Cross-Sector Dependency"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C7",
+        "title": "Geopolitical & Policy Risk"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C8",
+        "title": "Financial Health"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C9",
+        "title": "Earnings & Growth"
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 60,
+      "data": {
+        "card_id": "C10",
+        "title": "Valuation & Price Momentum"
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 500,
+      "data": {
+        "card": {
+          "id": "C4",
+          "title": "Market Regime & Volatility",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:09Z",
+          "latency_ms": 481,
+          "headline": {
+            "label": "VIX",
+            "value": 18.6,
+            "unit": "",
+            "delta": 3.1
+          },
+          "metrics": [
+            {
+              "name": "VIX level",
+              "value": 18.6,
+              "unit": "",
+              "note": ""
+            },
+            {
+              "name": "VIX percentile (1y)",
+              "value": 42,
+              "unit": "%ile",
+              "note": ""
+            },
+            {
+              "name": "SPY 20d return",
+              "value": 1.8,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "NVDA beta (1y)",
+              "value": 1.68,
+              "unit": "",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": 0.12,
+          "label": "neutral",
+          "weight": 0.7,
+          "quality": 0.98,
+          "reasoning": [
+            "VIX at 18.6 is mid-range (42nd percentile) \u2014 the market is not panicking broadly.",
+            "SPY is up 1.8% over 20 days; the broader market is positive, so NVDA's drop is not macro-driven.",
+            "NVDA's high beta (1.68) means market moves amplify both up and down \u2014 but the market isn't the story here.",
+            "The disconnect between SPY (+1.8%) and NVDA's sharp fall confirms this is company/sector-specific, not macro."
+          ],
+          "math": {
+            "formula": "s = d \u00d7 tanh(z / 2)",
+            "inputs": {
+              "z": 0.4,
+              "rho": 0.52,
+              "d": 1
+            },
+            "contribution": 0.04
+          },
+          "sources": [
+            {
+              "name": "FRED VIXCLS",
+              "url": "https://fred.stlouisfed.org/series/VIXCLS",
+              "retrieved_at": "2025-01-28T14:01:08Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 450,
+      "data": {
+        "card": {
+          "id": "C5",
+          "title": "Sector Relative Strength",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:11Z",
+          "latency_ms": 431,
+          "headline": {
+            "label": "NVDA vs XLK (20d)",
+            "value": -18.4,
+            "unit": "%"
+          },
+          "metrics": [
+            {
+              "name": "NVDA 20d",
+              "value": -16.9,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "XLK 20d",
+              "value": 1.5,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "SMH 20d",
+              "value": -8.2,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "SPY 20d",
+              "value": 1.8,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "Driver classification",
+              "value": "Company-driven",
+              "unit": "",
+              "note": ""
+            }
+          ],
+          "series": [
+            {
+              "t": "2025-01-08",
+              "v": 100.0
+            },
+            {
+              "t": "2025-01-09",
+              "v": 100.3
+            },
+            {
+              "t": "2025-01-10",
+              "v": 100.0994
+            },
+            {
+              "t": "2025-01-13",
+              "v": 100.5999
+            },
+            {
+              "t": "2025-01-14",
+              "v": 100.4993
+            },
+            {
+              "t": "2025-01-15",
+              "v": 100.7003
+            },
+            {
+              "t": "2025-01-16",
+              "v": 100.2975
+            },
+            {
+              "t": "2025-01-17",
+              "v": 100.6485
+            },
+            {
+              "t": "2025-01-20",
+              "v": 100.7492
+            },
+            {
+              "t": "2025-01-21",
+              "v": 100.4973
+            },
+            {
+              "t": "2025-01-22",
+              "v": 100.9495
+            },
+            {
+              "t": "2025-01-23",
+              "v": 100.7981
+            },
+            {
+              "t": "2025-01-24",
+              "v": 100.9997
+            },
+            {
+              "t": "2025-01-27",
+              "v": 100.6967
+            },
+            {
+              "t": "2025-01-28",
+              "v": 89.318
+            }
+          ],
+          "signal": -0.88,
+          "label": "headwind",
+          "weight": 0.75,
+          "quality": 0.98,
+          "reasoning": [
+            "NVDA has underperformed XLK by 18.4pp \u2014 a massive company-specific gap.",
+            "SMH (semiconductors) is down 8.2%, so there is a sector component, but NVDA is down twice as much.",
+            "Classification: 'company-driven' with sector amplification. DeepSeek's efficient training raises questions about NVDA-specific GPU demand, not all chips.",
+            "The sector component (SMH -8.2%) confirms some spill-over to peers, but NVDA is the epicentre."
+          ],
+          "math": {
+            "formula": "s = clip(alpha_vs_sector / threshold, -1, 1)",
+            "inputs": {
+              "alpha_vs_sector": -18.4,
+              "alpha_vs_spy": -18.7,
+              "threshold": 5.0
+            },
+            "contribution": -0.3
+          },
+          "sources": [
+            {
+              "name": "yfinance NVDA",
+              "url": "https://finance.yahoo.com/quote/NVDA",
+              "retrieved_at": "2025-01-28T14:01:10Z"
+            },
+            {
+              "name": "yfinance SMH",
+              "url": "https://finance.yahoo.com/quote/SMH",
+              "retrieved_at": "2025-01-28T14:01:10Z"
+            },
+            {
+              "name": "yfinance sector benchmark",
+              "url": "https://finance.yahoo.com/quote/XLK",
+              "retrieved_at": "2025-01-28T20:00:00Z"
+            },
+            {
+              "name": "yfinance SPY",
+              "url": "https://finance.yahoo.com/quote/SPY",
+              "retrieved_at": "2025-01-28T20:00:00Z"
+            }
+          ],
+          "warnings": [],
+          "related_series": {
+            "stock": [
+              {
+                "t": "2025-01-08",
+                "v": 100.0
+              },
+              {
+                "t": "2025-01-09",
+                "v": 100.3
+              },
+              {
+                "t": "2025-01-10",
+                "v": 100.0994
+              },
+              {
+                "t": "2025-01-13",
+                "v": 100.5999
+              },
+              {
+                "t": "2025-01-14",
+                "v": 100.4993
+              },
+              {
+                "t": "2025-01-15",
+                "v": 100.7003
+              },
+              {
+                "t": "2025-01-16",
+                "v": 100.2975
+              },
+              {
+                "t": "2025-01-17",
+                "v": 100.6485
+              },
+              {
+                "t": "2025-01-20",
+                "v": 100.7492
+              },
+              {
+                "t": "2025-01-21",
+                "v": 100.4973
+              },
+              {
+                "t": "2025-01-22",
+                "v": 100.9495
+              },
+              {
+                "t": "2025-01-23",
+                "v": 100.7981
+              },
+              {
+                "t": "2025-01-24",
+                "v": 100.9997
+              },
+              {
+                "t": "2025-01-27",
+                "v": 100.6967
+              },
+              {
+                "t": "2025-01-28",
+                "v": 89.318
+              }
+            ],
+            "sector": [
+              {
+                "t": "2025-01-08",
+                "v": 100.0
+              },
+              {
+                "t": "2025-01-09",
+                "v": 100.135
+              },
+              {
+                "t": "2025-01-10",
+                "v": 100.0449
+              },
+              {
+                "t": "2025-01-13",
+                "v": 100.27
+              },
+              {
+                "t": "2025-01-14",
+                "v": 100.2249
+              },
+              {
+                "t": "2025-01-15",
+                "v": 100.3151
+              },
+              {
+                "t": "2025-01-16",
+                "v": 100.1345
+              },
+              {
+                "t": "2025-01-17",
+                "v": 100.2922
+              },
+              {
+                "t": "2025-01-20",
+                "v": 100.3373
+              },
+              {
+                "t": "2025-01-21",
+                "v": 100.2245
+              },
+              {
+                "t": "2025-01-22",
+                "v": 100.4274
+              },
+              {
+                "t": "2025-01-23",
+                "v": 100.3596
+              },
+              {
+                "t": "2025-01-24",
+                "v": 100.4499
+              },
+              {
+                "t": "2025-01-27",
+                "v": 100.3143
+              },
+              {
+                "t": "2025-01-28",
+                "v": 97.1404
+              }
+            ],
+            "market": [
+              {
+                "t": "2025-01-08",
+                "v": 100.0
+              },
+              {
+                "t": "2025-01-09",
+                "v": 100.06
+              },
+              {
+                "t": "2025-01-10",
+                "v": 100.02
+              },
+              {
+                "t": "2025-01-13",
+                "v": 100.12
+              },
+              {
+                "t": "2025-01-14",
+                "v": 100.1
+              },
+              {
+                "t": "2025-01-15",
+                "v": 100.14
+              },
+              {
+                "t": "2025-01-16",
+                "v": 100.0599
+              },
+              {
+                "t": "2025-01-17",
+                "v": 100.1299
+              },
+              {
+                "t": "2025-01-20",
+                "v": 100.15
+              },
+              {
+                "t": "2025-01-21",
+                "v": 100.0999
+              },
+              {
+                "t": "2025-01-22",
+                "v": 100.19
+              },
+              {
+                "t": "2025-01-23",
+                "v": 100.1599
+              },
+              {
+                "t": "2025-01-24",
+                "v": 100.2
+              },
+              {
+                "t": "2025-01-27",
+                "v": 100.1399
+              },
+              {
+                "t": "2025-01-28",
+                "v": 99.2346
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 580,
+      "data": {
+        "card": {
+          "id": "C6",
+          "title": "Cross-Sector Dependency",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:14Z",
+          "latency_ms": 561,
+          "headline": {
+            "label": "SMH 20d",
+            "value": -8.2,
+            "unit": "%"
+          },
+          "metrics": [
+            {
+              "name": "SMH 20d",
+              "value": -8.2,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "Corr NVDA-SMH (252d)",
+              "value": 0.78,
+              "unit": "",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": -0.52,
+          "label": "headwind",
+          "weight": 0.65,
+          "quality": 0.88,
+          "reasoning": [
+            "SMH is down 8.2% \u2014 the TSM\u2192NVDA supplier edge and broader semis are under pressure.",
+            "NVDA's correlation with SMH (0.78) means sector weakness amplifies company headwinds.",
+            "If DeepSeek's approach reduces GPU intensity per AI model, the entire AI hardware supply chain (TSM, HBM makers) faces demand re-rating.",
+            "Downstream: hyperscaler capex plans (MSFT, AMZN, GOOGL) may be revised down \u2014 a secondary ripple."
+          ],
+          "math": {
+            "formula": "s = sum(strength_i \u00d7 move_i \u00d7 sign_i) / n, clipped to [-1,1]",
+            "inputs": {
+              "smh_move": -8.2,
+              "smh_strength": 0.78
+            },
+            "contribution": -0.15
+          },
+          "sources": [
+            {
+              "name": "yfinance SMH",
+              "url": "https://finance.yahoo.com/quote/SMH",
+              "retrieved_at": "2025-01-28T14:01:12Z"
+            },
+            {
+              "name": "data/dependencies.json (curated)",
+              "url": "",
+              "retrieved_at": "2025-01-28T14:01:12Z"
+            }
+          ],
+          "warnings": [
+            "Dependency edges are curated judgment; citations TODO."
+          ]
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 360,
+      "data": {
+        "card": {
+          "id": "C7",
+          "title": "Geopolitical & Policy Risk",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:16Z",
+          "latency_ms": 341,
+          "headline": {
+            "label": "GPR Index",
+            "value": 128.4,
+            "unit": "",
+            "delta": 6.2
+          },
+          "metrics": [
+            {
+              "name": "GPR level",
+              "value": 128.4,
+              "unit": "",
+              "note": ""
+            },
+            {
+              "name": "GPR 1y percentile",
+              "value": 68,
+              "unit": "%ile",
+              "note": ""
+            },
+            {
+              "name": "NVDA geopolitical exposure",
+              "value": "High",
+              "unit": "",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": -0.48,
+          "label": "headwind",
+          "weight": 0.78,
+          "quality": 0.86,
+          "reasoning": [
+            "GPR at 128.4 (68th percentile) \u2014 elevated geopolitical risk context.",
+            "NVDA's geopolitical exposure prior is 0.7: US export controls on H100/H200 to China limit addressable market.",
+            "DeepSeek is a Chinese AI lab \u2014 the narrative reinforces concern that China is achieving AI parity with fewer NVDA chips.",
+            "Policy risk: US may tighten export controls further in response, reducing NVDA's China revenue ceiling."
+          ],
+          "math": {
+            "formula": "s = d \u00d7 tanh(z / 2)",
+            "inputs": {
+              "z": -1.5,
+              "rho": -0.38,
+              "d": -1
+            },
+            "contribution": -0.16
+          },
+          "sources": [
+            {
+              "name": "GPR Index (Caldara & Iacoviello 2022)",
+              "url": "https://www.matteoiacoviello.com/gpr.htm",
+              "retrieved_at": "2025-01-28T14:01:15Z"
+            }
+          ],
+          "warnings": [
+            "Recent GPR values are preliminary and subject to revision."
+          ]
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 870,
+      "data": {
+        "card": {
+          "id": "C8",
+          "title": "Financial Health",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:21Z",
+          "latency_ms": 851,
+          "headline": {
+            "label": "Interest Coverage",
+            "value": 68.4,
+            "unit": "x",
+            "delta": 42.1
+          },
+          "metrics": [
+            {
+              "name": "Current ratio",
+              "value": 4.17,
+              "unit": "x",
+              "note": ""
+            },
+            {
+              "name": "Debt/Equity",
+              "value": 0.42,
+              "unit": "x",
+              "note": ""
+            },
+            {
+              "name": "Interest coverage",
+              "value": 68.4,
+              "unit": "x",
+              "note": ""
+            },
+            {
+              "name": "Operating margin",
+              "value": 54.1,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "Cash",
+              "value": 34.8,
+              "unit": "$B",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": 0.88,
+          "label": "tailwind",
+          "weight": 0.78,
+          "quality": 0.93,
+          "reasoning": [
+            "Interest coverage of 68.4x and operating margin of 54.1% \u2014 exceptional financial health.",
+            "Current ratio at 4.17x and $34.8B cash give NVDA enormous financial flexibility.",
+            "Even if GPU demand softens, NVDA can weather the adjustment from a position of strength.",
+            "The DeepSeek shock is a demand narrative risk, not a financial stress risk \u2014 balance sheet is irrelevant to the bear case."
+          ],
+          "math": {
+            "formula": "s = 0.5 \u00d7 band_score + 0.5 \u00d7 pct_vs_5y, clipped [-1,1]",
+            "inputs": {
+              "interest_coverage": 68.4,
+              "band_score": 1.0,
+              "pct_vs_5y": 0.98
+            },
+            "contribution": 0.31
+          },
+          "sources": [
+            {
+              "name": "SEC EDGAR XBRL (CIK 0001045810)",
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "retrieved_at": "2025-01-28T14:01:18Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 740,
+      "data": {
+        "card": {
+          "id": "C9",
+          "title": "Earnings & Growth",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:24Z",
+          "latency_ms": 721,
+          "headline": {
+            "label": "Revenue YoY",
+            "value": 122.4,
+            "unit": "%"
+          },
+          "metrics": [
+            {
+              "name": "Revenue YoY",
+              "value": 122.4,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "Diluted EPS YoY",
+              "value": 147.0,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "Last earnings abnormal return",
+              "value": 8.1,
+              "unit": "%",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": 0.92,
+          "label": "tailwind",
+          "weight": 0.8,
+          "quality": 0.94,
+          "reasoning": [
+            "Revenue up 122% YoY and EPS up 147% \u2014 the AI buildout has driven extraordinary growth.",
+            "Last earnings day: +8.1% abnormal return; market has been rewarding NVDA's execution.",
+            "The DeepSeek shock raises the question: does this growth rate decelerate? The answer depends on whether hyperscalers revise capex.",
+            "Near-term earnings (next 2 quarters) are likely unaffected \u2014 data centres already ordered Blackwell GPUs."
+          ],
+          "math": {
+            "formula": "s = clip(0.4\u00d7rev_score + 0.4\u00d7eps_score + 0.2\u00d7abn_ret_score, -1,1)",
+            "inputs": {
+              "rev_yoy": 122.4,
+              "eps_yoy": 147.0,
+              "abnormal_return": 8.1
+            },
+            "contribution": 0.33
+          },
+          "sources": [
+            {
+              "name": "SEC EDGAR XBRL (CIK 0001045810)",
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "retrieved_at": "2025-01-28T14:01:22Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 520,
+      "data": {
+        "card": {
+          "id": "C10",
+          "title": "Valuation & Price Momentum",
+          "status": "done",
+          "as_of": "2025-01-28",
+          "fetched_at": "2025-01-28T14:01:26Z",
+          "latency_ms": 501,
+          "headline": {
+            "label": "P/E (TTM)",
+            "value": 42.8,
+            "unit": "x",
+            "delta": -12.4
+          },
+          "metrics": [
+            {
+              "name": "P/E TTM",
+              "value": 42.8,
+              "unit": "x",
+              "note": ""
+            },
+            {
+              "name": "P/E 5y percentile",
+              "value": 48,
+              "unit": "%ile",
+              "note": ""
+            },
+            {
+              "name": "52-week range position",
+              "value": 62,
+              "unit": "%",
+              "note": ""
+            },
+            {
+              "name": "50d MA trend",
+              "value": "Below",
+              "unit": "",
+              "note": ""
+            },
+            {
+              "name": "200d MA trend",
+              "value": "Above",
+              "unit": "",
+              "note": ""
+            }
+          ],
+          "series": [],
+          "signal": -0.18,
+          "label": "neutral",
+          "weight": 0.75,
+          "quality": 0.96,
+          "reasoning": [
+            "P/E at 42.8x compressed from recent highs \u2014 in the 48th percentile of NVDA's 5-year history.",
+            "Still expensive on an absolute basis but the growth rate (122% revenue) partially justifies it.",
+            "52-week range at 62% \u2014 the stock has fallen from highs but is not at the bottom.",
+            "Below 50-day MA (momentum headwind) but above 200-day MA (longer-term trend intact)."
+          ],
+          "math": {
+            "formula": "s = 0.5\u00d7pe_pct_score + 0.3\u00d7range_score + 0.2\u00d7ma_score, clipped [-1,1]",
+            "inputs": {
+              "pe_pct": 48,
+              "range_pct": 62,
+              "below_50ma": true,
+              "above_200ma": true
+            },
+            "contribution": -0.06
+          },
+          "sources": [
+            {
+              "name": "yfinance NVDA",
+              "url": "https://finance.yahoo.com/quote/NVDA",
+              "retrieved_at": "2025-01-28T14:01:25Z"
+            }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "aggregate",
+      "delay_ms": 480,
+      "data": {
+        "result": {
+          "composite_signal": 0.14,
+          "evidence_strength": 0.58,
+          "coverage": 0.93,
+          "scenarios": [
+            {
+              "name": "Tailwind-dominant",
+              "score": 0.38,
+              "ci_low": 0.29,
+              "ci_high": 0.47,
+              "rationale": "Strong fundamentals (C8, C9) and eventual demand confirmation absorb the shock.",
+              "watch_for": "Hyperscaler capex guidance unchanged; Blackwell sell-through data."
+            },
+            {
+              "name": "Mixed",
+              "score": 0.42,
+              "ci_low": 0.33,
+              "ci_high": 0.51,
+              "rationale": "Demand narrative uncertainty keeps stock range-bound while fundamentals remain strong.",
+              "watch_for": "Analyst capex revision cycle; NVDA February earnings guidance."
+            },
+            {
+              "name": "Headwind-dominant",
+              "score": 0.2,
+              "ci_low": 0.13,
+              "ci_high": 0.28,
+              "rationale": "DeepSeek model efficiency represents a structural reduction in GPU intensity per AI dollar.",
+              "watch_for": "Data centre capex cuts; additional Chinese AI efficiency breakthroughs."
+            }
+          ],
+          "card_contributions": {
+            "C1": -0.04,
+            "C2": -0.1,
+            "C3": 0.01,
+            "C4": 0.04,
+            "C5": -0.3,
+            "C6": -0.15,
+            "C7": -0.16,
+            "C8": 0.31,
+            "C9": 0.33,
+            "C10": -0.06
+          }
+        }
+      }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 300,
+      "data": {
+        "delta": "The DeepSeek shock is primarily company/sector-specific [C5], not macro-driven [C4]. "
+      }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 100,
+      "data": {
+        "delta": "NVDA's fundamentals are exceptional [C8, C9] but the market is repricing the demand trajectory \u2014 "
+      }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 100,
+      "data": {
+        "delta": "the central question is whether hyperscaler GPU capex revises lower, which is not yet knowable."
+      }
+    },
+    {
+      "type": "verdict_done",
+      "delay_ms": 400,
+      "data": {
+        "verdict": {
+          "headline": "DeepSeek shock is company/sector-specific \u2014 NVDA's fundamentals are intact but demand narrative is under pressure",
+          "summary": "The DeepSeek news is a company and sector-specific shock [C5], not a macro event [C4]. SPY is up 1.8% over 20 days while NVDA has fallen sharply \u2014 a 18.4pp underperformance vs XLK that places this firmly in the company-driven category, with semiconductor sector amplification (SMH -8.2%). The bull case rests on NVDA's extraordinary fundamentals [C8, C9]: 122% revenue growth, 54% operating margins, and $34.8B cash make this a question of demand narrative, not financial survival. The bear case is a structural one: if DeepSeek proves that frontier AI can be trained with fewer H100-class GPUs, the market is right to reprice the long-term demand trajectory, particularly given export control risks [C7].",
+          "key_drivers": [
+            {
+              "card": "C5",
+              "point": "NVDA -16.9% vs XLK +1.5% over 20 days. Classification: company-driven with sector amplification. This is the answer to the question."
+            },
+            {
+              "card": "C6",
+              "point": "SMH -8.2% confirms sector-wide repricing of AI hardware, not just NVDA-specific."
+            },
+            {
+              "card": "C7",
+              "point": "GPR at 68th percentile; DeepSeek reinforces export control narrative \u2014 China AI parity threat."
+            }
+          ],
+          "counter_evidence": [
+            {
+              "card": "C8",
+              "point": "Interest coverage 68.4x and operating margin 54% \u2014 NVDA can sustain the adjustment from a position of exceptional strength."
+            },
+            {
+              "card": "C9",
+              "point": "Revenue +122% YoY; near-term Blackwell orders already placed \u2014 earnings impact is a 2026 story, not a 20-day story."
+            }
+          ],
+          "scenarios": [
+            {
+              "name": "Mixed",
+              "score": 0.42,
+              "rationale": "Most likely: stock range-bound as strong fundamentals compete with demand narrative uncertainty.",
+              "watch_for": "Hyperscaler capex guidance; NVDA February earnings call."
+            },
+            {
+              "name": "Tailwind-dominant",
+              "score": 0.38,
+              "rationale": "Demand confirmation absorbs shock; NVDA recovers as AI buildout continues.",
+              "watch_for": "Capex confirmation from MSFT, AMZN, GOOGL earnings."
+            },
+            {
+              "name": "Headwind-dominant",
+              "score": 0.2,
+              "rationale": "DeepSeek efficiency is structural; GPU intensity per AI dollar falls persistently.",
+              "watch_for": "More Chinese AI breakthroughs; data centre capex cuts."
+            }
+          ],
+          "confidence_statement": "Evidence strength: 0.58 (moderate \u2014 strong fundamental vs weak demand-narrative split). Composite signal: +0.14 (barely positive). The distribution is flat \u2014 this is a genuinely uncertain situation.",
+          "data_gaps": [
+            "C6: Dependency edges are curated judgment; citations TODO.",
+            "C7: GPR values are preliminary."
+          ],
+          "disclaimer": "This output is for informational and analytical purposes only. It does not constitute investment advice, a recommendation to buy or sell any security, or a price target.",
+          "references": [
+            {
+              "name": "FRED VIXCLS",
+              "url": "https://fred.stlouisfed.org/series/VIXCLS",
+              "retrieved_at": "2025-01-28T14:01:08Z"
+            },
+            {
+              "name": "yfinance NVDA",
+              "url": "https://finance.yahoo.com/quote/NVDA",
+              "retrieved_at": "2025-01-28T14:01:10Z"
+            },
+            {
+              "name": "SEC EDGAR XBRL (CIK 0001045810)",
+              "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+              "retrieved_at": "2025-01-28T14:01:18Z"
+            }
+          ],
+          "is_fallback": true,
+          "model_used": "template (demo mode)",
+          "is_fallback_model": false
+        }
+      }
+    },
+    {
+      "type": "done",
+      "delay_ms": 100,
+      "data": {
+        "run_id": "fixture-nvda-2025-01-28",
+        "total_ms": 8100
+      }
+    }
   ]
 }

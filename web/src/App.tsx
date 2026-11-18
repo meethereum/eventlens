@@ -11,10 +11,12 @@ import EmptyState from '@/components/EmptyState'
 import DemoBanner from '@/components/DemoBanner'
 import RefusalCard from '@/components/RefusalCard'
 import ErrorBoundary from '@/components/ErrorBoundary'
-import BaselineComparison from '@/components/BaselineComparison'
-import { useAnalysis } from '@/hooks/useAnalysis'import type { CardOutput, HealthResponse } from '@/types'
+import { useAnalysis } from '@/hooks/useAnalysis'
+import type { CardOutput, HealthResponse } from '@/types'
 import type { SubmitPayload } from '@/components/QueryBar'
 import { MOCK_HEALTH } from '@/lib/mockData'
+import WhatIfPanel from '@/components/WhatIfPanel'
+import PrecedentPanel from '@/components/PrecedentPanel'
 
 export default function App() {
   const { state, run, reset } = useAnalysis()
@@ -46,6 +48,8 @@ export default function App() {
   // Refusal card lives in cards['_refusal']
   const refusal = state.cards['_refusal']
   const analysisCards = Object.values(state.cards).filter(c => c.id !== '_refusal')
+  const c4Signal = state.cards.C4?.signal ?? 0
+  const marketMood = c4Signal < -0.1 ? 'risk_off' : c4Signal > 0.1 ? 'risk_on' : 'mixed'
 
   const isRunning =
     state.phase !== 'idle' && state.phase !== 'done' && state.phase !== 'error'
@@ -124,9 +128,7 @@ export default function App() {
                   ) : (
                     <CardGrid
                       cards={analysisCards}
-                      phase={state.phase}
                       onCardClick={setInspectedCard}
-                      ticker={state.parsed?.ticker}
                     />
                   )}
 
@@ -148,7 +150,19 @@ export default function App() {
                       />
                     )}
 
-                  {/* Baseline comparison toggle — removed per UX review */}
+                  {!refusal && state.phase === 'done' && state.runId && state.aggregate && (
+                    <div className="space-y-5">
+                      <WhatIfPanel runId={state.runId} />
+                      {state.parsed && (
+                        <PrecedentPanel
+                          ticker={state.parsed.ticker}
+                          eventType={state.parsed.event_type}
+                          asOf={state.parsed.as_of}
+                          marketMood={marketMood}
+                        />
+                      )}
+                    </div>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -158,6 +172,7 @@ export default function App() {
 
       <CardInspector
         card={inspectedCard}
+        runId={state.runId}
         onClose={() => setInspectedCard(null)}
       />
     </div>
