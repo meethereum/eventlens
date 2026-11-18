@@ -1,14 +1,12 @@
 import { motion } from 'framer-motion'
 import AnalysisCard from './AnalysisCard'
 import LockedCard from './LockedCard'
-import type { CardOutput, AnalysisState } from '@/types'
+import type { CardOutput } from '@/types'
 import { cardDisplayName } from '@/lib/companies'
 
 interface Props {
   cards: CardOutput[]
-  phase: AnalysisState['phase']
   onCardClick: (card: CardOutput) => void
-  ticker?: string
 }
 
 const CARD_IDS = ['C1','C2','C3','C4','C5','C6','C7','C8','C9','C10']
@@ -22,7 +20,7 @@ const item = {
   show:   { opacity: 1, y: 0, scale: 1, transition: { duration: 0.3, ease: 'easeOut' } },
 }
 
-export default function CardGrid({ cards, phase, onCardClick, ticker }: Props) {
+export default function CardGrid({ cards, onCardClick }: Props) {
   const cardMap = Object.fromEntries(cards.map(c => [c.id, c]))
 
   return (
@@ -40,7 +38,6 @@ export default function CardGrid({ cards, phase, onCardClick, ticker }: Props) {
               <AnalysisCard
                 card={card}
                 onClick={() => onCardClick(card)}
-                ticker={ticker}
               />
             ) : (
               <AnalysisCard
@@ -55,7 +52,6 @@ export default function CardGrid({ cards, phase, onCardClick, ticker }: Props) {
                 }}
                 onClick={() => {}}
                 disabled
-                ticker={ticker}
               />
             )}
           </motion.div>

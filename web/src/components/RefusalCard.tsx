@@ -37,7 +37,6 @@ export default function RefusalCard({ message, onSelectExample }: Props) {
                   onClick={() => onSelectExample({ query: eq.query, ticker: eq.ticker, as_of: eq.as_of })}
                   className="w-full text-left flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm border border-border bg-surface-3 text-text-secondary hover:border-accent/30 hover:text-accent-glow hover:bg-accent-muted transition-all group"
                 >
-                  <span className="text-lg">{eq.emoji}</span>
                   <span className="flex-1">{eq.query}</span>
                   <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
                 </button>

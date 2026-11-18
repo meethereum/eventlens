@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     # Data sources
     fred_api_key: str = ""
     sec_user_agent: str = "EventLens/0.1 user@example.com"
+    finnhub_api_key: str = ""
 
     # LLM — primary
     llm_base_url: str = "https://api.groq.com/openai/v1"

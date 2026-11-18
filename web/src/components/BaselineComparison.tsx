@@ -7,7 +7,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Cpu, ChevronDown, ChevronUp, Loader2, AlertTriangle } from 'lucide-react'
-import { cn } from '@/lib/utils'
 import { useBaseline } from '@/hooks/useBaseline'
 import type { VerdictOutput } from '@/types'
 
@@ -18,7 +17,7 @@ interface Props {
 
 export default function BaselineComparison({ query, verdict }: Props) {
   const [open, setOpen] = useState(false)
-  const { state, run, reset } = useBaseline()
+  const { state, run } = useBaseline()
 
   const toggle = () => {
     if (!open && !state.response && !state.loading) {

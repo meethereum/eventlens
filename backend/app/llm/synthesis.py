@@ -50,7 +50,7 @@ class SynthesisOutput(BaseModel):
 # System prompt (exactly as specified)
 # ---------------------------------------------------------------------------
 
-SYSTEM_PROMPT = """You are a senior equity research analyst writing a short research note. You receive JSON with the user's question, 10 analysis cards (C1 to C10) and precomputed scenario scores. Rules: 1) Use only facts present in the JSON. 2) Cite cards inline like [C3]. 3) Copy scenario scores exactly as given; never invent or alter numbers. 4) Name cards with low weight or quality in data_gaps. 5) Always include counter-evidence, meaning cards that point against the leading scenario. 6) No buy, sell or hold advice and no price targets. 7) If evidence is mixed, say so plainly. Output ONLY valid JSON: {headline, summary (3 to 4 sentences), key_drivers [{card, point}], counter_evidence [{card, point}], scenarios [{name, score, rationale, watch_for}], confidence_statement, data_gaps [], disclaimer}"""
+SYSTEM_PROMPT = """You are a senior equity research analyst writing a short research note. You receive JSON with the user's question, 10 analysis cards (C1 to C10) and precomputed scenario scores. Rules: 1) Use only facts present in the JSON. 2) Cite cards inline like [C3]. 3) Copy scenario scores exactly as given; never invent or alter numbers. 4) Name cards with low weight or quality in data_gaps. 5) Always include counter-evidence, meaning cards that point against the leading scenario. 6) No buy, sell or hold advice and no price targets. 7) If evidence is mixed, say so plainly. 8) Historical precedents are analogs, not predictions; do not invent missing outcomes. Output ONLY valid JSON: {headline, summary (3 to 4 sentences), key_drivers [{card, point}], counter_evidence [{card, point}], scenarios [{name, score, rationale, watch_for}], confidence_statement, data_gaps [], disclaimer}"""
 
 
 # ---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ def build_compact_cards(cards: dict[str, CardOutput]) -> list[dict]:
                 "label": c.headline.label if c.headline else "",
                 "value": c.headline.value if c.headline else "",
                 "unit":  c.headline.unit  if c.headline else "",
-            } if c.headline else None,
+            } if c.headline else             None,
             "key_metrics": [
                 {"name": m.name, "value": m.value, "unit": m.unit}
                 for m in c.metrics[:3]
@@ -182,6 +182,7 @@ def synthesize_verdict(
     parsed: dict,
     cards: dict[str, CardOutput],
     aggregate,
+    precedents: list[dict] | None = None,
 ) -> tuple[VerdictOutput, bool]:
     """
     Call LLM to synthesize the final verdict.
@@ -212,6 +213,7 @@ def synthesize_verdict(
         "composite_signal": round(aggregate.composite_signal, 4) if aggregate else 0,
         "evidence_strength": round(aggregate.evidence_strength, 4) if aggregate else 0,
         "coverage": round(aggregate.coverage, 4) if aggregate else 0,
+        "historical_precedents": precedents or [],
     }
 
     import json
@@ -233,6 +235,9 @@ def synthesize_verdict(
 
     # Validate citations and scenario numbers
     is_verified = validate_verdict(parsed_llm, cards, aggregate)
+    if not is_verified:
+        logger.warning("LLM synthesis failed validation; using the deterministic template")
+        return _template_verdict(query, parsed, cards, aggregate, references), False
 
     # Convert to VerdictOutput
     verdict = VerdictOutput(

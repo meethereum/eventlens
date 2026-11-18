@@ -1,5 +1,3 @@
-version: "3.9"
-
 # ── Dev override — hot reload for both services ───────────────────────────
 # Usage:
 #   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
@@ -13,8 +11,11 @@ services:
     volumes:
       - ./backend:/app            # live source mount
       - ./config:/app/config      # live config mount
-      - ./scripts:/app/scripts    # live scripts mount
-      - ./fixtures:/app/fixtures  # live fixtures mount
+      # Keep precedent tools from backend/scripts available in dev while
+      # exposing the project-level operational scripts at their usual paths.
+      - ./scripts/check_apis.py:/app/scripts/check_apis.py
+      - ./scripts/record_fixture.py:/app/scripts/record_fixture.py
+      - ./backend/fixtures:/app/fixtures  # live fixtures mount
       - ./backend/data:/app/data  # live data mount
       - cache_vol:/app/.cache
 
@@ -22,7 +23,7 @@ services:
     build:
       context: ./web
       dockerfile: Dockerfile.dev
-    ports:
+    ports: !override
       - "5173:5173"               # Vite dev port (replaces 8080 in dev)
     volumes:
       - ./web:/app
