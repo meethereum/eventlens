@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "description": "Curated cross-sector dependency edges for EventLens C6. Each edge represents a directional relationship between a source entity (sector ETF, commodity, rate, or specific ticker) and a target ticker in the covered universe.",
+    "caveat": "Curated judgment; citations TODO. Edge strengths are subjective estimates (0-1) based on economic logic and observed correlations.",
+    "version": "1",
+    "created": "2025-01-15"
+  },
+  "nodes": [
+    { "id": "SMH",     "label": "Semiconductors (SMH)",    "type": "etf" },
+    { "id": "TSM",     "label": "TSMC (TSM)",              "type": "ticker" },
+    { "id": "CRWD",    "label": "CrowdStrike (CRWD)",     "type": "ticker" },
+    { "id": "SPR",     "label": "Spirit AeroSystems (SPR)", "type": "ticker" },
+    { "id": "WTI",     "label": "WTI Crude Oil",           "type": "commodity" },
+    { "id": "XLE",     "label": "Energy Sector (XLE)",     "type": "etf" },
+    { "id": "XLY",     "label": "Consumer Discretionary (XLY)", "type": "etf" },
+    { "id": "XLI",     "label": "Industrials (XLI)",       "type": "etf" },
+    { "id": "DGS10",   "label": "10y Treasury Yield",     "type": "rate" },
+    { "id": "KRE",     "label": "Regional Banks (KRE)",    "type": "etf" },
+    { "id": "ITA",     "label": "Defense/Aerospace (ITA)", "type": "etf" },
+    { "id": "GPR",     "label": "Geopolitical Risk Index", "type": "index" },
+    { "id": "NVDA",    "label": "NVIDIA (NVDA)",           "type": "ticker" },
+    { "id": "AAPL",    "label": "Apple (AAPL)",            "type": "ticker" },
+    { "id": "INTC",    "label": "Intel (INTC)",            "type": "ticker" },
+    { "id": "GM",      "label": "General Motors (GM)",     "type": "ticker" },
+    { "id": "MSFT",    "label": "Microsoft (MSFT)",        "type": "ticker" },
+    { "id": "BA",      "label": "Boeing (BA)",             "type": "ticker" },
+    { "id": "RTX",     "label": "RTX Corp (RTX)",          "type": "ticker" },
+    { "id": "XOM",     "label": "Exxon Mobil (XOM)",       "type": "ticker" },
+    { "id": "CVX",     "label": "Chevron (CVX)",           "type": "ticker" },
+    { "id": "JPM",     "label": "JPMorgan (JPM)",          "type": "ticker" },
+    { "id": "SCHW",    "label": "Charles Schwab (SCHW)",   "type": "ticker" },
+    { "id": "XLY_2",   "label": "Consumer Spending Proxy", "type": "etf" }
+  ],
+  "edges": [
+    {
+      "from": "TSM", "to": "NVDA",
+      "channel": "supplier",
+      "sign": 1, "strength": 0.85, "lag_days": 0,
+      "rationale": "TSMC manufactures NVIDIA's GPUs; foundry capacity and pricing directly constrain NVIDIA's revenue. Supply chain dependency is near-total.",
+      "evidence_url": "https://www.reuters.com/technology/nvidia-chips-tsmc/"
+    },
+    {
+      "from": "TSM", "to": "AAPL",
+      "channel": "supplier",
+      "sign": 1, "strength": 0.65, "lag_days": 0,
+      "rationale": "TSMC fabricates Apple's A-series and M-series chips. Less critical than for NVDA (Apple has some Samsung diversification historically) but still a primary supplier.",
+      "evidence_url": ""
+    },
+    {
+      "from": "SMH", "to": "INTC",
+      "channel": "commodity",
+      "sign": 1, "strength": 0.70, "lag_days": 0,
+      "rationale": "Intel is a constituent of SMH and the semiconductor sector; sector-wide sentiment and valuation shifts directly impact INTC's multiple.",
+      "evidence_url": ""
+    },
+    {
+      "from": "SMH", "to": "GM",
+      "channel": "customer",
+      "sign": 1, "strength": 0.35, "lag_days": 30,
+      "rationale": "Modern vehicles use 1000+ chips; semiconductor availability and pricing affect auto production schedules and costs. Weaker link than pure-play semis.",
+      "evidence_url": "https://www.reuters.com/business/autos-transportation/chip-shortage-auto/"
+    },
+    {
+      "from": "CRWD", "to": "MSFT",
+      "channel": "vendor",
+      "sign": 1, "strength": 0.45, "lag_days": 0,
+      "rationale": "CrowdStrike runs on Azure; a CRWD outage (e.g. July 2024) can dent Azure reliability perception and enterprise cloud demand, indirectly affecting MSFT.",
+      "evidence_url": "https://www.bbc.com/news/articles/c9dnwk1nwp9o"
+    },
+    {
+      "from": "SPR", "to": "BA",
+      "channel": "supplier",
+      "sign": 1, "strength": 0.80, "lag_days": 0,
+      "rationale": "Spirit AeroSystems is Boeing's primary fuselage supplier; SPR operational disruptions directly constrain BA's production rate. Deeply entangled supply chain.",
+      "evidence_url": "https://www.reuters.com/business/aerospace-defense/boeing-spirit-aerosystems/"
+    },
+    {
+      "from": "WTI", "to": "XLY",
+      "channel": "commodity",
+      "sign": -1, "strength": 0.40, "lag_days": 14,
+      "rationale": "Rising oil prices increase gasoline costs, squeezing consumer discretionary spending with a 2-4 week lag. XLY components (restaurants, retail, autos) are sensitive to fuel costs.",
+      "evidence_url": "https://fred.stlouisfed.org/series/DCOILWTICO"
+    },
+    {
+      "from": "XLE", "to": "XLI",
+      "channel": "commodity",
+      "sign": -1, "strength": 0.30, "lag_days": 7,
+      "rationale": "Rising energy prices increase transport and industrial input costs, putting margin pressure on industrials. Effect is modest — many industrials benefit from capex in energy.",
+      "evidence_url": ""
+    },
+    {
+      "from": "DGS10", "to": "JPM",
+      "channel": "rate",
+      "sign": -1, "strength": 0.85, "lag_days": 0,
+      "rationale": "10y yield changes directly affect JPM's net interest margin and Treasury portfolio marks. Rapid yield moves create duration risk on the balance sheet.",
+      "evidence_url": "https://fred.stlouisfed.org/series/DGS10"
+    },
+    {
+      "from": "DGS10", "to": "SCHW",
+      "channel": "rate",
+      "sign": -1, "strength": 0.80, "lag_days": 0,
+      "rationale": "SCHW earns on sweep cash balances; falling rates compress the spread between client cash and reinvestment yields. Duration of client cash is short but repricing is asymmetric.",
+      "evidence_url": "https://fred.stlouisfed.org/series/DGS10"
+    },
+    {
+      "from": "KRE", "to": "JPM",
+      "channel": "contagion",
+      "sign": -1, "strength": 0.65, "lag_days": 0,
+      "rationale": "Regional bank stress (e.g. SVB 2023) creates system-wide multiple compression for all banks, even large well-capitalized ones. Contagion is psychological + funding-cost based.",
+      "evidence_url": "https://finance.yahoo.com/quote/KRE"
+    },
+    {
+      "from": "KRE", "to": "SCHW",
+      "channel": "contagion",
+      "sign": -1, "strength": 0.60, "lag_days": 0,
+      "rationale": "Regional bank contagion affects SCHW due to its bank subsidiary and sweep deposit franchise. Less direct than for pure regional banks but sentiment-driven.",
+      "evidence_url": "https://finance.yahoo.com/quote/KRE"
+    },
+    {
+      "from": "ITA", "to": "BA",
+      "channel": "customer",
+      "sign": 1, "strength": 0.50, "lag_days": 90,
+      "rationale": "Defense spending drives ITA; BA's defense segment (25% of revenue) benefits from elevated defense budgets with a lag. Geopolitical stress typically precedes budget increases.",
+      "evidence_url": "https://finance.yahoo.com/quote/ITA"
+    },
+    {
+      "from": "ITA", "to": "RTX",
+      "channel": "customer",
+      "sign": 1, "strength": 0.75, "lag_days": 90,
+      "rationale": "RTX is the largest pure-play defense prime; ITA moves and defense budget cycles are the primary revenue driver. Geopolitical risk directly translates to RTX order flow.",
+      "evidence_url": "https://finance.yahoo.com/quote/ITA"
+    },
+    {
+      "from": "GPR", "to": "XOM",
+      "channel": "policy",
+      "sign": 1, "strength": 0.85, "lag_days": 0,
+      "rationale": "Geopolitical risk events (wars, sanctions) disrupt oil supply and push prices higher, directly benefiting integrated producers like XOM. The GPR→oil→XOM chain is one of the strongest in the model.",
+      "evidence_url": "https://www.matteoiacoviello.com/gpr.htm"
+    }
+  ]
+}

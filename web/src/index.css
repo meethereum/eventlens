@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ----------------------------------------------------------------
+   CSS custom properties (design tokens)
+   ---------------------------------------------------------------- */
+@layer base {
+  :root {
+    --radius: 0.5rem;
+
+    /* shadcn/ui required variables (mapped to our palette) */
+    --background: 222 47% 4%;
+    --foreground: 210 40% 95%;
+    --card: 222 47% 6%;
+    --card-foreground: 210 40% 95%;
+    --popover: 222 47% 6%;
+    --popover-foreground: 210 40% 95%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 222 47% 4%;
+    --secondary: 217 32% 15%;
+    --secondary-foreground: 210 40% 95%;
+    --muted: 217 32% 12%;
+    --muted-foreground: 215 20% 50%;
+    --accent: 217 91% 60%;
+    --accent-foreground: 222 47% 4%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 95%;
+    --border: 217 32% 16%;
+    --input: 217 32% 16%;
+    --ring: 217 91% 60%;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Base reset & typography
+   ---------------------------------------------------------------- */
+@layer base {
+  * {
+    @apply border-border;
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-surface text-text-primary font-sans;
+    min-height: 100dvh;
+  }
+
+  /* Monospace numbers everywhere */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum";
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border-bright rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-text-muted;
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(59, 130, 246, 0.3);
+  }
+}
+
+/* ----------------------------------------------------------------
+   Component utilities
+   ---------------------------------------------------------------- */
+@layer components {
+  /* Glass panel */
+  .glass-panel {
+    @apply bg-surface-2 border border-border rounded-lg shadow-glass;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Shimmer skeleton */
+  .skeleton {
+    @apply rounded bg-surface-3;
+    background: linear-gradient(
+      90deg,
+      theme(colors.surface.3) 25%,
+      theme(colors.surface.4) 50%,
+      theme(colors.surface.3) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s linear infinite;
+  }
+
+  /* Signal badge */
+  .signal-tailwind {
+    @apply text-tailwind bg-tailwind-dim border border-tailwind/20;
+  }
+  .signal-headwind {
+    @apply text-headwind bg-headwind-dim border border-headwind/20;
+  }
+  .signal-neutral {
+    @apply text-neutral bg-neutral-dim border border-neutral/20;
+  }
+
+  /* Card glow on done */
+  .card-done-tailwind {
+    box-shadow: 0 0 0 1px theme(colors.tailwind.DEFAULT / 30%), 
+                0 0 20px theme(colors.tailwind.DEFAULT / 8%);
+  }
+  .card-done-headwind {
+    box-shadow: 0 0 0 1px theme(colors.headwind.DEFAULT / 30%), 
+                0 0 20px theme(colors.headwind.DEFAULT / 8%);
+  }
+  .card-done-neutral {
+    box-shadow: 0 0 0 1px theme(colors.neutral.DEFAULT / 20%);
+  }
+
+  /* Fetching shimmer overlay */
+  .card-fetching {
+    position: relative;
+    overflow: hidden;
+  }
+  .card-fetching::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(59, 130, 246, 0.04) 50%,
+      transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  /* Number count-up */
+  .num {
+    @apply font-mono tabular-nums;
+  }
+
+  /* Inline citation chip */
+  .citation-chip {
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-2xs font-mono
+           bg-accent-muted text-accent-glow border border-accent/20
+           cursor-pointer hover:bg-accent/20 transition-colors;
+  }
+}
+
+/* ----------------------------------------------------------------
+   Utility overrides
+   ---------------------------------------------------------------- */
+@layer utilities {
+  .bg-grid {
+    background-image: theme(backgroundImage.grid-pattern);
+    background-size: theme(backgroundSize.grid);
+  }
+}

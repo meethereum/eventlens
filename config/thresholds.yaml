@@ -1,0 +1,137 @@
+# ============================================================
+# EventLens — Financial health thresholds for C8
+#
+# Rules:
+# (a) Every threshold has a comment saying "rule of thumb"
+#     and, if possible, a source.
+# (b) s = 0.5 × absolute_band_score + 0.5 × percentile_vs_own_trailing_5y,
+#     then clipped to [-1, 1]. Do not score on absolute thresholds alone
+#     because many healthy large caps run a current ratio below 1.
+# (c) Banks and brokers (JPM, SCHW) get equity/assets, interest coverage
+#     excluded, current ratio marked N/A.
+# (d) Typical bands to start from:
+#     interest coverage above 5 strong, below 2 weak;
+#     current ratio above 1.5 strong, below 1.0 weak (before the percentile blend).
+# ============================================================
+
+# Sector rule overrides — which tickers use the bank/broker path
+# Source: rule of thumb; banks don't have meaningful current ratios because
+# their assets are mostly loans, not inventory/receivables.
+bank_tickers:
+  - JPM
+  - SCHW
+
+# ── Default thresholds (non-bank companies) ──────────────────────────────
+
+# Rule of thumb: coverage >5x means interest is easily serviced,
+# <2x signals distress. Source: Damodaran, "Investment Valuation" Ch. 9.
+interest_coverage:
+  strong: 5.0    # ≥ 5x → band_score = +1
+  weak: 2.0      # ≤ 2x → band_score = -1
+  # Linear interpolation between weak and strong; below weak → -1, above strong → +1
+
+# Rule of thumb: >1.5 healthy liquidity, <1.0 potential working capital stress.
+# Source: investopedia.com/terms/c/currentratio.asp
+# Note: many healthy large caps (e.g. AAPL ~1.0) run below 1.5 because they
+# have strong cash flow and don't need working capital buffers — hence
+# the 50% percentile blend in the scoring formula.
+current_ratio:
+  strong: 1.5
+  weak: 1.0
+
+# Rule of thumb: D/E > 2.0 high leverage, < 0.3 low leverage.
+# Source: investopedia.com/terms/d/debtequityratio.asp
+debt_to_equity:
+  strong: 0.3    # low leverage → band_score = +1
+  weak: 2.0     # high leverage → band_score = -1
+  # Note: this is inverted — lower D/E is better
+
+# Rule of thumb: operating margin >20% strong, <5% weak for non-financials.
+# Source: rule of thumb based on S&P 500 average ~10-12%
+operating_margin:
+  strong: 20.0   # percent
+  weak: 5.0      # percent
+
+# ── Bank / broker thresholds ────────────────────────────────────────────
+
+# Rule of thumb: equity/assets (a CET1 proxy) >8% well-capitalized,
+# <5% undercapitalized. Source: Basel III minimum CET1 is 4.5%,
+# well-capitalized banks typically run 8-12%.
+bank_equity_to_assets:
+  strong: 8.0    # percent
+  weak: 5.0      # percent
+
+# Rule of thumb: bank operating margin >30% strong, <15% weak.
+# Banks have different cost structures; net interest income is the margin.
+bank_operating_margin:
+  strong: 30.0
+  weak: 15.0
+
+# ── C9 Earnings & Growth thresholds ─────────────────────────────────────
+
+# Rule of thumb: revenue growth >15% strong, <0% weak.
+# Source: rule of thumb based on S&P 500 average ~5-7%
+revenue_growth:
+  strong: 15.0   # percent YoY
+  weak: 0.0
+
+# Rule of thumb: EPS growth >20% strong, <0% weak.
+# EPS is more volatile than revenue; wider band.
+eps_growth:
+  strong: 20.0
+  weak: 0.0
+
+# Rule of thumb: earnings-day abnormal return >+3% positive surprise,
+# <-3% negative surprise.
+# Source: rule of thumb based on typical post-earnings drift studies
+abnormal_return:
+  strong: 3.0
+  weak: -3.0
+
+# ── C10 Valuation & Price Momentum thresholds ──────────────────────────
+
+# Rule of thumb: P/E percentile <30% cheap, >70% expensive vs own history.
+pe_percentile:
+  strong: 30.0   # low percentile → band_score = +1 (cheap)
+  weak: 70.0      # high percentile → band_score = -1 (expensive)
+  # Note: inverted — lower percentile is better
+
+# Rule of thumb: 52-week range position >80% near highs (bullish momentum),
+# <20% near lows (bearish momentum).
+range_position:
+  strong: 80.0
+  weak: 20.0
+
+# Weights for C10 composite signal
+c10_weights:
+  pe_percentile: 0.5
+  range_position: 0.3
+  ma_trend: 0.2
+
+# Weights for C9 composite signal
+c9_weights:
+  revenue_growth: 0.4
+  eps_growth: 0.4
+  abnormal_return: 0.2
+
+# ── Sector overrides ────────────────────────────────────────────────────
+# Override thresholds for specific sectors where the defaults don't fit.
+
+sector_overrides:
+  # Energy companies have different margin profiles (cyclical, capital-intensive)
+  Energy:
+    operating_margin:
+      strong: 15.0
+      weak: 3.0
+
+  # Financials (non-bank) — e.g. SCHW has different margin structure
+  Financials_non_bank:
+    operating_margin:
+      strong: 25.0
+      weak: 10.0
+
+  # Tech companies often run lower current ratios (efficient working capital)
+  Technology:
+    current_ratio:
+      strong: 1.2   # tech companies can run leaner
+      weak: 0.8

@@ -1,0 +1,107 @@
+{
+  "meta": {
+    "query": "Russia has invaded Ukraine and oil is spiking. How does that affect Exxon?",
+    "ticker": "XOM",
+    "as_of": "2022-02-25",
+    "horizon_days": 20,
+    "recorded_at": "2022-02-25T14:00:00Z",
+    "fixture_version": "1"
+  },
+  "events": [
+    {
+      "type": "query_parsed",
+      "delay_ms": 420,
+      "data": {
+        "parsed": {
+          "ticker": "XOM",
+          "event_type": "geopolitical shock / commodity spike",
+          "as_of": "2022-02-25",
+          "horizon_days": 20,
+          "intent": "analysis"
+        },
+        "latency_ms": 395
+      }
+    },
+    {
+      "type": "scope_check",
+      "delay_ms": 180,
+      "data": {
+        "in_scope": true,
+        "ticker": "XOM",
+        "reason": "ticker in covered universe",
+        "refusal_message": ""
+      }
+    },
+    { "type": "card_start", "delay_ms": 100, "data": { "card_id": "C1", "title": "USD Strength" } },
+    { "type": "card_start", "delay_ms": 60,  "data": { "card_id": "C2", "title": "Rates & Inflation" } },
+    { "type": "card_start", "delay_ms": 60,  "data": { "card_id": "C3", "title": "Oil & Energy" } },
+    {
+      "type": "card_done", "delay_ms": 350,
+      "data": { "card": { "id": "C1", "title": "USD Strength", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:03Z", "latency_ms": 298, "headline": { "label": "DXY Index", "value": 97.1, "unit": "", "delta": 1.1 }, "metrics": [{ "name": "Level", "value": 97.1, "unit": "", "note": "" }, { "name": "20d change", "value": 1.1, "unit": "%", "note": "" }, { "name": "1y percentile", "value": 55, "unit": "%ile", "note": "" }], "series": [], "signal": -0.18, "label": "neutral", "weight": 0.3, "quality": 0.90, "reasoning": ["DXY at 97.1 is mid-range; USD is modestly strong but not at extremes.", "Exxon's international revenues are limited compared to tech peers; USD is a secondary concern.", "In a commodity shock, oil price direction swamps currency effects for energy producers."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -0.6, "rho": -0.18, "d": -1 }, "contribution": -0.02 }, "sources": [{ "name": "FRED DTWEXBGS", "url": "https://fred.stlouisfed.org/series/DTWEXBGS", "retrieved_at": "2022-02-25T14:01:00Z" }], "warnings": [] } }
+    },
+    {
+      "type": "card_done", "delay_ms": 320,
+      "data": { "card": { "id": "C2", "title": "Rates & Inflation", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:05Z", "latency_ms": 305, "headline": { "label": "10y Treasury", "value": 1.97, "unit": "%", "delta": 15 }, "metrics": [{ "name": "10y yield", "value": 1.97, "unit": "%", "note": "" }, { "name": "20d change", "value": 15, "unit": "bp", "note": "" }, { "name": "CPI YoY", "value": 7.5, "unit": "%", "note": "" }], "series": [], "signal": -0.22, "label": "neutral", "weight": 0.72, "quality": 0.94, "reasoning": ["CPI at 7.5% YoY — the highest since 1982 — adds inflationary pressure that will drive Fed tightening.", "Rising yields mildly compress energy sector valuations but are secondary to commodity prices.", "For XOM, rate risk is moderate; the company benefits more from high nominal energy prices than it suffers from rate increases."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -0.7, "rho": -0.3, "d": -1 }, "contribution": -0.07 }, "sources": [{ "name": "FRED DGS10", "url": "https://fred.stlouisfed.org/series/DGS10", "retrieved_at": "2022-02-25T14:01:04Z" }], "warnings": [] } }
+    },
+    {
+      "type": "card_done", "delay_ms": 290,
+      "data": { "card": { "id": "C3", "title": "Oil & Energy", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:07Z", "latency_ms": 271, "headline": { "label": "WTI Crude", "value": 92.8, "unit": "$/bbl", "delta": 18.4 }, "metrics": [{ "name": "WTI price", "value": 92.8, "unit": "$/bbl", "note": "" }, { "name": "20d change", "value": 18.4, "unit": "%", "note": "" }, { "name": "60d change", "value": 32.1, "unit": "%", "note": "" }, { "name": "1y percentile", "value": 94, "unit": "%ile", "note": "" }], "series": [], "signal": 0.92, "label": "tailwind", "weight": 0.9, "quality": 0.96, "reasoning": ["WTI crude has surged 18.4% in 20 days to $92.8, sitting at the 94th percentile of its 1-year range.", "Exxon's oil exposure prior is 0.9 (maximum) — this is the dominant driver for XOM.", "Russia-Ukraine conflict removes ~3M bbl/day of potential supply from global markets, underpinning prices.", "High oil directly translates to Exxon's upstream revenue and free cash flow — the correlation is near 1."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": 2.8, "rho": 0.91, "d": 1 }, "contribution": 0.44 }, "sources": [{ "name": "FRED DCOILWTICO", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "retrieved_at": "2022-02-25T14:01:06Z" }], "warnings": [] } }
+    },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C4", "title": "Market Regime & Volatility" } },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C5", "title": "Sector Relative Strength" } },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C6", "title": "Cross-Sector Dependency" } },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C7", "title": "Geopolitical & Policy Risk" } },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C8", "title": "Financial Health" } },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C9", "title": "Earnings & Growth" } },
+    { "type": "card_start", "delay_ms": 60, "data": { "card_id": "C10", "title": "Valuation & Price Momentum" } },
+    { "type": "card_done", "delay_ms": 480, "data": { "card": { "id": "C4", "title": "Market Regime & Volatility", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:09Z", "latency_ms": 461, "headline": { "label": "VIX", "value": 32.1, "unit": "", "delta": 8.4 }, "metrics": [{ "name": "SPY 20d return", "value": -6.4, "unit": "%", "note": "" }, { "name": "VIX level", "value": 32.1, "unit": "", "note": "" }, { "name": "VIX percentile (1y)", "value": 88, "unit": "%ile", "note": "" }, { "name": "XOM beta (1y)", "value": 0.95, "unit": "", "note": "" }], "series": [], "signal": -0.35, "label": "headwind", "weight": 0.5, "quality": 0.97, "reasoning": ["VIX at 32.1 (88th percentile) reflects genuine market fear following the invasion.", "Elevated volatility is a headwind for equity valuations broadly.", "However, energy stocks often outperform in geopolitical risk-off episodes — XOM's sector offsets the vol headwind.", "SPY is down 6.4% over 20 days; XOM has bucked this trend due to oil's move."], "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -1.1, "rho": 0.42, "d": -1 }, "contribution": -0.08 }, "sources": [{ "name": "FRED VIXCLS", "url": "https://fred.stlouisfed.org/series/VIXCLS", "retrieved_at": "2022-02-25T14:01:08Z" }], "warnings": [] } } },
+    { "type": "card_done", "delay_ms": 420, "data": { "card": { "id": "C5", "title": "Sector Relative Strength", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:11Z", "latency_ms": 401, "headline": { "label": "XOM vs XLE (20d)", "value": 3.8, "unit": "%" }, "metrics": [{ "name": "XOM 20d", "value": 14.2, "unit": "%", "note": "" }, { "name": "XLE 20d", "value": 10.4, "unit": "%", "note": "" }, { "name": "SPY 20d", "value": -6.4, "unit": "%", "note": "" }, { "name": "Driver classification", "value": "Sector-driven", "unit": "", "note": "" }], "series": [], "signal": 0.68, "label": "tailwind", "weight": 0.75, "quality": 0.97, "reasoning": ["XOM is up 14.2% in 20 days, outperforming even the already-strong XLE by 3.8%.", "Classification: 'sector-driven' — the entire energy sector is rising on oil prices, with XOM at the top.", "XOM's large upstream exposure (vs peers with more downstream/refining) gives it extra leverage to crude price moves."], "math": { "formula": "s = clip(alpha_vs_sector / threshold, -1, 1)", "inputs": { "alpha_vs_sector": 3.8, "alpha_vs_spy": 20.6, "threshold": 5.0 }, "contribution": 0.23 }, "sources": [{ "name": "yfinance XOM", "url": "https://finance.yahoo.com/quote/XOM", "retrieved_at": "2022-02-25T14:01:10Z" }], "warnings": [] } } },
+    { "type": "card_done", "delay_ms": 580, "data": { "card": { "id": "C6", "title": "Cross-Sector Dependency", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:14Z", "latency_ms": 554, "headline": { "label": "Linked sectors (20d avg)", "value": 4.2, "unit": "%" }, "metrics": [{ "name": "XLI 20d", "value": -2.1, "unit": "%", "note": "" }, { "name": "XLY 20d", "value": -8.4, "unit": "%", "note": "" }, { "name": "Corr XOM-XLE (252d)", "value": 0.88, "unit": "", "note": "" }], "series": [], "signal": 0.42, "label": "tailwind", "weight": 0.65, "quality": 0.86, "reasoning": ["Oil→industrials edge is active: XLI down 2.1% as rising transport costs hurt industrials.", "Oil→consumer spending edge: XLY down 8.4%, higher fuel prices squeeze discretionary.", "Paradoxically these downstream headwinds are tailwinds for XOM — higher prices mean higher XOM revenues.", "The dependency graph confirms XOM sits at the source of multiple chain reactions."], "math": { "formula": "s = sum(strength_i × move_i × sign_i) / n, clipped to [-1,1]", "inputs": { "xle_move": 10.4, "xle_strength": 0.88 }, "contribution": 0.12 }, "sources": [{ "name": "data/dependencies.json (curated)", "url": "", "retrieved_at": "2022-02-25T14:01:12Z" }], "warnings": ["Dependency edges are curated judgment; citations TODO."] } } },
+    { "type": "card_done", "delay_ms": 360, "data": { "card": { "id": "C7", "title": "Geopolitical & Policy Risk", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:16Z", "latency_ms": 341, "headline": { "label": "GPR Index", "value": 294.6, "unit": "", "delta": 142.8 }, "metrics": [{ "name": "GPR level", "value": 294.6, "unit": "", "note": "" }, { "name": "GPR 1y percentile", "value": 99, "unit": "%ile", "note": "" }, { "name": "GPR 3m change", "value": 142.8, "unit": "", "note": "" }, { "name": "XOM geopolitical exposure", "value": "Very High", "unit": "", "note": "" }], "series": [], "signal": 0.88, "label": "tailwind", "weight": 0.9, "quality": 0.88, "reasoning": ["GPR at 294.6 is in the 99th percentile — an extreme geopolitical shock.", "For energy producers, extreme geopolitical events are historically price-positive: supply disruption > demand destruction in the short term.", "XOM's geopolitical exposure prior is 0.9; this card carries maximum weight.", "Sanctions on Russian energy exports will divert demand toward non-Russian suppliers including US majors like XOM."], "math": { "formula": "s = d × tanh(z / 2), w = max(|rho|/0.5, w_prior)", "inputs": { "z": 2.6, "rho": 0.72, "d": 1, "w_prior": 0.9 }, "contribution": 0.38 }, "sources": [{ "name": "GPR Index (Caldara & Iacoviello 2022)", "url": "https://www.matteoiacoviello.com/gpr.htm", "retrieved_at": "2022-02-25T14:01:15Z" }], "warnings": ["Recent GPR values are preliminary and subject to revision."] } } },
+    { "type": "card_done", "delay_ms": 820, "data": { "card": { "id": "C8", "title": "Financial Health", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:21Z", "latency_ms": 801, "headline": { "label": "Interest Coverage", "value": 14.2, "unit": "x", "delta": 6.1 }, "metrics": [{ "name": "Current ratio", "value": 1.08, "unit": "x", "note": "" }, { "name": "Debt/Equity", "value": 0.21, "unit": "x", "note": "" }, { "name": "Interest coverage", "value": 14.2, "unit": "x", "note": "" }, { "name": "Operating margin", "value": 10.8, "unit": "%", "note": "" }], "series": [], "signal": 0.52, "label": "tailwind", "weight": 0.78, "quality": 0.92, "reasoning": ["Interest coverage of 14.2x is in the 'strong' band; Exxon's balance sheet is solid.", "Low leverage (D/E 0.21) means rising rates are not a material risk.", "Operating margin improving on higher oil prices; XOM can sustain and grow dividends.", "Financial strength allows XOM to capitalise on dislocation — it can acquire distressed assets if peers struggle."], "math": { "formula": "s = 0.5 × band_score + 0.5 × pct_vs_5y, clipped [-1,1]", "inputs": { "interest_coverage": 14.2, "band_score": 0.8, "pct_vs_5y": 0.72 }, "contribution": 0.17 }, "sources": [{ "name": "SEC EDGAR XBRL (CIK 0000034088)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json", "retrieved_at": "2022-02-25T14:01:18Z" }], "warnings": [] } } },
+    { "type": "card_done", "delay_ms": 700, "data": { "card": { "id": "C9", "title": "Earnings & Growth", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:24Z", "latency_ms": 681, "headline": { "label": "Revenue YoY", "value": 54.8, "unit": "%" }, "metrics": [{ "name": "Revenue YoY", "value": 54.8, "unit": "%", "note": "" }, { "name": "Diluted EPS YoY", "value": 221.0, "unit": "%", "note": "" }, { "name": "Last earnings abnormal return", "value": 4.2, "unit": "%", "note": "" }], "series": [], "signal": 0.84, "label": "tailwind", "weight": 0.8, "quality": 0.93, "reasoning": ["Revenue up 54.8% YoY and EPS up 221% — driven entirely by oil price recovery from 2020 lows.", "The last earnings day produced a +4.2% abnormal return; market was positively surprised.", "Current oil spike will push Q1 2022 earnings materially higher — consensus estimates are likely too low.", "Momentum is strongly positive; XOM reinstated dividend growth and buybacks."], "math": { "formula": "s = clip(0.4×rev_score + 0.4×eps_score + 0.2×abn_ret_score, -1,1)", "inputs": { "rev_yoy": 54.8, "eps_yoy": 221.0, "abnormal_return": 4.2 }, "contribution": 0.30 }, "sources": [{ "name": "SEC EDGAR XBRL (CIK 0000034088)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json", "retrieved_at": "2022-02-25T14:01:22Z" }], "warnings": [] } } },
+    { "type": "card_done", "delay_ms": 490, "data": { "card": { "id": "C10", "title": "Valuation & Price Momentum", "status": "done", "as_of": "2022-02-25", "fetched_at": "2022-02-25T14:01:26Z", "latency_ms": 471, "headline": { "label": "P/E (TTM)", "value": 16.4, "unit": "x", "delta": -8.2 }, "metrics": [{ "name": "P/E TTM", "value": 16.4, "unit": "x", "note": "" }, { "name": "P/E 5y percentile", "value": 24, "unit": "%ile", "note": "" }, { "name": "52-week range position", "value": 82, "unit": "%", "note": "" }, { "name": "50d MA trend", "value": "Above", "unit": "", "note": "" }, { "name": "200d MA trend", "value": "Above", "unit": "", "note": "" }], "series": [], "signal": 0.61, "label": "tailwind", "weight": 0.75, "quality": 0.95, "reasoning": ["P/E of 16.4x is in the 24th percentile of XOM's 5-year history — still cheap on a historical basis despite the rally.", "Trading at the 82nd percentile of its 52-week range; strong upward momentum confirmed.", "Price above both 50-day and 200-day moving averages — bullish technical setup.", "Forward P/E will compress further as Q1 2022 earnings incorporate the oil spike."], "math": { "formula": "s = 0.5×pe_pct_score + 0.3×range_score + 0.2×ma_score, clipped [-1,1]", "inputs": { "pe_pct": 24, "range_pct": 82, "above_50ma": true, "above_200ma": true }, "contribution": 0.20 }, "sources": [{ "name": "yfinance XOM", "url": "https://finance.yahoo.com/quote/XOM", "retrieved_at": "2022-02-25T14:01:25Z" }], "warnings": [] } } },
+    {
+      "type": "aggregate", "delay_ms": 500,
+      "data": { "result": { "composite_signal": 0.68, "evidence_strength": 0.81, "coverage": 0.95, "scenarios": [{ "name": "Tailwind-dominant", "score": 0.76, "ci_low": 0.68, "ci_high": 0.84, "rationale": "Oil spike + geopolitical premium + strong fundamentals dominate.", "watch_for": "Ceasefire or oil demand destruction could reverse quickly." }, { "name": "Mixed", "score": 0.18, "ci_low": 0.11, "ci_high": 0.26, "rationale": "High VIX and broader market sell-off offset some of the tailwind.", "watch_for": "Fed rate-hike pace acceleration." }, { "name": "Headwind-dominant", "score": 0.06, "ci_low": 0.02, "ci_high": 0.12, "rationale": "Very low probability; would require rapid geopolitical resolution plus demand collapse.", "watch_for": "Emergency SPR release above 1M bbl/day." }], "card_contributions": { "C1": -0.02, "C2": -0.07, "C3": 0.44, "C4": -0.08, "C5": 0.23, "C6": 0.12, "C7": 0.38, "C8": 0.17, "C9": 0.30, "C10": 0.20 } } }
+    },
+    { "type": "verdict_delta", "delay_ms": 300, "data": { "delta": "Exxon is the clearest near-term beneficiary of the Russia-Ukraine shock. " } },
+    { "type": "verdict_delta", "delay_ms": 110, "data": { "delta": "Oil [C3] at $92.8 and GPR [C7] at a 99th-percentile extreme are the two dominant drivers, " } },
+    { "type": "verdict_delta", "delay_ms": 110, "data": { "delta": "combining to push 8 of 10 cards into tailwind territory. " } },
+    { "type": "verdict_delta", "delay_ms": 100, "data": { "delta": "The main risk is speed of reversal: a ceasefire or coordinated SPR release could unwind the commodity premium quickly [C4]." } },
+    {
+      "type": "verdict_done", "delay_ms": 400,
+      "data": {
+        "verdict": {
+          "headline": "Exxon is a primary beneficiary of the energy supply shock — 8/10 cards tailwind",
+          "summary": "The Russia-Ukraine invasion has created an extreme geopolitical risk premium [C7] that directly amplifies Exxon's core business: upstream oil production. Oil [C3] at $92.8/bbl (+18.4% in 20 days, 94th percentile) is the dominant driver, with XOM's 0.9 exposure prior ensuring maximum sensitivity. Financial health [C8] and earnings momentum [C9] confirm the company enters this shock from a position of strength, with interest coverage at 14.2x and EPS up 221% YoY. The principal risks are reversal speed — a ceasefire or SPR release could unwind the commodity premium within days [C4] — and broader market contagion from the elevated VIX [C4].",
+          "key_drivers": [
+            { "card": "C3", "point": "WTI at $92.8 (+18.4% in 20 days) — 94th percentile. XOM exposure prior 0.9." },
+            { "card": "C7", "point": "GPR index at 294.6, 99th percentile. Supply disruption historically price-positive for non-Russian producers." },
+            { "card": "C9", "point": "EPS up 221% YoY; Q1 2022 estimates likely too low given current oil prices." },
+            { "card": "C5", "point": "XOM outperforming XLE by 3.8% and SPY by 20.6% — sector-driven with XOM at the top." }
+          ],
+          "counter_evidence": [
+            { "card": "C4", "point": "VIX at 32.1 (88th percentile) — elevated fear could trigger broader de-risking that clips energy gains." },
+            { "card": "C2", "point": "Rising inflation (CPI 7.5%) will accelerate Fed tightening, compressing equity multiples sector-wide." }
+          ],
+          "scenarios": [
+            { "name": "Tailwind-dominant", "score": 0.76, "rationale": "Oil supply disruption persists; XOM revenues surge.", "watch_for": "Ceasefire negotiations; emergency SPR release above 1M bbl/day." },
+            { "name": "Mixed", "score": 0.18, "rationale": "High VIX creates broader equity headwinds offsetting commodity gains.", "watch_for": "Fed rate decision; market-wide de-leveraging." },
+            { "name": "Headwind-dominant", "score": 0.06, "rationale": "Rapid geopolitical resolution plus demand collapse — very low probability.", "watch_for": "Sudden ceasefire plus coordinated OPEC+ supply increase." }
+          ],
+          "confidence_statement": "Evidence strength: 0.81 (very high). Composite signal: +0.68 (strong tailwind). 8 of 10 cards positive.",
+          "data_gaps": ["C6: Dependency edges are curated judgment; citations TODO.", "C7: GPR values for recent months are preliminary."],
+          "disclaimer": "This output is for informational and analytical purposes only. It does not constitute investment advice, a recommendation to buy or sell any security, or a price target.",
+          "references": [
+            { "name": "FRED DCOILWTICO", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "retrieved_at": "2022-02-25T14:01:06Z" },
+            { "name": "GPR Index (Caldara & Iacoviello 2022)", "url": "https://www.matteoiacoviello.com/gpr.htm", "retrieved_at": "2022-02-25T14:01:15Z" },
+            { "name": "SEC EDGAR XBRL (CIK 0000034088)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000034088.json", "retrieved_at": "2022-02-25T14:01:22Z" }
+          ],
+          "is_fallback": true, "model_used": "template (demo mode)", "is_fallback_model": false
+        }
+      }
+    },
+    { "type": "done", "delay_ms": 100, "data": { "run_id": "fixture-xom-2022-02-25", "total_ms": 7800 } }
+  ]
+}

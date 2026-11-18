@@ -1,0 +1,481 @@
+{
+  "meta": {
+    "query": "Intel's CEO was just ousted. What should I expect?",
+    "ticker": "INTC",
+    "as_of": "2024-12-02",
+    "horizon_days": 20,
+    "recorded_at": "2024-12-02T14:00:00Z",
+    "fixture_version": "1"
+  },
+  "events": [
+    {
+      "type": "query_parsed",
+      "delay_ms": 400,
+      "data": {
+        "parsed": {
+          "ticker": "INTC",
+          "event_type": "CEO departure",
+          "as_of": "2024-12-02",
+          "horizon_days": 20,
+          "intent": "analysis"
+        },
+        "latency_ms": 380
+      }
+    },
+    {
+      "type": "scope_check",
+      "delay_ms": 200,
+      "data": {
+        "in_scope": true,
+        "ticker": "INTC",
+        "reason": "ticker in covered universe",
+        "refusal_message": ""
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 100,
+      "data": { "card_id": "C1", "title": "USD Strength" }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 50,
+      "data": { "card_id": "C2", "title": "Rates & Inflation" }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 50,
+      "data": { "card_id": "C3", "title": "Oil & Energy" }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 400,
+      "data": {
+        "card": {
+          "id": "C1", "title": "USD Strength", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:03Z", "latency_ms": 312,
+          "headline": { "label": "DXY Index", "value": 106.2, "unit": "", "delta": 1.8 },
+          "metrics": [
+            { "name": "Level", "value": 106.2, "unit": "", "note": "" },
+            { "name": "20d change", "value": 1.8, "unit": "%", "note": "" },
+            { "name": "60d change", "value": 3.4, "unit": "%", "note": "" },
+            { "name": "1y percentile", "value": 72, "unit": "%ile", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.38, "label": "headwind", "weight": 0.6, "quality": 0.91,
+          "reasoning": [
+            "DXY has risen 1.8% over the past 20 trading days, sitting at the 72nd percentile of its 1-year range.",
+            "A strong dollar compresses overseas revenue when translated back to USD — Intel derives ~70% of sales internationally.",
+            "Given the CEO change, investor uncertainty about Intel's strategic direction amplifies this currency headwind.",
+            "The 60-day trend (+3.4%) suggests persistent USD strength rather than a transitory spike."
+          ],
+          "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -1.2, "rho": -0.31, "d": -1 }, "contribution": -0.09 },
+          "sources": [{ "name": "FRED DTWEXBGS", "url": "https://fred.stlouisfed.org/series/DTWEXBGS", "retrieved_at": "2024-12-02T14:01:00Z" }],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 450,
+      "data": {
+        "card": {
+          "id": "C2", "title": "Rates & Inflation", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:05Z", "latency_ms": 418,
+          "headline": { "label": "10y Treasury", "value": 4.21, "unit": "%", "delta": -0.12 },
+          "metrics": [
+            { "name": "10y yield", "value": 4.21, "unit": "%", "note": "" },
+            { "name": "20d change", "value": -12, "unit": "bp", "note": "" },
+            { "name": "Yield curve (10y-2y)", "value": 0.08, "unit": "%", "note": "" },
+            { "name": "CPI YoY", "value": 2.6, "unit": "%", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.42, "label": "headwind", "weight": 0.72, "quality": 0.95,
+          "reasoning": [
+            "10-year yields at 4.21% remain historically elevated despite a 12bp decline over the past month.",
+            "High discount rates compress the present value of future earnings — particularly damaging for a capital-intensive fab business.",
+            "Intel is in an expensive multi-year capex cycle (Intel Foundry Services); higher-for-longer rates increase the hurdle rate on these investments.",
+            "CPI at 2.6% YoY shows inflation cooling but above the Fed target, suggesting rates stay elevated through 2025."
+          ],
+          "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": -1.4, "rho": -0.52, "d": -1 }, "contribution": -0.14 },
+          "sources": [
+            { "name": "FRED DGS10", "url": "https://fred.stlouisfed.org/series/DGS10", "retrieved_at": "2024-12-02T14:01:04Z" },
+            { "name": "FRED CPIAUCSL", "url": "https://fred.stlouisfed.org/series/CPIAUCSL", "retrieved_at": "2024-12-02T14:01:04Z" }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 350,
+      "data": {
+        "card": {
+          "id": "C3", "title": "Oil & Energy", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:07Z", "latency_ms": 287,
+          "headline": { "label": "WTI Crude", "value": 68.4, "unit": "$/bbl", "delta": -4.2 },
+          "metrics": [
+            { "name": "WTI price", "value": 68.4, "unit": "$/bbl", "note": "" },
+            { "name": "20d change", "value": -4.2, "unit": "%", "note": "" },
+            { "name": "60d change", "value": -9.1, "unit": "%", "note": "" },
+            { "name": "1y percentile", "value": 28, "unit": "%ile", "note": "" }
+          ],
+          "series": [],
+          "signal": 0.15, "label": "neutral", "weight": 0.3, "quality": 0.93,
+          "reasoning": [
+            "WTI crude is down 4.2% over 20 days and sits at the 28th percentile of its 1-year range — a mild tailwind via lower energy costs.",
+            "Intel's priors for oil exposure are low (0.3); the semiconductor sector is not a major direct oil consumer.",
+            "Lower energy costs modestly reduce fab operating expenses, but the effect is secondary to the leadership disruption."
+          ],
+          "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": 0.48, "rho": 0.12, "d": 1 }, "contribution": 0.02 },
+          "sources": [{ "name": "FRED DCOILWTICO", "url": "https://fred.stlouisfed.org/series/DCOILWTICO", "retrieved_at": "2024-12-02T14:01:06Z" }],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C4", "title": "Market Regime & Volatility" }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C5", "title": "Sector Relative Strength" }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 520,
+      "data": {
+        "card": {
+          "id": "C4", "title": "Market Regime & Volatility", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:09Z", "latency_ms": 523,
+          "headline": { "label": "VIX", "value": 13.4, "unit": "", "delta": -1.2 },
+          "metrics": [
+            { "name": "SPY 20d return", "value": 3.1, "unit": "%", "note": "" },
+            { "name": "SPY 60d return", "value": 7.4, "unit": "%", "note": "" },
+            { "name": "SPY vs 200d MA", "value": 7.2, "unit": "%", "note": "" },
+            { "name": "VIX level", "value": 13.4, "unit": "", "note": "" },
+            { "name": "VIX percentile (1y)", "value": 18, "unit": "%ile", "note": "" },
+            { "name": "INTC beta (1y)", "value": 0.82, "unit": "", "note": "" }
+          ],
+          "series": [],
+          "signal": 0.44, "label": "tailwind", "weight": 0.7, "quality": 0.98,
+          "reasoning": [
+            "VIX at 13.4 is in the 18th percentile of its 1-year distribution — a low-fear, risk-on environment.",
+            "SPY is up 3.1% over 20 days and trading 7.2% above its 200-day moving average, confirming a bull-market regime.",
+            "In this backdrop, idiosyncratic shocks (like a CEO exit) tend to be absorbed faster than in bear markets.",
+            "Intel's beta of 0.82 means it moves less than the market on average; the calm macro backdrop limits further contagion."
+          ],
+          "math": { "formula": "s = d × tanh(z / 2)", "inputs": { "z": 1.5, "rho": 0.61, "d": 1 }, "contribution": 0.17 },
+          "sources": [
+            { "name": "FRED VIXCLS", "url": "https://fred.stlouisfed.org/series/VIXCLS", "retrieved_at": "2024-12-02T14:01:08Z" },
+            { "name": "yfinance SPY", "url": "https://finance.yahoo.com/quote/SPY", "retrieved_at": "2024-12-02T14:01:08Z" }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 450,
+      "data": {
+        "card": {
+          "id": "C5", "title": "Sector Relative Strength", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:11Z", "latency_ms": 445,
+          "headline": { "label": "INTC vs XLK (20d)", "value": -6.4, "unit": "%" },
+          "metrics": [
+            { "name": "INTC 5d", "value": -3.2, "unit": "%", "note": "" },
+            { "name": "INTC 20d", "value": -11.8, "unit": "%", "note": "" },
+            { "name": "INTC 60d", "value": -18.4, "unit": "%", "note": "" },
+            { "name": "XLK 20d", "value": -5.4, "unit": "%", "note": "" },
+            { "name": "SPY 20d", "value": 3.1, "unit": "%", "note": "" },
+            { "name": "Driver classification", "value": "Company-driven", "unit": "", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.72, "label": "headwind", "weight": 0.75, "quality": 0.97,
+          "reasoning": [
+            "INTC has underperformed XLK by 6.4% and SPY by 14.9% over 20 days — a large company-specific gap.",
+            "The underperformance classification is 'company-driven': sector and market are both positive, so the drag is INTC-specific.",
+            "This pattern pre-dates the CEO announcement and intensified on the news, confirming the market had concerns about Intel's execution.",
+            "Persistent relative weakness over 60 days (-18.4% vs benchmark) suggests deteriorating investor confidence in Intel's turnaround thesis."
+          ],
+          "math": { "formula": "s = clip(alpha_vs_sector / threshold, -1, 1)", "inputs": { "alpha_vs_sector": -6.4, "alpha_vs_spy": -14.9, "threshold": 5.0 }, "contribution": -0.24 },
+          "sources": [
+            { "name": "yfinance INTC", "url": "https://finance.yahoo.com/quote/INTC", "retrieved_at": "2024-12-02T14:01:10Z" },
+            { "name": "yfinance XLK", "url": "https://finance.yahoo.com/quote/XLK", "retrieved_at": "2024-12-02T14:01:10Z" }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C6", "title": "Cross-Sector Dependency" }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C7", "title": "Geopolitical & Policy Risk" }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 620,
+      "data": {
+        "card": {
+          "id": "C6", "title": "Cross-Sector Dependency", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:14Z", "latency_ms": 611,
+          "headline": { "label": "Linked sectors (20d avg)", "value": -1.4, "unit": "%" },
+          "metrics": [
+            { "name": "SMH 20d", "value": -4.1, "unit": "%", "note": "" },
+            { "name": "XLY 20d", "value": 1.2, "unit": "%", "note": "" },
+            { "name": "XLI 20d", "value": 0.8, "unit": "%", "note": "" },
+            { "name": "Corr INTC-SMH (252d)", "value": 0.68, "unit": "", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.31, "label": "headwind", "weight": 0.65, "quality": 0.88,
+          "reasoning": [
+            "The semiconductor ETF (SMH) is down 4.1% over 20 days, dragging linked nodes.",
+            "Intel's 252-day correlation with SMH is 0.68 — moderate co-movement means sector weakness compounds company headwinds.",
+            "Downstream customers (auto, industrial via XLY/XLI) show mild strength, limiting contagion beyond the chip sector.",
+            "The GM→chips dependency edge is active but weak; auto demand is not an immediate amplifier here."
+          ],
+          "math": { "formula": "s = sum(strength_i × move_i × sign_i) / n, clipped to [-1,1]", "inputs": { "smh_move": -4.1, "smh_strength": 0.75, "xly_move": 1.2, "xly_strength": 0.3 }, "contribution": -0.09 },
+          "sources": [
+            { "name": "yfinance SMH", "url": "https://finance.yahoo.com/quote/SMH", "retrieved_at": "2024-12-02T14:01:12Z" },
+            { "name": "data/dependencies.json (curated)", "url": "", "retrieved_at": "2024-12-02T14:01:12Z" }
+          ],
+          "warnings": ["Dependency edges are curated judgment; citations TODO."]
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 380,
+      "data": {
+        "card": {
+          "id": "C7", "title": "Geopolitical & Policy Risk", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:16Z", "latency_ms": 374,
+          "headline": { "label": "GPR Index", "value": 118.4, "unit": "", "delta": 8.2 },
+          "metrics": [
+            { "name": "GPR level", "value": 118.4, "unit": "", "note": "" },
+            { "name": "GPR 1y percentile", "value": 61, "unit": "%ile", "note": "" },
+            { "name": "GPR 3m change", "value": 8.2, "unit": "", "note": "" },
+            { "name": "INTC geopolitical exposure", "value": "High", "unit": "", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.55, "label": "headwind", "weight": 0.78, "quality": 0.85,
+          "reasoning": [
+            "The Caldara-Iacoviello GPR index stands at 118.4 — 61st percentile — with an 8-point rise over 3 months.",
+            "Intel has a high geopolitical exposure prior (0.7): export controls on chips to China remain a live regulatory risk, and Intel's new Foundry Services ambitions depend on government subsidies (CHIPS Act).",
+            "A leadership vacuum at the top magnifies policy execution risk — investors may question whether Intel can navigate subsidy negotiations without continuity.",
+            "Elevated GPR modestly amplifies sector headwinds already present in C5."
+          ],
+          "math": { "formula": "s = d × tanh(z / 2), w = max(|rho|/0.5, w_prior)", "inputs": { "z": -1.8, "rho": -0.41, "d": -1, "w_prior": 0.7 }, "contribution": -0.19 },
+          "sources": [{ "name": "GPR Index (Caldara & Iacoviello 2022)", "url": "https://www.matteoiacoviello.com/gpr.htm", "retrieved_at": "2024-12-02T14:01:15Z" }],
+          "warnings": ["Recent GPR values are preliminary and subject to revision."]
+        }
+      }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C8", "title": "Financial Health" }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C9", "title": "Earnings & Growth" }
+    },
+    {
+      "type": "card_start",
+      "delay_ms": 80,
+      "data": { "card_id": "C10", "title": "Valuation & Price Momentum" }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 900,
+      "data": {
+        "card": {
+          "id": "C8", "title": "Financial Health", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:21Z", "latency_ms": 892,
+          "headline": { "label": "Interest Coverage", "value": 2.1, "unit": "x", "delta": -1.4 },
+          "metrics": [
+            { "name": "Current ratio", "value": 1.42, "unit": "x", "note": "" },
+            { "name": "Debt/Equity", "value": 0.52, "unit": "x", "note": "" },
+            { "name": "Interest coverage", "value": 2.1, "unit": "x", "note": "" },
+            { "name": "Operating margin", "value": 1.8, "unit": "%", "note": "" },
+            { "name": "Cash", "value": 24.1, "unit": "$B", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.61, "label": "headwind", "weight": 0.78, "quality": 0.91,
+          "reasoning": [
+            "Interest coverage of 2.1x sits in the 'weak' band (threshold: <2 weak, >5 strong) — the blended score (absolute + 5y percentile) is -0.61.",
+            "Operating margin at 1.8% is severely compressed versus Intel's historical range of 25-35%, reflecting factory underutilisation.",
+            "The current ratio (1.42x) and cash position ($24.1B) provide near-term liquidity buffer, but deteriorating margins limit self-funding capacity.",
+            "A CEO transition creates uncertainty about capital allocation — will the new leader continue the foundry investment or pivot? Markets dislike this ambiguity."
+          ],
+          "math": { "formula": "s = 0.5 × band_score + 0.5 × pct_vs_5y, clipped [-1,1]", "inputs": { "interest_coverage": 2.1, "band_score": -0.6, "pct_vs_5y": 0.08 }, "contribution": -0.21 },
+          "sources": [{ "name": "SEC EDGAR XBRL (CIK 0000050863)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000050863.json", "retrieved_at": "2024-12-02T14:01:18Z" }],
+          "warnings": ["Operating margin reflects TTM through Q3 2024 10-Q (filed 2024-10-25)."]
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 760,
+      "data": {
+        "card": {
+          "id": "C9", "title": "Earnings & Growth", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:24Z", "latency_ms": 756,
+          "headline": { "label": "Revenue YoY", "value": -6.2, "unit": "%" },
+          "metrics": [
+            { "name": "Revenue YoY", "value": -6.2, "unit": "%", "note": "" },
+            { "name": "Diluted EPS YoY", "value": -88.4, "unit": "%", "note": "" },
+            { "name": "Gross margin trend", "value": "Declining", "unit": "", "note": "" },
+            { "name": "Last earnings abnormal return", "value": -9.4, "unit": "%", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.78, "label": "headwind", "weight": 0.8, "quality": 0.93,
+          "reasoning": [
+            "Revenue has declined 6.2% YoY; diluted EPS is down 88% — the earnings deterioration is severe and accelerating.",
+            "The last earnings-day abnormal return was -9.4% (stock minus SPY on Q3 2024 earnings day), confirming the market was surprised by weak execution.",
+            "Margin compression is structural, not cyclical: Intel is absorbing high fixed costs from new fabs that are not yet at scale.",
+            "A CEO change typically precedes a kitchen-sink quarter where the incoming leader resets expectations downward."
+          ],
+          "math": { "formula": "s = clip(0.4×rev_score + 0.4×eps_score + 0.2×abn_ret_score, -1,1)", "inputs": { "rev_yoy": -6.2, "eps_yoy": -88.4, "abnormal_return": -9.4 }, "contribution": -0.28 },
+          "sources": [
+            { "name": "SEC EDGAR XBRL (CIK 0000050863)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000050863.json", "retrieved_at": "2024-12-02T14:01:22Z" },
+            { "name": "yfinance INTC", "url": "https://finance.yahoo.com/quote/INTC", "retrieved_at": "2024-12-02T14:01:22Z" }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "card_done",
+      "delay_ms": 540,
+      "data": {
+        "card": {
+          "id": "C10", "title": "Valuation & Price Momentum", "status": "done",
+          "as_of": "2024-12-02", "fetched_at": "2024-12-02T14:01:26Z", "latency_ms": 534,
+          "headline": { "label": "P/E (TTM)", "value": 94.2, "unit": "x", "delta": 68.1 },
+          "metrics": [
+            { "name": "P/E TTM", "value": 94.2, "unit": "x", "note": "" },
+            { "name": "P/E 5y percentile", "value": 89, "unit": "%ile", "note": "" },
+            { "name": "52-week range position", "value": 14, "unit": "%", "note": "" },
+            { "name": "50d MA trend", "value": "Below", "unit": "", "note": "" },
+            { "name": "200d MA trend", "value": "Below", "unit": "", "note": "" }
+          ],
+          "series": [],
+          "signal": -0.52, "label": "headwind", "weight": 0.75, "quality": 0.96,
+          "reasoning": [
+            "P/E of 94x is misleading (near-zero earnings in numerator); the 89th percentile on a 5y basis signals the stock is not 'cheap' despite price declines.",
+            "Trading at the 14th percentile of its 52-week range means the stock has already fallen significantly, limiting further momentum selling — but no floor is visible.",
+            "Price is below both 50-day and 200-day moving averages — a confirmed bearish technical setup.",
+            "Momentum headwind is consistent with the fundamental picture: until a credible plan emerges from new leadership, re-rating is unlikely."
+          ],
+          "math": { "formula": "s = 0.5×pe_pct_score + 0.3×range_score + 0.2×ma_score, clipped [-1,1]", "inputs": { "pe_pct": 89, "range_pct": 14, "below_50ma": true, "below_200ma": true }, "contribution": -0.17 },
+          "sources": [
+            { "name": "SEC EDGAR XBRL (CIK 0000050863)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000050863.json", "retrieved_at": "2024-12-02T14:01:25Z" },
+            { "name": "yfinance INTC", "url": "https://finance.yahoo.com/quote/INTC", "retrieved_at": "2024-12-02T14:01:25Z" }
+          ],
+          "warnings": []
+        }
+      }
+    },
+    {
+      "type": "aggregate",
+      "delay_ms": 500,
+      "data": {
+        "result": {
+          "composite_signal": -0.52,
+          "evidence_strength": 0.74,
+          "coverage": 0.88,
+          "scenarios": [
+            { "name": "Tailwind-dominant", "score": 0.08, "ci_low": 0.03, "ci_high": 0.16, "rationale": "Low VIX and positive market regime provide some macro support.", "watch_for": "VIX spike above 20 would remove this scenario." },
+            { "name": "Mixed", "score": 0.21, "ci_low": 0.14, "ci_high": 0.30, "rationale": "Calm macro offsets company-specific pressures partially.", "watch_for": "New CEO announcement with credible plan could shift balance." },
+            { "name": "Headwind-dominant", "score": 0.71, "ci_low": 0.62, "ci_high": 0.80, "rationale": "Company fundamentals (C8, C9), sector weakness (C5), and policy risk (C7) dominate.", "watch_for": "Kitchen-sink guidance cut likely within 60 days." }
+          ],
+          "card_contributions": { "C1": -0.09, "C2": -0.14, "C3": 0.02, "C4": 0.17, "C5": -0.24, "C6": -0.09, "C7": -0.19, "C8": -0.21, "C9": -0.28, "C10": -0.17 }
+        }
+      }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 300,
+      "data": { "delta": "Intel faces compounding headwinds — " }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 120,
+      "data": { "delta": "leadership vacuum amplifies pre-existing fundamental stress. " }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 120,
+      "data": { "delta": "The CEO departure at Intel [C5] arrives against a backdrop of severe earnings deterioration [C9] " }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 120,
+      "data": { "delta": "and compressed operating margins [C8], creating a leadership vacuum precisely when Intel most needs strategic continuity. " }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 100,
+      "data": { "delta": "Macro conditions are broadly supportive — low volatility [C4] and softening oil [C3] — " }
+    },
+    {
+      "type": "verdict_delta",
+      "delay_ms": 100,
+      "data": { "delta": "but these macro tailwinds are insufficient to offset company-specific pressures that dominate 7 of 10 analysis cards." }
+    },
+    {
+      "type": "verdict_done",
+      "delay_ms": 400,
+      "data": {
+        "verdict": {
+          "headline": "Intel faces compounding headwinds — leadership vacuum amplifies pre-existing fundamental stress",
+          "summary": "The CEO departure at Intel [C5] arrives against a backdrop of severe earnings deterioration [C9] and compressed operating margins [C8], creating a leadership vacuum precisely when Intel most needs strategic continuity. Macro conditions are broadly supportive — low volatility [C4] and softening oil [C3] — but these macro tailwinds are insufficient to offset company-specific pressures that dominate 7 of 10 analysis cards. The evidence-weighted scenario distribution strongly favours continued headwinds over the 20-day horizon (71% confidence), though the credible interval is wide, reflecting genuine uncertainty about who leads the company next.",
+          "key_drivers": [
+            { "card": "C9", "point": "Revenue -6.2% YoY and EPS -88% with no visible inflection; last earnings surprise was -9.4% abnormal return." },
+            { "card": "C8", "point": "Interest coverage of 2.1x and operating margin of 1.8% signal structural stress in the foundry transition." },
+            { "card": "C5", "point": "INTC has underperformed XLK by 6.4% and SPY by 14.9% over 20 days — company-driven, not sector-driven." },
+            { "card": "C7", "point": "Elevated geopolitical risk (GPR 61st %ile) compounds export-control uncertainty and CHIPS Act execution risk." }
+          ],
+          "counter_evidence": [
+            { "card": "C4", "point": "VIX at the 18th percentile signals a low-fear market environment that historically accelerates recovery from idiosyncratic shocks." },
+            { "card": "C3", "point": "Softening oil prices modestly reduce fab energy costs, a small offset to margin pressure." }
+          ],
+          "scenarios": [
+            { "name": "Headwind-dominant", "score": 0.71, "rationale": "Fundamental deterioration and leadership uncertainty drive continued underperformance.", "watch_for": "New CEO announcement; Q4 guidance reset; any CHIPS Act disbursement news." },
+            { "name": "Mixed", "score": 0.21, "rationale": "Calm macro could limit the downside if a credible successor is named quickly.", "watch_for": "Speed and profile of CEO appointment." },
+            { "name": "Tailwind-dominant", "score": 0.08, "rationale": "Very low probability; would require both a strong CEO hire and a positive macro catalyst.", "watch_for": "Unexpected positive earnings pre-announcement." }
+          ],
+          "confidence_statement": "Evidence strength: 0.74 (high coverage, 10/10 cards with data). Composite signal: -0.52 (moderate headwind). Scenario confidence is evidence-weighted, not calibrated; treat as directional.",
+          "data_gaps": [
+            "C6: Dependency edges are curated judgment; citations TODO.",
+            "C7: GPR values for recent months are preliminary."
+          ],
+          "disclaimer": "This output is for informational and analytical purposes only. It does not constitute investment advice, a recommendation to buy or sell any security, or a price target. Past patterns are not predictive of future outcomes.",
+          "references": [
+            { "name": "SEC EDGAR XBRL (CIK 0000050863)", "url": "https://data.sec.gov/api/xbrl/companyfacts/CIK0000050863.json", "retrieved_at": "2024-12-02T14:01:25Z" },
+            { "name": "FRED DTWEXBGS", "url": "https://fred.stlouisfed.org/series/DTWEXBGS", "retrieved_at": "2024-12-02T14:01:00Z" },
+            { "name": "GPR Index (Caldara & Iacoviello 2022)", "url": "https://www.matteoiacoviello.com/gpr.htm", "retrieved_at": "2024-12-02T14:01:15Z" },
+            { "name": "yfinance INTC", "url": "https://finance.yahoo.com/quote/INTC", "retrieved_at": "2024-12-02T14:01:22Z" }
+          ],
+          "is_fallback": true,
+          "model_used": "template (demo mode)",
+          "is_fallback_model": false
+        }
+      }
+    },
+    {
+      "type": "done",
+      "delay_ms": 100,
+      "data": { "run_id": "fixture-intc-2024-12-02", "total_ms": 8200 }
+    }
+  ]
+}

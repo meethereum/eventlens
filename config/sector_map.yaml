@@ -1,0 +1,62 @@
+# ============================================================
+# EventLens — Ticker → Sector ETF mapping
+#
+# Used by C5 (Sector Relative Strength) and C6 (Cross-Sector
+# Dependency) to identify the right sector SPDR ETF for each
+# company in the covered universe.
+# ============================================================
+
+# S&P 100 subset → sector SPDR ETF
+ticker_sector:
+  # XLK — Technology
+  NVDA: { etf: XLK, sector: Technology }
+  INTC: { etf: XLK, sector: Technology }
+  AAPL: { etf: XLK, sector: Technology }
+  MSFT: { etf: XLK, sector: Technology }
+
+  # XLY — Consumer Discretionary
+  GM:   { etf: XLY, sector: Consumer Discretionary }
+  SBUX: { etf: XLY, sector: Consumer Discretionary }
+  AMZN: { etf: XLY, sector: Consumer Discretionary }
+
+  # XLC — Communication Services
+  DIS:  { etf: XLC, sector: Communication Services }
+
+  # XLI — Industrials
+  BA:   { etf: XLI, sector: Industrials }
+  RTX:  { etf: XLI, sector: Industrials }
+
+  # XLE — Energy
+  XOM:  { etf: XLE, sector: Energy }
+  CVX:  { etf: XLE, sector: Energy }
+
+  # XLF — Financials
+  JPM:  { etf: XLF, sector: Financials }
+  SCHW: { etf: XLF, sector: Financials }
+
+  # XLV — Health Care
+  UNH:  { etf: XLV, sector: Health Care }
+
+# Proxy ETFs used by C6 cross-sector dependency edges
+proxy_etfs:
+  semiconductors: SMH
+  regional_banks: KRE
+  defense: ITA
+  aerospace: ITA
+  oil_energy: XLE
+  consumer_disc: XLY
+  industrials: XLI
+  financials: XLF
+  technology: XLK
+  communication: XLC
+  health_care: XLV
+
+# Thresholds for C5 driver classification
+# (rule of thumb — adjust based on observed dispersion)
+c5_thresholds:
+  # If stock out/underperforms sector ETF by more than this → "company-driven"
+  company_alpha_threshold: 3.0    # percentage points
+  # If sector ETF out/underperforms SPY by more than this → "sector-driven"
+  sector_alpha_threshold: 2.0    # percentage points
+  # Signal clip threshold (alpha / this → signal)
+  signal_threshold: 5.0

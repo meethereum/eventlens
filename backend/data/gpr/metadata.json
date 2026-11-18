@@ -1,0 +1,6 @@
+{
+  "bundled_date": "2024-06-01",
+  "note": "Placeholder metadata. The actual Excel file (data_gpr_daily_recent_YYYYMMDD.xls) should be downloaded from https://www.matteoiacoviello.com/gpr.htm and placed in this directory. If the file is missing, the GPR client will attempt a web refresh at runtime; if that also fails, C7 will report an error but the app will still boot.",
+  "attribution": "Caldara and Iacoviello (2022), American Economic Review. Data downloaded from https://www.matteoiacoviello.com/gpr.htm",
+  "citation": "Caldara, Dario and Matteo Iacoviello (2022), 'Measuring Geopolitical Risk,' American Economic Review, vol. 112 (4), pp. 1195-1225."
+}

@@ -1,0 +1,34 @@
+version: "3.9"
+
+# ── Dev override — hot reload for both services ───────────────────────────
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
+#
+# Backend:  uvicorn --reload watches app/ for changes
+# Frontend: vite dev server on port 5173, proxies /api to backend
+
+services:
+  backend:
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+    volumes:
+      - ./backend:/app            # live source mount
+      - ./config:/app/config      # live config mount
+      - ./scripts:/app/scripts    # live scripts mount
+      - ./fixtures:/app/fixtures  # live fixtures mount
+      - ./backend/data:/app/data  # live data mount
+      - cache_vol:/app/.cache
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173"               # Vite dev port (replaces 8080 in dev)
+    volumes:
+      - ./web:/app
+      - /app/node_modules         # don't overwrite the installed modules
+    environment:
+      - VITE_API_URL=http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy

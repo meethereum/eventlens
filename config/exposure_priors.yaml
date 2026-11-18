@@ -1,0 +1,98 @@
+# ============================================================
+# EventLens — Exposure priors (w_prior) per card × ticker
+#
+# Used in: w = max(clip(|rho| / 0.5, 0.1, 1.0), w_prior)
+#
+# Three levels only:
+#   0.9  direct / primary exposure
+#   0.6  moderate / secondary exposure
+#   0.3  default (all tickers not listed)
+#
+# These are starting-point estimates based on sector judgment.
+# The data-driven Pearson correlation still applies; w_prior
+# only acts as a floor so well-known exposures are never
+# accidentally down-weighted by a short correlation window.
+# ============================================================
+
+defaults:
+  C1_usd:          0.3   # most tickers — baseline
+  C2_rates:        0.3
+  C3_oil:          0.3
+  C4_market:       0.5   # everyone has some market exposure
+  C7_geopolitics:  0.3
+
+# ── C1: USD Strength ─────────────────────────────────────────
+# High international revenue → USD move matters
+usd:
+  AAPL:  0.6   # ~60% international revenue
+  MSFT:  0.6   # ~50% international revenue
+  NVDA:  0.6   # ~56% international revenue
+  INTC:  0.6   # ~70% international revenue
+  SBUX:  0.5   # significant international (China)
+  AMZN:  0.5   # AWS + international retail
+  DIS:   0.5   # international parks + content
+  BA:    0.5   # commercial aircraft priced in USD but buyers are international
+  GM:    0.3   # mostly domestic
+  RTX:   0.3   # government contracts mostly USD-denominated
+  XOM:   0.3   # oil is USD-denominated globally
+  CVX:   0.3
+  JPM:   0.3
+  SCHW:  0.3
+  UNH:   0.3
+
+# ── C2: Rates & Inflation ─────────────────────────────────────
+# Banks: NIM. Tech: valuation / duration sensitivity.
+rates:
+  JPM:   0.9   # NIM directly driven by rate level
+  SCHW:  0.9   # sweep deposits + NIM
+  NVDA:  0.6   # high-multiple growth stock: duration sensitive
+  INTC:  0.6
+  AAPL:  0.6   # mega-cap multiple
+  MSFT:  0.6
+  AMZN:  0.6
+  GM:    0.5   # auto financing costs
+  SBUX:  0.4   # franchise debt + consumer credit
+  DIS:   0.4   # debt load
+  BA:    0.4   # large capex / debt
+  RTX:   0.3
+  XOM:   0.3
+  CVX:   0.3
+  UNH:   0.3
+
+# ── C3: Oil & Energy ─────────────────────────────────────────
+# Energy producers: direct. Transport-heavy: cost channel.
+oil:
+  XOM:   0.9   # upstream oil producer
+  CVX:   0.9   # upstream oil producer
+  BA:    0.6   # jet fuel cost for airlines (customers)
+  RTX:   0.6   # defense + aerospace, energy exposure via supply chain
+  GM:    0.5   # gasoline → auto demand; plant energy costs
+  SBUX:  0.4   # delivery + store energy costs
+  AMZN:  0.4   # logistics fleet fuel costs
+  DIS:   0.4   # theme park energy + transport
+  NVDA:  0.3
+  INTC:  0.3
+  AAPL:  0.3
+  MSFT:  0.3
+  JPM:   0.3
+  SCHW:  0.3
+  UNH:   0.3
+
+# ── C7: Geopolitical & Policy Risk ───────────────────────────
+# Energy, defense, export-control-sensitive tech
+geopolitics:
+  XOM:   0.9   # Middle East / Russia oil supply
+  CVX:   0.9
+  RTX:   0.9   # defense demand spikes with geopolitical risk
+  BA:    0.7   # commercial + defense; export licences
+  NVDA:  0.7   # H100/H200 export controls; Taiwan supply chain
+  INTC:  0.7   # CHIPS Act; China export controls; Taiwan fab
+  AAPL:  0.5   # China manufacturing concentration
+  MSFT:  0.4   # cloud sovereignty / government contracts
+  AMZN:  0.4   # AWS government + international
+  GM:    0.3
+  SBUX:  0.3
+  DIS:   0.3
+  JPM:   0.3
+  SCHW:  0.3
+  UNH:   0.3

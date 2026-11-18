@@ -1,0 +1,41 @@
+{
+  "meta": {
+    "query": "Should I buy Intel stock?",
+    "ticker": "INTC",
+    "as_of": null,
+    "horizon_days": null,
+    "recorded_at": "2024-12-02T14:00:00Z",
+    "fixture_version": "1"
+  },
+  "events": [
+    {
+      "type": "query_parsed",
+      "delay_ms": 400,
+      "data": {
+        "parsed": {
+          "ticker": "INTC",
+          "event_type": "investment advice",
+          "as_of": "2024-12-02",
+          "horizon_days": 20,
+          "intent": "advice_request"
+        },
+        "latency_ms": 360
+      }
+    },
+    {
+      "type": "scope_check",
+      "delay_ms": 150,
+      "data": {
+        "in_scope": false,
+        "ticker": "INTC",
+        "reason": "intent is advice_request",
+        "refusal_message": "EventLens is a descriptive analysis tool — it explains what financial and macro factors are at play, not whether to buy or sell. Try asking about a specific event: 'Intel's CEO was just ousted. What should I expect?'"
+      }
+    },
+    {
+      "type": "done",
+      "delay_ms": 100,
+      "data": { "run_id": "fixture-refusal", "total_ms": 650 }
+    }
+  ]
+}
