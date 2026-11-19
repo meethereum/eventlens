@@ -88,6 +88,8 @@ async def replay_fixture(
     so the run_store has a complete snapshot when streaming ends.
     """
     raw = json.loads(fixture_path.read_text())
+    ctx.is_fixture = True
+    ctx.event_evidence = raw.get("meta", {}).get("event_evidence", {})
     events: list[dict] = raw["events"]
 
     for ev in events:
@@ -98,8 +100,17 @@ async def replay_fixture(
         event_type = ev["type"]
         data = ev.get("data", {})
 
+        # Fixture files contain the ID from their original recording.  A replay
+        # has a fresh run ID, so keep the payload in sync with the SSE envelope
+        # used by API consumers.
+        if event_type == "done":
+            data = {**data, "run_id": ctx.run_id}
+
         # Populate run context for inspect endpoint
         _update_ctx(ctx, event_type, data)
+        if event_type == "done":
+            from app.core.run_store import put
+            put(ctx)
 
         sse = SSEEvent(
             type=event_type,  # type: ignore[arg-type]

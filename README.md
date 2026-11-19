@@ -34,12 +34,17 @@ http://localhost:8080
                          ├── POST /api/analyze   SSE stream
                          ├── GET  /api/health
                          ├── GET  /api/cards/{id}/inspect
+                         ├── POST /api/simulate
+                         ├── POST /api/simulate/explain
+                         ├── GET  /api/precedents
+                         ├── GET  /api/cards/{id}/unusual-days
+                         ├── POST /api/explain-day
                          └── POST /api/baseline  plain-LLM comparison
 ```
 
 ### Backend stack
 - **Python 3.11**, FastAPI, sse-starlette, uvicorn
-- **Data**: FRED API, yfinance, SEC EDGAR XBRL, Caldara-Iacoviello GPR index
+- **Data**: FRED API, yfinance, SEC EDGAR, optional Finnhub company news, Caldara-Iacoviello GPR index
 - **Cache**: diskcache (named Docker volume, survives restarts)
 - **Math**: numpy, scipy — all scoring is deterministic code, no LLM inside cards
 
@@ -193,10 +198,11 @@ Checks all 9 FRED series, 29 yfinance tickers, and 15 EDGAR CIK lookups. Exits w
 docker compose exec backend python -m pytest tests/ -v
 ```
 
-53 unit tests across three files:
+60 unit tests across four files:
 - `tests/test_scoring_math.py` — z-score, correlation, macro signal, quality
 - `tests/test_aggregation.py` — golden-number tests for each aggregation formula component
 - `tests/test_golden.py` — full 10-card golden test verifying scenario distribution, credible intervals, and contributions
+- `tests/test_new_features.py` — scenario sensitivity, precedent date filtering, unusual-day detection, and feature API flows
 
 ---
 
@@ -227,10 +233,25 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 ---
 
+## Scenario tools
+
+After an analysis completes, the UI offers three additional views:
+
+- **What-if simulator** — applies deterministic changes to linked evidence cards and presents a plain-language outlook with ranked drivers. The explicit explanation action may make one cached LLM call; slider updates do not.
+- **Similar past events** — ranks locally stored, source-linked precedents and charts normalized 60-trading-day outcomes. Build the static library with `docker compose exec backend python -m scripts.build_precedents`, then verify it with `docker compose exec backend python -m scripts.validate_precedents --check-urls`.
+- **Unusual-day explanation** — shows robust outliers in the adjusted-close price chart, then provides a cited comparison with sector, market, SEC filings, and optional Finnhub headlines. Demo runs must use only fixture evidence; live explanations use a cited template if news or the LLM is unavailable.
+
+The scenario endpoints use the in-memory run store, so they are available only while that run remains in the current backend process.
+
+The checked-in precedent file currently has no verified records. The old four-row demo seed had neither valid source URLs nor realized outcomes and was removed rather than presented as historical evidence. Building the requested 100+ record library requires successful SEC and adjusted-close data access; the builder aborts instead of writing incomplete or invented outcomes.
+
+---
+
 ## What's not in v1
 
 - **C11 Historical Precedent** — locked card, coming in v2
-- **Graph/vector memory** — no LangGraph, no embeddings
+- **Verified precedent library** — not bundled yet; the static dataset stays empty until at least 100 complete, source-checked records are available
+- **Graph/vector memory** — no vector database, LangChain, LangGraph, or embeddings
 - **Auth** — none
 - **Buy/sell advice** — explicitly refused; EventLens is descriptive only
 - **LLM inside cards** — all card logic is deterministic code

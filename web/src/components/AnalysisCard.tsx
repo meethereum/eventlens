@@ -10,7 +10,6 @@ interface Props {
   card: CardOutput
   onClick: () => void
   disabled?: boolean
-  ticker?: string
 }
 
 function CountUp({ target, decimals = 1 }: { target: number | string; decimals?: number }) {
@@ -69,8 +68,8 @@ const SIGNAL_CONFIG = {
   },
 }
 
-export default function AnalysisCard({ card, onClick, disabled, ticker }: Props) {
-  const label = (typeof card.label === 'string' ? card.label : (card.label as any)?.value ?? 'neutral') as keyof typeof SIGNAL_CONFIG
+export default function AnalysisCard({ card, onClick, disabled }: Props) {
+  const label = card.label as keyof typeof SIGNAL_CONFIG
   const sig = SIGNAL_CONFIG[label] || SIGNAL_CONFIG.neutral
   const SignalIcon = sig.icon
 

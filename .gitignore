@@ -1,35 +1,100 @@
-# Environment
+# Environment and Secrets
 .env
-.env.local
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
 
 # Python
 __pycache__/
+**/__pycache__/
+backend/**/__pycache__/
+backend/app/**/__pycache__/
+backend/app/__pycache__/
 *.py[cod]
+*.pyc
 *.pyo
+*.pyd
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environments
+.venv/
+venv/
+ENV/
+env/
+
+# Python Testing, Coverage & Linters
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
-dist/
-build/
-*.egg-info/
-.venv/
-venv/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
 
-# Node
+# Node & Frontend (Vite / React)
 node_modules/
 web/node_modules/
 web/dist/
+dist/
+.vite/
+web/.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
 
-# Cache volumes (local dev bind mount if any)
+# Caching & Databases
 .cache/
+backend/.cache/
+*.db
+*.sqlite
+*.sqlite3
 
-# Docker
+# Docker & Logs
 *.log
+docker-compose.override.yml
+.docker/
 
-# macOS
+# Operating System Files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
 
-# IDE
+# IDEs & Editors
 .idea/
 .vscode/
+*.sublime-project
+*.sublime-workspace
 *.swp
+*.swo
+*~

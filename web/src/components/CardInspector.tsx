@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { cn, signalColors, formatDate } from '@/lib/utils'
@@ -8,13 +8,87 @@ import ReactECharts from 'echarts-for-react'
 
 interface Props {
   card: CardOutput | null
+  runId: string | null
   onClose: () => void
 }
 
-type Tab = 'evidence' | 'reasoning' | 'math' | 'sources' | 'raw'
+type Tab = 'evidence' | 'reasoning' | 'sources'
 
-export default function CardInspector({ card, onClose }: Props) {
+interface UnusualDay {
+  date: string
+  adjusted_price: number
+  daily_percentage_move: number
+  robust_score: number
+}
+
+interface DayExplanation {
+  explanation: string
+  classification: string
+  citations: Array<{ number: number; title: string; url: string; date?: string }>
+  cached: boolean
+  used_llm: boolean
+}
+
+export default function CardInspector({ card, runId, onClose }: Props) {
   const [tab, setTab] = useState<Tab>('evidence')
+  const [unusualDays, setUnusualDays] = useState<UnusualDay[]>([])
+  const [selectedDay, setSelectedDay] = useState<string | null>(null)
+  const [explanation, setExplanation] = useState<DayExplanation | null>(null)
+  const [explanationLoading, setExplanationLoading] = useState(false)
+  const [chartError, setChartError] = useState('')
+  const explanationCache = useRef(new Map<string, DayExplanation>())
+  const cardId = card?.id
+  const hasSeries = (card?.series.length ?? 0) > 0
+
+  useEffect(() => {
+    setUnusualDays([])
+    setSelectedDay(null)
+    setExplanation(null)
+    setChartError('')
+    if (!cardId || !runId || !hasSeries) return
+    const controller = new AbortController()
+    fetch(`/api/cards/${cardId}/unusual-days?run_id=${encodeURIComponent(runId)}`, {
+      signal: controller.signal,
+    })
+      .then(async response => {
+        if (!response.ok) throw new Error(`Could not find unusual days (${response.status})`)
+        return response.json()
+      })
+      .then(data => setUnusualDays(data.days))
+      .catch(err => {
+        if (err.name !== 'AbortError') setChartError(err.message || 'Could not load chart markers')
+      })
+    return () => controller.abort()
+  }, [cardId, hasSeries, runId])
+
+  const explainDay = async (eventDate: string) => {
+    if (!card || !runId) return
+    setSelectedDay(eventDate)
+    const key = `${runId}:${card.id}:${eventDate}`
+    const cached = explanationCache.current.get(key)
+    if (cached) {
+      setExplanation({ ...cached, cached: true })
+      return
+    }
+    setExplanation(null)
+    setExplanationLoading(true)
+    setChartError('')
+    try {
+      const response = await fetch('/api/explain-day', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ run_id: runId, card_id: card.id, event_date: eventDate }),
+      })
+      if (!response.ok) throw new Error(`Could not explain selected day (${response.status})`)
+      const data: DayExplanation = await response.json()
+      explanationCache.current.set(key, data)
+      setExplanation(data)
+    } catch (err) {
+      setChartError((err as Error).message || 'Could not explain selected day')
+    } finally {
+      setExplanationLoading(false)
+    }
+  }
 
   // Close on Esc
   useEffect(() => {
@@ -72,7 +146,7 @@ export default function CardInspector({ card, onClose }: Props) {
                   {card.label === 'tailwind' && <TrendingUp className="w-3 h-3" />}
                   {card.label === 'headwind' && <TrendingDown className="w-3 h-3" />}
                   {card.label === 'neutral' && <Minus className="w-3 h-3" />}
-                  {card.label} · s={card.signal.toFixed(2)}
+                  {card.label}
                 </span>
                 <button
                   onClick={onClose}
@@ -85,7 +159,7 @@ export default function CardInspector({ card, onClose }: Props) {
 
             {/* Tabs */}
             <div className="flex border-b border-border px-6 shrink-0">
-              {(['evidence', 'reasoning', 'math', 'sources', 'raw'] as Tab[]).map(t => (
+              {(['evidence', 'reasoning', 'sources'] as Tab[]).map(t => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
@@ -103,11 +177,20 @@ export default function CardInspector({ card, onClose }: Props) {
 
             {/* Tab content */}
             <div className="flex-1 overflow-y-auto">
-              {tab === 'evidence' && <EvidenceTab card={card} colors={colors} />}
+              {tab === 'evidence' && (
+                <EvidenceTab
+                  card={card}
+                  colors={colors}
+                  unusualDays={unusualDays}
+                  onExplainDay={explainDay}
+                  selectedDay={selectedDay}
+                  explanation={explanation}
+                  explanationLoading={explanationLoading}
+                  chartError={chartError}
+                />
+              )}
               {tab === 'reasoning' && <ReasoningTab card={card} />}
-              {tab === 'math' && <MathTab card={card} />}
               {tab === 'sources' && <SourcesTab card={card} />}
-              {tab === 'raw' && <RawTab card={card} />}
             </div>
           </motion.div>
         </>
@@ -115,10 +198,27 @@ export default function CardInspector({ card, onClose }: Props) {
     </AnimatePresence>
   )
 }
-
 // ─── Tab: Evidence ─────────────────────────────────────────────────────────
 
-function EvidenceTab({ card, colors }: { card: CardOutput; colors: ReturnType<typeof signalColors> }) {
+function EvidenceTab({
+  card,
+  colors,
+  unusualDays,
+  onExplainDay,
+  selectedDay,
+  explanation,
+  explanationLoading,
+  chartError,
+}: {
+  card: CardOutput
+  colors: ReturnType<typeof signalColors>
+  unusualDays: UnusualDay[]
+  onExplainDay: (date: string) => void
+  selectedDay: string | null
+  explanation: DayExplanation | null
+  explanationLoading: boolean
+  chartError: string
+}) {
   const chartOption = {
     backgroundColor: 'transparent',
     grid: { left: 40, right: 16, top: 16, bottom: 32 },
@@ -148,6 +248,17 @@ function EvidenceTab({ card, colors }: { card: CardOutput; colors: ReturnType<ty
             { offset: 1, color: colors.hex + '00' },
           ]},
       },
+      markPoint: {
+        symbol: 'pin',
+        symbolSize: 36,
+        label: { formatter: '!', color: '#ffffff', fontWeight: 'bold' },
+        itemStyle: { color: '#f59e0b' },
+        data: unusualDays.map(day => ({
+          coord: [day.date, day.adjusted_price],
+          name: day.date,
+          value: 'Unusual',
+        })),
+      },
     }],
     tooltip: {
       trigger: 'axis',
@@ -156,16 +267,59 @@ function EvidenceTab({ card, colors }: { card: CardOutput; colors: ReturnType<ty
       textStyle: { color: '#f1f5f9', fontSize: 11, fontFamily: 'JetBrains Mono' },
     },
   }
+  const chartEvents = {
+    click: (params: { componentType?: string; name?: string }) => {
+      if (params.componentType === 'markPoint' && params.name) onExplainDay(params.name)
+    },
+  }
 
   return (
     <div className="p-6 space-y-6">
       {/* Chart */}
       {card.series.length > 0 && (
         <div>
-          <h3 className="text-xs font-medium text-text-secondary mb-3">Time Series</h3>
+          <h3 className="text-xs font-medium text-text-secondary mb-3">
+            {card.id === 'C5' ? 'Adjusted closing price' : 'Time Series'}
+          </h3>
           <div className="glass-panel p-2">
-            <ReactECharts option={chartOption} style={{ height: 200 }} />
+            <ReactECharts option={chartOption} onEvents={chartEvents} style={{ height: 200 }} />
           </div>
+          <p className="mt-2 text-xs text-text-muted">
+            {unusualDays.length
+              ? 'Click an amber marker to inspect an unusually large move in this series.'
+              : 'No unusually large daily moves were detected in this series.'}
+          </p>
+          {selectedDay && (
+            <div className="mt-3 rounded-lg border border-border bg-surface-2 p-4">
+              <div className="text-xs font-medium text-text-primary">
+                Selected day: {selectedDay}
+              </div>
+              {explanationLoading && <p className="mt-2 text-sm text-text-muted">Preparing explanation…</p>}
+              {explanation && (
+                <>
+                  <p className="mt-2 text-sm leading-relaxed text-text-secondary">{explanation.explanation}</p>
+                  <p className="mt-2 text-xs font-medium text-text-muted">
+                    Classification: {explanation.classification.replace(/_/g, ' ')}
+                  </p>
+                  {explanation.citations.length > 0 && (
+                    <ol className="mt-2 space-y-1">
+                      {explanation.citations.map(citation => (
+                        <li key={citation.number} className="text-xs">
+                          <a href={citation.url} target="_blank" rel="noopener noreferrer" className="text-accent-glow hover:underline">
+                            [{citation.number}] {citation.title}{citation.date ? ` · ${citation.date}` : ''}
+                          </a>
+                        </li>
+                      ))}
+                    </ol>
+                  )}
+                  <p className="mt-2 text-xs text-text-muted">
+                    {explanation.cached ? 'Cached explanation.' : explanation.used_llm ? 'Evidence-grounded explanation.' : 'Cited template explanation.'}
+                  </p>
+                </>
+              )}
+            </div>
+          )}
+          {chartError && <p role="alert" className="mt-2 text-xs text-headwind">{chartError}</p>}
         </div>
       )}
 
@@ -206,6 +360,14 @@ function EvidenceTab({ card, colors }: { card: CardOutput; colors: ReturnType<ty
           ))}
         </div>
       )}
+      <details className="rounded-lg border border-border px-4 py-3 text-xs text-text-muted">
+        <summary className="cursor-pointer">How was this calculated?</summary>
+        <p className="mt-2">
+          The chart uses the recorded {card.id === 'C5' ? 'adjusted closing price' : 'time series'}.
+          Unusual days are selected from daily percentage moves using their median and median absolute
+          deviation. The explanation uses only the dated evidence and sources listed above.
+        </p>
+      </details>
     </div>
   )
 }
@@ -228,81 +390,6 @@ function ReasoningTab({ card }: { card: CardOutput }) {
           </li>
         ))}
       </ol>
-    </div>
-  )
-}
-
-// ─── Tab: Math ─────────────────────────────────────────────────────────────
-
-function MathTab({ card }: { card: CardOutput }) {
-  if (!card.math) return (
-    <div className="p-6 text-sm text-text-muted">No math detail available for this card.</div>
-  )
-
-  const { formula, inputs, contribution } = card.math
-
-  return (
-    <div className="p-6 space-y-6">
-      <div>
-        <h3 className="text-xs font-medium text-text-secondary mb-2">Formula</h3>
-        <div className="bg-surface-3 rounded px-4 py-3 font-mono text-sm text-accent-glow border border-border">
-          {formula}
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-xs font-medium text-text-secondary mb-3">Inputs (actual values)</h3>
-        <div className="glass-panel overflow-hidden">
-          <table className="w-full text-xs font-mono">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left p-3 text-text-muted font-medium">Variable</th>
-                <th className="text-right p-3 text-text-muted font-medium">Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(inputs).map(([k, v]) => (
-                <tr key={k} className="border-b border-border/50 last:border-0">
-                  <td className="p-3 text-text-secondary">{k}</td>
-                  <td className="p-3 text-right text-text-primary tabular-nums">
-                    {typeof v === 'boolean' ? String(v) : typeof v === 'number' ? v.toFixed(4) : String(v)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-xs font-medium text-text-secondary mb-2">Contribution to composite signal</h3>
-        <div className="flex items-center gap-3">
-          <div className="flex-1 h-2 bg-surface-3 rounded-full overflow-hidden">
-            <div
-              className={cn(
-                'h-full rounded-full transition-all',
-                (contribution ?? 0) > 0 ? 'bg-tailwind' : 'bg-headwind',
-              )}
-              style={{ width: `${Math.abs((contribution ?? 0) * 100 / 0.3)}%` }}
-            />
-          </div>
-          <span className={cn(
-            'text-sm font-mono font-medium tabular-nums',
-            (contribution ?? 0) > 0 ? 'text-tailwind' : 'text-headwind',
-          )}>
-            {contribution !== null && contribution !== undefined
-              ? `${contribution > 0 ? '+' : ''}${contribution.toFixed(3)}`
-              : '—'}
-          </span>
-        </div>
-      </div>
-
-      <div className="text-2xs text-text-muted border border-border rounded p-3 leading-relaxed">
-        <strong className="text-text-secondary">Scoring note:</strong> Macro cards use
-        s = d × tanh(z / 2) where z is the 20-day change in standard deviations, d is
-        the correlation sign, and w is clipped correlation magnitude vs prior.
-        Fundamental cards use rule/threshold tables. All signals are in [−1, 1].
-      </div>
     </div>
   )
 }
@@ -335,19 +422,6 @@ function SourcesTab({ card }: { card: CardOutput }) {
           )}
         </div>
       ))}
-    </div>
-  )
-}
-
-// ─── Tab: Raw JSON ─────────────────────────────────────────────────────────
-
-function RawTab({ card }: { card: CardOutput }) {
-  const json = JSON.stringify(card, null, 2)
-  return (
-    <div className="p-6">
-      <pre className="text-2xs font-mono text-text-secondary bg-surface-3 rounded p-4 overflow-x-auto leading-relaxed border border-border max-h-[600px] overflow-y-auto">
-        {json}
-      </pre>
     </div>
   )
 }
