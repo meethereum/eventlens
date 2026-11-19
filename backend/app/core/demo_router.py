@@ -113,6 +113,8 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
     intent = parsed["intent"]
 
     if intent == "advice_request":
+        from app.core.run_store import put
+        put(ctx)
         yield SSEEvent(
             type="scope_check",
             run_id=ctx.run_id,
@@ -133,6 +135,8 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
         return
 
     if intent == "out_of_scope":
+        from app.core.run_store import put
+        put(ctx)
         yield SSEEvent(
             type="scope_check",
             run_id=ctx.run_id,
@@ -169,6 +173,8 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
     ).to_sse()
 
     if not in_scope:
+        from app.core.run_store import put
+        put(ctx)
         yield SSEEvent(type="done", run_id=ctx.run_id, ts=time.time(),
                        data={"run_id": ctx.run_id, "total_ms": ctx.elapsed_ms()}).to_sse()
         return
@@ -219,6 +225,15 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
     ).to_sse()
 
     # ── LLM call 2: synthesise verdict ───────────────────────────────────
+    from app.precedents.engine import find_precedents
+    c4 = ctx.cards.get("C4")
+    market_mood = "risk_off" if c4 and c4.signal < -0.1 else "risk_on" if c4 and c4.signal > 0.1 else "mixed"
+    historical_precedents = find_precedents(
+        ctx.ticker,
+        parsed["event_type"],
+        ctx.as_of,
+        market_mood=market_mood,
+    )
     verdict, is_verified = await loop.run_in_executor(
         None,
         synthesize_verdict,
@@ -226,6 +241,7 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
         parsed,
         ctx.cards,
         ctx.aggregate,
+        historical_precedents,
     )
     ctx.verdict = verdict
 
@@ -247,6 +263,8 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
         data={"verdict": verdict.model_dump()},
     ).to_sse()
 
+    from app.core.run_store import put
+    put(ctx)
     yield SSEEvent(
         type="done",
         run_id=ctx.run_id,

@@ -76,7 +76,7 @@ export function useAnalysis() {
       const decoder = new TextDecoder()
       let buffer = ''
 
-      while (true) {
+      for (;;) {
         const { done, value } = await reader.read()
         if (done) break
 
@@ -281,7 +281,9 @@ function handleEvent(
       setState(s => ({
         ...s,
         phase: 'done',
-        runId: (data?.run_id as string) ?? s.runId,
+        // The SSE envelope is authoritative. This also prevents a recorded
+        // fixture's historical payload ID from replacing the active run ID.
+        runId: runId || s.runId,
       }))
       break
     }

@@ -59,7 +59,7 @@ export function cardDescription(cardId: string): string {
 }
 
 // No-op kept for backward compat — returns empty string
-export function cardIcon(_cardId: string): string {
+export function cardIcon(): string {
   return ''
 }
 

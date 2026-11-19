@@ -1,9 +1,7 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Info, AlertTriangle, TrendingUp, TrendingDown, Minus } from 'lucide-react'
+import { AlertTriangle, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { VerdictOutput, AggregateResult, CardOutput } from '@/types'
-import ReactECharts from 'echarts-for-react'
 import { cardDisplayName } from '@/lib/companies'
 
 interface Props {
@@ -57,12 +55,9 @@ function CitedText({
     </>
   )
 }
-
 export default function VerdictPanel({
   verdict, aggregate, verdictStream, cards, onCitationClick, ticker,
 }: Props) {
-  const [tooltipVisible, setTooltipVisible] = useState(false)
-
   const isStreaming = !verdict && verdictStream.length > 0
   const compName = ticker
     ? (({ NVDA:'Nvidia', INTC:'Intel', AAPL:'Apple', MSFT:'Microsoft', GM:'General Motors',
@@ -189,7 +184,7 @@ export default function VerdictPanel({
                   {verdict.counter_evidence.length > 0 && verdict.key_drivers
                     .filter(kd => {
                       const card = cards[kd.card]
-                      const lbl = card ? (typeof card.label === 'string' ? card.label : (card.label as any)?.value) : null
+                      const lbl = card?.label ?? null
                       return lbl === 'tailwind'
                     })
                     .concat(verdict.key_drivers.slice(0, 2))
@@ -252,7 +247,6 @@ export default function VerdictPanel({
                     const color = sc.name.includes('Tailwind') ? '#10b981'
                                 : sc.name.includes('Headwind') ? '#ef4444'
                                 : '#f59e0b'
-                    const pct = Math.round(sc.score * 100)
                     return (
                       <div key={sc.name}>
                         <div className="flex items-center justify-between mb-1.5">
@@ -263,22 +257,10 @@ export default function VerdictPanel({
                             {isLikely && (
                               <span className="text-2xs font-medium px-1.5 py-0.5 rounded-full border"
                                     style={{ color, borderColor: color + '40', background: color + '15' }}>
-                                Most likely
+                                Most supported
                               </span>
                             )}
                           </div>
-                          <span className="text-sm font-mono font-bold tabular-nums" style={{ color }}>
-                            {pct}%
-                          </span>
-                        </div>
-                        <div className="h-2 bg-surface-3 rounded-full overflow-hidden mb-1.5">
-                          <motion.div
-                            initial={{ width: 0 }}
-                            animate={{ width: `${pct}%` }}
-                            transition={{ duration: 0.8, ease: 'easeOut', delay: i * 0.1 }}
-                            className="h-full rounded-full"
-                            style={{ background: color }}
-                          />
                         </div>
                         {sc.rationale && (
                           <p className="text-xs text-text-muted leading-relaxed">{sc.rationale}</p>
@@ -318,181 +300,53 @@ export default function VerdictPanel({
           )}
         </div>
 
-        {/* ── Right: charts ── */}
+        {/* ── Right: confidence summary ── */}
         <div className="space-y-4">
           {aggregate && (
-            <EvidenceGauge
-              strength={aggregate.evidence_strength}
-              coverage={aggregate.coverage}
-              composite={aggregate.composite_signal}
-              tooltipVisible={tooltipVisible}
-              setTooltipVisible={setTooltipVisible}
-            />
-          )}
-          {aggregate && Object.keys(aggregate.card_contributions).length > 0 && (
-            <ContributionWaterfall
-              contributions={aggregate.card_contributions}
-              onCardClick={onCitationClick}
-            />
+            <>
+              <div className="glass-panel p-5">
+                <h4 className="text-sm font-semibold text-text-primary">How confident are we?</h4>
+                <p className="mt-2 text-lg font-medium text-text-secondary">
+                  {aggregate.evidence_strength >= 0.55
+                    ? 'Higher confidence'
+                    : aggregate.evidence_strength >= 0.3
+                      ? 'Moderate confidence'
+                      : 'Limited confidence'}
+                </p>
+                <p className="mt-1 text-xs text-text-muted">
+                  {aggregate.coverage >= 0.8
+                    ? 'Most evidence sources were available.'
+                    : aggregate.coverage >= 0.5
+                      ? 'Some evidence sources were unavailable.'
+                      : 'Many evidence sources were unavailable.'}
+                </p>
+              </div>
+              <details className="glass-panel p-4 text-xs text-text-muted">
+                <summary className="cursor-pointer">How was this calculated?</summary>
+                <p className="mt-2">
+                  Confidence reflects agreement among the available evidence sources; coverage reflects
+                  how many sources returned usable data. The overall direction combines each source's
+                  signal, reliability, and contribution.
+                </p>
+                <p className="mt-2">
+                  Debug values — agreement: {aggregate.evidence_strength.toFixed(3)}, coverage: {aggregate.coverage.toFixed(3)},
+                  composite: {aggregate.composite_signal.toFixed(3)}.
+                </p>
+                {verdict?.scenarios && (
+                  <ul className="mt-2 space-y-1">
+                    {verdict.scenarios.map(scenario => (
+                      <li key={scenario.name}>
+                        {scenario.name}: {(scenario.score * 100).toFixed(1)}% internal scenario weight
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </details>
+            </>
           )}
         </div>
       </div>
 
     </motion.div>
-  )
-}
-
-// ─── Evidence Gauge ────────────────────────────────────────────────────────
-
-function EvidenceGauge({
-  strength, coverage, composite, tooltipVisible, setTooltipVisible,
-}: {
-  strength: number; coverage: number; composite: number
-  tooltipVisible: boolean; setTooltipVisible: (v: boolean) => void
-}) {
-  const pct = Math.round(strength * 100)
-  const option = {
-    backgroundColor: 'transparent',
-    series: [{
-      type: 'gauge',
-      startAngle: 180, endAngle: 0, min: 0, max: 1,
-      radius: '90%', center: ['50%', '70%'],
-      pointer: { show: false },
-      progress: {
-        show: true, overlap: false, roundCap: true, width: 14,
-        itemStyle: { color: strength > 0.5 ? '#10b981' : strength > 0.25 ? '#f59e0b' : '#6b7280' },
-      },
-      axisLine: { lineStyle: { width: 14, color: [[1, '#1a2030']] } },
-      axisTick: { show: false }, splitLine: { show: false }, axisLabel: { show: false },
-      detail: {
-        offsetCenter: [0, '-10%'], fontSize: 28,
-        fontFamily: 'JetBrains Mono', fontWeight: 700, color: '#f1f5f9',
-        formatter: `${pct}%`,
-      },
-      data: [{ value: strength }],
-    }],
-  }
-
-  return (
-    <div className="glass-panel p-5">
-      <div className="flex items-center justify-between mb-2">
-        <div>
-          <h4 className="text-sm font-semibold text-text-primary">How confident are we?</h4>
-          <p className="text-2xs text-text-muted mt-0.5">Based on how much the data agrees</p>
-        </div>
-        <button
-          onClick={() => setTooltipVisible(!tooltipVisible)}
-          className="text-text-muted hover:text-text-secondary transition-colors p-1"
-          title="How is this calculated?"
-        >
-          <Info className="w-4 h-4" />
-        </button>
-      </div>
-
-      {tooltipVisible && (
-        <div className="text-xs text-text-muted bg-surface-3 border border-border rounded-lg p-3 mb-3 leading-relaxed">
-          This score measures how much the 10 data sources agree with each other.
-          High = most sources point the same way. Low = mixed signals.
-          <br /><br />
-          <span className="text-text-secondary font-medium">Formula: </span>
-          1 − H(p)/ln(3), where H is Shannon entropy of the scenario distribution.
-        </div>
-      )}
-
-      <ReactECharts option={option} style={{ height: 150 }} />
-
-      <div className="grid grid-cols-2 gap-3 mt-2">
-        <div className="text-center p-2 rounded-lg bg-surface-3/50">
-          <div className="text-xs text-text-muted mb-0.5">Data coverage</div>
-          <div className="text-lg font-mono font-bold text-text-primary tabular-nums">
-            {Math.round(coverage * 100)}%
-          </div>
-        </div>
-        <div className="text-center p-2 rounded-lg bg-surface-3/50">
-          <div className="text-xs text-text-muted mb-0.5">Net signal</div>
-          <div className={cn(
-            'text-lg font-mono font-bold tabular-nums',
-            composite > 0.1 ? 'text-tailwind' : composite < -0.1 ? 'text-headwind' : 'text-neutral',
-          )}>
-            {composite > 0 ? '+' : ''}{composite.toFixed(2)}
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-// ─── Contribution Waterfall ────────────────────────────────────────────────
-
-function ContributionWaterfall({
-  contributions, onCardClick,
-}: {
-  contributions: Record<string, number>
-  onCardClick: (id: string) => void
-}) {
-  const entries = Object.entries(contributions)
-    .filter(([id]) => id !== '_refusal')
-    .sort((a, b) => a[1] - b[1])
-
-  // Use plain card names instead of C1, C2
-  const labels = entries.map(([id]) => cardDisplayName(id))
-
-  const option = {
-    backgroundColor: 'transparent',
-    grid: { left: 100, right: 16, top: 8, bottom: 8 },
-    xAxis: {
-      type: 'value',
-      axisLabel: { color: '#475569', fontSize: 9, fontFamily: 'JetBrains Mono' },
-      splitLine: { lineStyle: { color: '#1f2937', type: 'dashed' } },
-      axisLine: { lineStyle: { color: '#1f2937' } },
-    },
-    yAxis: {
-      type: 'category',
-      data: labels,
-      axisLabel: { color: '#94a3b8', fontSize: 10 },
-      axisLine: { show: false }, splitLine: { show: false },
-    },
-    series: [{
-      type: 'bar',
-      data: entries.map(([, v]) => ({
-        value: v,
-        itemStyle: {
-          color: v > 0 ? '#10b981' : '#ef4444',
-          borderRadius: v > 0 ? [0, 4, 4, 0] : [4, 0, 0, 4],
-        },
-      })),
-      barMaxWidth: 16,
-    }],
-    tooltip: {
-      trigger: 'axis',
-      backgroundColor: '#141820', borderColor: '#1f2937',
-      textStyle: { color: '#f1f5f9', fontSize: 11 },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter: (params: any) => {
-        const [p] = params
-        const val = p.value > 0 ? `+${p.value.toFixed(3)}` : p.value.toFixed(3)
-        return `${p.name}: ${val}`
-      },
-    },
-  }
-
-  return (
-    <div className="glass-panel p-5">
-      <h4 className="text-sm font-semibold text-text-primary mb-1">What's driving the signal</h4>
-      <p className="text-xs text-text-muted mb-3">Green = positive contribution, red = negative</p>
-      <ReactECharts
-        option={option}
-        style={{ height: entries.length * 26 + 20 }}
-        onEvents={{
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          click: (params: any) => {
-            // Map label back to card ID
-            const idx = labels.indexOf(params.name)
-            if (idx >= 0) onCardClick(entries[idx][0])
-          },
-        }}
-      />
-      <p className="text-2xs text-text-muted mt-2">Click a bar to see details</p>
-    </div>
   )
 }

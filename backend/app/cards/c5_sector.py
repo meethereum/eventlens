@@ -130,14 +130,9 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
         Metric(name="Driver classification", value=classification, unit=""),
     ]
 
-    # Relative strength series (stock / sector ratio)
-    rel_series = None
-    try:
-        aligned = stock_prices.to_frame("stock").join(etf_prices.to_frame("etf"), how="inner")
-        rel = (aligned["stock"] / aligned["etf"]) * 100
-        rel_series = series_to_output(rel.tail(250))
-    except Exception:
-        rel_series = []
+    aligned_prices = stock_prices.to_frame("stock")
+    aligned_prices = aligned_prices.join(etf_prices.rename("sector"), how="inner")
+    aligned_prices = aligned_prices.join(spy_prices.rename("market"), how="inner").tail(250)
 
     return CardOutput(
         id=CARD_ID,
@@ -152,7 +147,11 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
             unit="%",
         ),
         metrics=metrics,
-        series=rel_series or series_to_output(stock_prices.tail(250)),
+        series=series_to_output(stock_prices.tail(250)),
+        related_series={
+            name: series_to_output(aligned_prices[name])
+            for name in ("stock", "sector", "market")
+        },
         signal=round(s, 4),
         label=signal_label(s),
         weight=round(w, 3),

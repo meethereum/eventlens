@@ -26,6 +26,17 @@ logger = logging.getLogger("eventlens.edgar")
 CIK_MAP_URL  = "https://www.sec.gov/files/company_tickers.json"
 FACTS_URL    = "https://data.sec.gov/api/xbrl/companyfacts/CIK{cik:010d}.json"
 
+# The SEC ticker map retains historical/duplicate ticker assignments.  EventLens
+# has a fixed v1 universe, so use the current issuer CIK for those symbols rather
+# than accepting the first duplicate entry returned by the map.
+CIK_OVERRIDES = {
+    "NVDA": "0001045810", "INTC": "0000050863", "AAPL": "0000320193",
+    "MSFT": "0000789019", "GM": "0001467858", "SBUX": "0000829224",
+    "AMZN": "0001018724", "DIS": "0001744489", "BA": "0000012927",
+    "RTX": "0000101829", "XOM": "0000034088", "CVX": "0000093410",
+    "JPM": "0000019617", "SCHW": "0000316709", "UNH": "0000731766",
+}
+
 # XBRL concept names used by C8-C10
 CONCEPTS = {
     # Balance sheet
@@ -74,6 +85,8 @@ _CIK_CACHE: dict[str, str] = {}  # ticker → CIK string (zero-padded 10)
 def get_cik(ticker: str) -> str | None:
     """Return the 10-digit zero-padded CIK for the given ticker."""
     ticker = ticker.upper()
+    if ticker in CIK_OVERRIDES:
+        return CIK_OVERRIDES[ticker]
     if ticker in _CIK_CACHE:
         return _CIK_CACHE[ticker]
 
@@ -127,6 +140,50 @@ def get_companyfacts(ticker: str, as_of: str | None = None) -> dict[str, Any]:
         time.sleep(0.2)  # stay under 5 req/s
 
     return facts
+
+
+def get_filings_near_date(ticker: str, event_date: str, window_days: int = 1) -> list[dict[str, str]]:
+    """Return company 8-K/10-K/10-Q filings near a date with official filing URLs."""
+    cik = get_cik(ticker)
+    if not cik:
+        return []
+
+    cache_id = cache_key("edgar", "submissions", cik)
+    submissions = cache_get(cache_id)
+    if submissions is None:
+        url = f"https://data.sec.gov/submissions/CIK{cik}.json"
+        with httpx.Client(timeout=30, headers=_headers_data()) as client:
+            response = client.get(url)
+            response.raise_for_status()
+            submissions = response.json()
+        cache_set(cache_id, submissions, TTL_EDGAR)
+
+    target = pd.Timestamp(event_date)
+    forms = submissions.get("filings", {}).get("recent", {})
+    dates = forms.get("filingDate", [])
+    accepted_forms = forms.get("form", [])
+    accession_numbers = forms.get("accessionNumber", [])
+    primary_documents = forms.get("primaryDocument", [])
+    results: list[dict[str, str]] = []
+
+    for index, filed in enumerate(dates):
+        filed_date = pd.Timestamp(filed)
+        if abs((filed_date - target).days) > window_days:
+            continue
+        form = accepted_forms[index]
+        if form not in {"8-K", "10-K", "10-Q"}:
+            continue
+        accession = accession_numbers[index]
+        accession_path = accession.replace("-", "")
+        document = primary_documents[index]
+        results.append({
+            "title": f"{form} filed {filed_date.date().isoformat()}",
+            "url": f"https://www.sec.gov/Archives/edgar/data/{int(cik)}/{accession_path}/{document}",
+            "date": filed_date.date().isoformat(),
+            "source": "SEC EDGAR",
+            "form": form,
+        })
+    return results[:5]
 
 
 # ---------------------------------------------------------------------------

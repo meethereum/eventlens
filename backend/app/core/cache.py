@@ -6,6 +6,8 @@ TTLs (seconds):
   yfinance   1h   = 3600
   EDGAR      24h  = 86400
   GPR file   7d   = 604800
+  NEWS       1h   = 3600
+  EXPLANATION 24h = 86400
 """
 from __future__ import annotations
 
@@ -21,6 +23,8 @@ TTL_FRED     = 21_600   # 6 h
 TTL_YFINANCE =  3_600   # 1 h
 TTL_EDGAR    = 86_400   # 24 h
 TTL_GPR      = 604_800  # 7 d
+TTL_NEWS     = 3_600    # 1 h
+TTL_EXPLANATION = 86_400  # 24 h
 
 
 @lru_cache(maxsize=1)

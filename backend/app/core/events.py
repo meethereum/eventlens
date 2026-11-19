@@ -118,6 +118,8 @@ class RunContext:
     cards: dict[str, CardOutput] = field(default_factory=dict)
     aggregate: AggregateResult | None = None
     verdict: VerdictOutput | None = None
+    event_evidence: dict[str, Any] = field(default_factory=dict)
+    is_fixture: bool = False
     started_at: float = field(default_factory=time.time)
 
     def elapsed_ms(self) -> int:
