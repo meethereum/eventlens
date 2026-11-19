@@ -238,18 +238,13 @@ export default function App() {
                           {/* Tab 3: Historical Precedents */}
                           {(activeTab === 'precedents' || activeTab === 'all') && (
                             <section>
-                              {state.phase === 'done' && state.parsed ? (
-                                <PrecedentPanel
-                                  ticker={state.parsed.ticker}
-                                  eventType={state.parsed.event_type}
-                                  asOf={state.parsed.as_of}
-                                  marketMood={marketMood}
-                                />
-                              ) : (
-                                <div className="glass-panel p-8 text-center text-xs text-text-muted">
-                                  Historical Precedents activate once analysis synthesis completes.
-                                </div>
-                              )}
+                              <PrecedentPanel
+                                ticker={state.parsed?.ticker || 'INTC'}
+                                eventType={state.parsed?.event_type || 'CEO departure'}
+                                asOf={state.parsed?.as_of || new Date().toISOString().split('T')[0]}
+                                marketMood={marketMood}
+                                query={state.query}
+                              />
                             </section>
                           )}
 

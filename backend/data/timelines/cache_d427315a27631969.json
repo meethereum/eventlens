@@ -1,0 +1,2542 @@
+{
+  "query_prompt": "Regional bank runs and deposits disappearing",
+  "generated_at": "2026-11-19T13:33:59.923102+00:00",
+  "incident_category": "Financial Contagion: Digital Bank Runs, Liquidity Shocks & Bond Portfolio Losses",
+  "core_themes": [
+    "Unrealized held-to-maturity (HTM) fixed income losses from rapid interest rate hikes",
+    "Hyper-speed digital deposit withdrawals via mobile apps and venture chat groups",
+    "Concentration of uninsured corporate and institutional deposit balances",
+    "Central bank liquidity intervention (BTFP, Discount Window) and emergency systemic risk determinations",
+    "Distressed asset transfers to G-SIBs and forced sovereign-brokered mergers"
+  ],
+  "executive_synthesis": "**Systemic Fragility & Duration Mismatch Dynamics** — The 2023 banking crisis revealed a new paradigm of financial panic: the digital bank run. Decades of low interest rates incentivized financial institutions to invest long-duration fixed-rate Treasuries and mortgage-backed securities (MBS) classified as Held-to-Maturity (HTM). When the Federal Reserve hiked interest rates by over 500 basis points at record velocity, paper mark-to-market losses erased significant portions of tangible common equity. Unlike traditional 20th-century bank runs where depositors queued on sidewalks, modern withdrawals materialized in minutes via mobile banking and synchronized Slack and WhatsApp corporate channels, draining over $40 billion from Silicon Valley Bank in a single day.\n\n**Contagion Transmission & Market Bifurcation** — The equity markets responded with violent repricing that bifurcated financial institutions into vulnerable regional targets and fortress beneficiaries. Mid-sized lenders with high ratios of uninsured commercial deposits (Western Alliance, First Republic, Signature) suffered 50% to 90% equity market drawdowns and multiple halts. Conversely, Global Systemically Important Banks (G-SIBs) led by JPMorgan Chase became immediate safe-haven destinations, absorbing over $50 billion in inflows within days. Charles Schwab, despite suffering a steep -32% drawdown over HTM concerns, demonstrated that retail deposit fragmentation and vast borrowing capacity from the FHLB and Fed could successfully absorb severe panic selling.\n\n**Resolution Mechanisms & Structural Ramifications** — Resolving digital liquidity runs required unprecedented regulatory maneuvers: the invocation of the Systemic Risk Exception guaranteeing uninsured depositors, the establishment of the Fed's Bank Term Funding Program (BTFP) loaning against par value rather than market price, and sovereign-brokered weekend auctions. While these interventions averted a broader 1930s-style domino collapse, they accelerated the concentration of the American banking sector into mega-banks and established permanently higher deposit costs that compressed regional bank net interest margins throughout subsequent quarters.",
+  "total_companies_analyzed": 5,
+  "similar_company_events": [
+    {
+      "company_name": "The Charles Schwab Corporation",
+      "stock_ticker": "SCHW",
+      "industry": "Financial Services / Brokerage & Banking",
+      "incident_title": "Held-to-Maturity Bond Paper Losses & Regional Contagion Defense",
+      "event_timeframe": "March 2023",
+      "summary": "During the historic March 2023 regional banking panic triggered by SVB's collapse, Charles Schwab was targeted by short sellers and panic selling due to $28 billion in unrealized paper losses on its held-to-maturity (HTM) government bond portfolio. Schwab suffered a sharp -32% drawdown over three sessions as fears of deposit flight spread across social media.",
+      "similarity_rationale": "Parallels acute market panic over unrealized bond portfolio mark-to-market losses and rapid digital contagion threatening deposit stability.",
+      "key_parallels": [
+        "Unrealized paper losses on long-duration Treasuries and MBS due to rapid Fed rate hikes.",
+        "Viral social media rumors sparking rapid institutional and retail sentiment shift.",
+        "Extreme intraday stock volatility and widening credit default swap spreads.",
+        "Successful defense via robust retail deposit loyalty and Federal Reserve emergency facilities."
+      ],
+      "key_differences": [
+        "Schwab possessed over $100B in available borrowing capacity from FHLB and Fed discount window.",
+        "Over 80% of Schwab's deposits were within FDIC insurance limits, unlike SVB's 90%+ uninsured base."
+      ],
+      "timeline": [
+        {
+          "date": "2023-03-08",
+          "phase": "Precursor / Baseline",
+          "event": "SVB Financial announces capital raise; Schwab closes normally at $76.01.",
+          "impact": "Baseline price before banking contagion explodes across financial sector.",
+          "stock_price": 72.2,
+          "stock_change_from_baseline_pct": -0.0,
+          "trading_volume": 5371900
+        },
+        {
+          "date": "2023-03-10",
+          "phase": "Trigger / Contagion Outbreak",
+          "event": "FDIC takes possession of Silicon Valley Bank; panic spreads to Schwab over held-to-maturity losses.",
+          "impact": "SCHW stock plunges -11.7% to $58.70 on massive trading volume.",
+          "stock_price": 55.62,
+          "stock_change_from_baseline_pct": -22.97,
+          "trading_volume": 88882900
+        },
+        {
+          "date": "2023-03-13",
+          "phase": "Peak Panic & Defense",
+          "event": "Stock drops another -11.6% intraday to $51.91; CEO Walt Bettinger confirms massive liquidity reserves and organic deposit inflows.",
+          "impact": "Trough price reached; billions in retail dip-buying volume enters the market.",
+          "stock_price": 49.19,
+          "stock_change_from_baseline_pct": -31.87,
+          "trading_volume": 148476900
+        },
+        {
+          "date": "2023-03-14",
+          "phase": "Relief & Stabilization",
+          "event": "Wall Street firms issue upgrade notes citing Schwab's $100B cash reserves; stock rebounds +9.2%.",
+          "impact": "Contagion halted; deposit outflow data proves retail base is stable.",
+          "stock_price": 53.71,
+          "stock_change_from_baseline_pct": -25.61,
+          "trading_volume": 112494900
+        },
+        {
+          "date": "2023-03-24",
+          "phase": "Normalization",
+          "event": "Fed emergency Bank Term Funding Program (BTFP) backstops liquidity across the banking sector.",
+          "impact": "Stock stabilizes in $55-$60 range; systemic banking crisis containment achieved.",
+          "stock_price": 50.46,
+          "stock_change_from_baseline_pct": -30.11,
+          "trading_volume": 45393100
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "SCHW",
+        "baseline_date": "2023-03-08",
+        "baseline_price": 72.2,
+        "trough_date": "2023-05-04",
+        "trough_price": 44.88,
+        "max_drawdown_pct": -37.83,
+        "daily_series": [
+          {
+            "date": "2023-02-13",
+            "close": 76.2
+          },
+          {
+            "date": "2023-02-14",
+            "close": 76.53
+          },
+          {
+            "date": "2023-02-15",
+            "close": 76.26
+          },
+          {
+            "date": "2023-02-16",
+            "close": 76.12
+          },
+          {
+            "date": "2023-02-17",
+            "close": 76.1
+          },
+          {
+            "date": "2023-02-21",
+            "close": 75.71
+          },
+          {
+            "date": "2023-02-22",
+            "close": 75.8
+          },
+          {
+            "date": "2023-02-23",
+            "close": 74.83
+          },
+          {
+            "date": "2023-02-24",
+            "close": 76.37
+          },
+          {
+            "date": "2023-02-27",
+            "close": 73.79
+          },
+          {
+            "date": "2023-02-28",
+            "close": 73.83
+          },
+          {
+            "date": "2023-03-01",
+            "close": 73.35
+          },
+          {
+            "date": "2023-03-02",
+            "close": 72.1
+          },
+          {
+            "date": "2023-03-03",
+            "close": 73.35
+          },
+          {
+            "date": "2023-03-06",
+            "close": 72.58
+          },
+          {
+            "date": "2023-03-07",
+            "close": 71.02
+          },
+          {
+            "date": "2023-03-08",
+            "close": 72.2
+          },
+          {
+            "date": "2023-03-09",
+            "close": 62.98
+          },
+          {
+            "date": "2023-03-10",
+            "close": 55.62
+          },
+          {
+            "date": "2023-03-13",
+            "close": 49.19
+          },
+          {
+            "date": "2023-03-14",
+            "close": 53.71
+          },
+          {
+            "date": "2023-03-15",
+            "close": 56.42
+          },
+          {
+            "date": "2023-03-16",
+            "close": 54.84
+          },
+          {
+            "date": "2023-03-17",
+            "close": 53.45
+          },
+          {
+            "date": "2023-03-20",
+            "close": 53.17
+          },
+          {
+            "date": "2023-03-21",
+            "close": 56.35
+          },
+          {
+            "date": "2023-03-22",
+            "close": 53.31
+          },
+          {
+            "date": "2023-03-23",
+            "close": 50.11
+          },
+          {
+            "date": "2023-03-24",
+            "close": 50.46
+          },
+          {
+            "date": "2023-03-27",
+            "close": 51.98
+          },
+          {
+            "date": "2023-03-28",
+            "close": 51.02
+          },
+          {
+            "date": "2023-03-29",
+            "close": 52.31
+          },
+          {
+            "date": "2023-03-30",
+            "close": 49.72
+          },
+          {
+            "date": "2023-03-31",
+            "close": 49.63
+          },
+          {
+            "date": "2023-04-03",
+            "close": 48.86
+          },
+          {
+            "date": "2023-04-04",
+            "close": 47.38
+          },
+          {
+            "date": "2023-04-05",
+            "close": 46.31
+          },
+          {
+            "date": "2023-04-06",
+            "close": 46.76
+          },
+          {
+            "date": "2023-04-10",
+            "close": 49.01
+          },
+          {
+            "date": "2023-04-11",
+            "close": 49.0
+          },
+          {
+            "date": "2023-04-12",
+            "close": 49.2
+          },
+          {
+            "date": "2023-04-13",
+            "close": 48.79
+          },
+          {
+            "date": "2023-04-14",
+            "close": 48.11
+          },
+          {
+            "date": "2023-04-17",
+            "close": 50.0
+          },
+          {
+            "date": "2023-04-18",
+            "close": 51.17
+          },
+          {
+            "date": "2023-04-19",
+            "close": 52.63
+          },
+          {
+            "date": "2023-04-20",
+            "close": 51.17
+          },
+          {
+            "date": "2023-04-21",
+            "close": 50.98
+          },
+          {
+            "date": "2023-04-24",
+            "close": 50.33
+          },
+          {
+            "date": "2023-04-25",
+            "close": 48.35
+          },
+          {
+            "date": "2023-04-26",
+            "close": 47.94
+          },
+          {
+            "date": "2023-04-27",
+            "close": 49.02
+          },
+          {
+            "date": "2023-04-28",
+            "close": 49.5
+          },
+          {
+            "date": "2023-05-01",
+            "close": 49.09
+          },
+          {
+            "date": "2023-05-02",
+            "close": 47.47
+          },
+          {
+            "date": "2023-05-03",
+            "close": 45.51
+          },
+          {
+            "date": "2023-05-04",
+            "close": 44.88
+          },
+          {
+            "date": "2023-05-05",
+            "close": 46.66
+          }
+        ]
+      },
+      "total_impact_assessment": "Temporary 35% market cap drop, successfully weathered panic without tapping BTFP, organic deposit inflows restored within weeks.",
+      "sources": [
+        {
+          "title": "Schwab CEO Says Firm Has Ample Liquidity",
+          "url": "https://www.bloomberg.com/news/articles/2023-03-14/schwab-ceo-says-firm-has-enough-liquidity-to-ride-out-storm"
+        },
+        {
+          "title": "SEC 8-K Schwab Liquidity and Deposit Update",
+          "url": "https://www.sec.gov/ix?doc=/Archives/edgar/data/316709/000031670923000021/schw-20230313.htm"
+        }
+      ]
+    },
+    {
+      "company_name": "Western Alliance Bancorporation",
+      "stock_ticker": "WAL",
+      "industry": "Regional Commercial Banking",
+      "incident_title": "Surviving Acute Digital Deposit Run and Short Attack",
+      "event_timeframe": "March - May 2023",
+      "summary": "Western Alliance Bancorporation was thrust to the epicenter of the regional banking crisis following the seizures of SVB, Signature, and First Republic. Short sellers and social media panics drove WAL shares down over 75% peak-to-trough, yet the bank survived through aggressive liquidity disclosures, deposit guarantees, and tech customer retention.",
+      "similarity_rationale": "Prime example of a regional bank enduring a digital deposit run, successfully mobilizing liquidity, and recovering to profitability.",
+      "key_parallels": [
+        "Sudden digital withdrawal run enabled by mobile banking and venture network contagion.",
+        "Targeted by aggressive short selling and halt-inducing volatility.",
+        "Mobilized Federal Reserve Discount Window and FHLB advances to replace fleeing deposits.",
+        "Rebuilt deposit base by pivoting to insured sweep accounts."
+      ],
+      "key_differences": [
+        "Unlike SVB and First Republic, Western Alliance had a diversified commercial and retail loan book.",
+        "Survived without FDIC receivership or forced government sale."
+      ],
+      "timeline": [
+        {
+          "date": "2023-03-08",
+          "phase": "Precursor / Baseline",
+          "event": "Western Alliance stock trades at $71.69 ahead of SVB collapse.",
+          "impact": "Pre-crisis valuation established.",
+          "stock_price": 65.46,
+          "stock_change_from_baseline_pct": -0.01,
+          "trading_volume": 353600
+        },
+        {
+          "date": "2023-03-10",
+          "phase": "Contagion Wave 1",
+          "event": "SVB failure triggers indiscriminate selling of mid-sized banks; WAL drops -20.9% to $49.34.",
+          "impact": "Tech startup depositors begin transferring funds to money center banks.",
+          "stock_price": 45.14,
+          "stock_change_from_baseline_pct": -31.05,
+          "trading_volume": 24666500
+        },
+        {
+          "date": "2023-03-13",
+          "phase": "Severe Intraday Halt Plunge",
+          "event": "WAL stock halts multiple times, touching an intraday trough of $26.11 (-47% in one session).",
+          "impact": "Bank issues emergency statement confirming $25B in available cash and borrowing capacity.",
+          "stock_price": 23.89,
+          "stock_change_from_baseline_pct": -63.51,
+          "trading_volume": 60550200
+        },
+        {
+          "date": "2023-03-17",
+          "phase": "Deposit Transparency Initiative",
+          "event": "WAL begins publishing unprecedented weekly deposit updates showing 68% insured deposit ratio.",
+          "impact": "Short squeeze begins; stock surges +45% from lows over three days.",
+          "stock_price": 28.65,
+          "stock_change_from_baseline_pct": -56.24,
+          "trading_volume": 24311900
+        },
+        {
+          "date": "2023-05-04",
+          "phase": "PacWest Spillover & Ultimate Rebound",
+          "event": "After First Republic seizure, false rumors trigger second brief dip; WAL management aggressively refutes report.",
+          "impact": "WAL confirms deposit growth of $1.8B since March; stock begins permanent recovery back above $50.",
+          "stock_price": 16.65,
+          "stock_change_from_baseline_pct": -74.57,
+          "trading_volume": 60473500
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "WAL",
+        "baseline_date": "2023-03-08",
+        "baseline_price": 65.46,
+        "trough_date": "2023-05-04",
+        "trough_price": 16.65,
+        "max_drawdown_pct": -74.57,
+        "daily_series": [
+          {
+            "date": "2023-02-13",
+            "close": 68.76
+          },
+          {
+            "date": "2023-02-14",
+            "close": 68.73
+          },
+          {
+            "date": "2023-02-15",
+            "close": 68.85
+          },
+          {
+            "date": "2023-02-16",
+            "close": 67.62
+          },
+          {
+            "date": "2023-02-17",
+            "close": 68.19
+          },
+          {
+            "date": "2023-02-21",
+            "close": 66.2
+          },
+          {
+            "date": "2023-02-22",
+            "close": 66.11
+          },
+          {
+            "date": "2023-02-23",
+            "close": 67.23
+          },
+          {
+            "date": "2023-02-24",
+            "close": 67.53
+          },
+          {
+            "date": "2023-02-27",
+            "close": 67.98
+          },
+          {
+            "date": "2023-02-28",
+            "close": 67.92
+          },
+          {
+            "date": "2023-03-01",
+            "close": 68.76
+          },
+          {
+            "date": "2023-03-02",
+            "close": 67.72
+          },
+          {
+            "date": "2023-03-03",
+            "close": 69.2
+          },
+          {
+            "date": "2023-03-06",
+            "close": 68.97
+          },
+          {
+            "date": "2023-03-07",
+            "close": 65.77
+          },
+          {
+            "date": "2023-03-08",
+            "close": 65.46
+          },
+          {
+            "date": "2023-03-09",
+            "close": 57.05
+          },
+          {
+            "date": "2023-03-10",
+            "close": 45.14
+          },
+          {
+            "date": "2023-03-13",
+            "close": 23.89
+          },
+          {
+            "date": "2023-03-14",
+            "close": 27.33
+          },
+          {
+            "date": "2023-03-15",
+            "close": 29.59
+          },
+          {
+            "date": "2023-03-16",
+            "close": 33.77
+          },
+          {
+            "date": "2023-03-17",
+            "close": 28.65
+          },
+          {
+            "date": "2023-03-20",
+            "close": 26.72
+          },
+          {
+            "date": "2023-03-21",
+            "close": 30.72
+          },
+          {
+            "date": "2023-03-22",
+            "close": 29.19
+          },
+          {
+            "date": "2023-03-23",
+            "close": 28.59
+          },
+          {
+            "date": "2023-03-24",
+            "close": 30.23
+          },
+          {
+            "date": "2023-03-27",
+            "close": 31.15
+          },
+          {
+            "date": "2023-03-28",
+            "close": 30.95
+          },
+          {
+            "date": "2023-03-29",
+            "close": 33.0
+          },
+          {
+            "date": "2023-03-30",
+            "close": 32.85
+          },
+          {
+            "date": "2023-03-31",
+            "close": 32.51
+          },
+          {
+            "date": "2023-04-03",
+            "close": 31.86
+          },
+          {
+            "date": "2023-04-04",
+            "close": 30.66
+          },
+          {
+            "date": "2023-04-05",
+            "close": 26.87
+          },
+          {
+            "date": "2023-04-06",
+            "close": 28.16
+          },
+          {
+            "date": "2023-04-10",
+            "close": 28.05
+          },
+          {
+            "date": "2023-04-11",
+            "close": 29.13
+          },
+          {
+            "date": "2023-04-12",
+            "close": 28.88
+          },
+          {
+            "date": "2023-04-13",
+            "close": 29.41
+          },
+          {
+            "date": "2023-04-14",
+            "close": 28.96
+          },
+          {
+            "date": "2023-04-17",
+            "close": 30.02
+          },
+          {
+            "date": "2023-04-18",
+            "close": 29.74
+          },
+          {
+            "date": "2023-04-19",
+            "close": 36.91
+          },
+          {
+            "date": "2023-04-20",
+            "close": 36.18
+          },
+          {
+            "date": "2023-04-21",
+            "close": 37.13
+          },
+          {
+            "date": "2023-04-24",
+            "close": 36.57
+          },
+          {
+            "date": "2023-04-25",
+            "close": 34.53
+          },
+          {
+            "date": "2023-04-26",
+            "close": 34.52
+          },
+          {
+            "date": "2023-04-27",
+            "close": 34.73
+          },
+          {
+            "date": "2023-04-28",
+            "close": 33.96
+          },
+          {
+            "date": "2023-05-01",
+            "close": 33.34
+          },
+          {
+            "date": "2023-05-02",
+            "close": 28.3
+          },
+          {
+            "date": "2023-05-03",
+            "close": 27.05
+          },
+          {
+            "date": "2023-05-04",
+            "close": 16.65
+          },
+          {
+            "date": "2023-05-05",
+            "close": 24.85
+          },
+          {
+            "date": "2023-05-08",
+            "close": 24.99
+          },
+          {
+            "date": "2023-05-09",
+            "close": 24.65
+          },
+          {
+            "date": "2023-05-10",
+            "close": 25.14
+          },
+          {
+            "date": "2023-05-11",
+            "close": 24.94
+          },
+          {
+            "date": "2023-05-12",
+            "close": 25.46
+          },
+          {
+            "date": "2023-05-15",
+            "close": 28.51
+          },
+          {
+            "date": "2023-05-16",
+            "close": 29.28
+          },
+          {
+            "date": "2023-05-17",
+            "close": 32.27
+          },
+          {
+            "date": "2023-05-18",
+            "close": 32.61
+          },
+          {
+            "date": "2023-05-19",
+            "close": 31.81
+          },
+          {
+            "date": "2023-05-22",
+            "close": 35.09
+          },
+          {
+            "date": "2023-05-23",
+            "close": 34.66
+          },
+          {
+            "date": "2023-05-24",
+            "close": 33.69
+          },
+          {
+            "date": "2023-05-25",
+            "close": 32.84
+          },
+          {
+            "date": "2023-05-26",
+            "close": 32.93
+          },
+          {
+            "date": "2023-05-30",
+            "close": 32.56
+          },
+          {
+            "date": "2023-05-31",
+            "close": 31.42
+          },
+          {
+            "date": "2023-06-01",
+            "close": 31.75
+          },
+          {
+            "date": "2023-06-02",
+            "close": 35.18
+          },
+          {
+            "date": "2023-06-05",
+            "close": 34.53
+          },
+          {
+            "date": "2023-06-06",
+            "close": 36.63
+          },
+          {
+            "date": "2023-06-07",
+            "close": 37.57
+          },
+          {
+            "date": "2023-06-08",
+            "close": 37.79
+          },
+          {
+            "date": "2023-06-09",
+            "close": 36.16
+          },
+          {
+            "date": "2023-06-12",
+            "close": 36.09
+          },
+          {
+            "date": "2023-06-13",
+            "close": 37.89
+          },
+          {
+            "date": "2023-06-14",
+            "close": 35.69
+          },
+          {
+            "date": "2023-06-15",
+            "close": 36.01
+          },
+          {
+            "date": "2023-06-16",
+            "close": 34.69
+          }
+        ]
+      },
+      "total_impact_assessment": "Severe stock crash followed by a dramatic 150%+ recovery as deposit stabilization was verified in Q2 earnings.",
+      "sources": [
+        {
+          "title": "Western Alliance Reassures Depositors on Liquidity",
+          "url": "https://www.reuters.com/business/finance/western-alliance-shares-fall-bank-reassures-liquidity-2023-03-13/"
+        },
+        {
+          "title": "SEC 8-K WAL Daily Deposit Disclosures",
+          "url": "https://www.sec.gov/ix?doc=/Archives/edgar/data/1212544/000121254423000018/wal-20230317.htm"
+        }
+      ]
+    },
+    {
+      "company_name": "SPDR S&P Regional Banking ETF",
+      "stock_ticker": "KRE",
+      "industry": "Banking Sector Index / Benchmark",
+      "incident_title": "Systemic Regional Banking Contagion & Liquidity Shock",
+      "event_timeframe": "March - May 2023",
+      "summary": "The KRE regional banking benchmark captured the broader contagion across mid-sized American lenders when rising interest rates exposed paper portfolio markdowns and prompted over $100 billion in uninsured deposit reallocation to global systematically important banks (G-SIBs).",
+      "similarity_rationale": "Represents the aggregate equity and liquidity drawdown across the entire regional banking sector during an acute bank run cycle.",
+      "key_parallels": [
+        "Synchronized multiple contraction across all mid-cap financial institutions.",
+        "Spread of fear via social media networks and digital mobile banking platforms.",
+        "Intervention by Fed, Treasury, and FDIC via systemic risk exceptions and the BTFP facility.",
+        "Prolonged recovery timeline as banks faced elevated deposit funding costs."
+      ],
+      "key_differences": [
+        "Index product reflecting diversified sector performance rather than idiosyncratic single-bank insolvency."
+      ],
+      "timeline": [
+        {
+          "date": "2023-03-06",
+          "phase": "Precursor Baseline",
+          "event": "KRE trades at $63.00 with regional banks enjoying strong net interest margins.",
+          "impact": "Peak sector valuation before crisis onset.",
+          "stock_price": 53.82,
+          "stock_change_from_baseline_pct": -0.01,
+          "trading_volume": 7301400
+        },
+        {
+          "date": "2023-03-09",
+          "phase": "Contagion Outbreak",
+          "event": "SVB capital crisis triggers a 8.1% drop in the regional banking ETF.",
+          "impact": "Broad-based liquidation across regional banks commences.",
+          "stock_price": 47.62,
+          "stock_change_from_baseline_pct": -11.53,
+          "trading_volume": 57213200
+        },
+        {
+          "date": "2023-03-13",
+          "phase": "Systemic Risk Intervention",
+          "event": "Biden administration guarantees all uninsured deposits at SVB and Signature Bank; Fed launches BTFP.",
+          "impact": "KRE drops another -12.3% as market questions viability of remaining regional banks.",
+          "stock_price": 39.92,
+          "stock_change_from_baseline_pct": -25.83,
+          "trading_volume": 94522700
+        },
+        {
+          "date": "2023-05-01",
+          "phase": "First Republic Seizure",
+          "event": "FDIC seizes First Republic and sells it to JPMorgan; KRE touches cyclical low of $36.00.",
+          "impact": "Final major bank resolution of the spring crisis concluded.",
+          "stock_price": 37.55,
+          "stock_change_from_baseline_pct": -30.24,
+          "trading_volume": 28443800
+        },
+        {
+          "date": "2023-06-15",
+          "phase": "Stabilization & Recovery",
+          "event": "Regional bank deposits stabilize industry-wide; deposit beta increases but insolvency risk recedes.",
+          "impact": "KRE begins steady climb back toward $45-$50.",
+          "stock_price": 39.55,
+          "stock_change_from_baseline_pct": -26.52,
+          "trading_volume": 18410500
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "KRE",
+        "baseline_date": "2023-03-06",
+        "baseline_price": 53.82,
+        "trough_date": "2023-05-04",
+        "trough_price": 32.68,
+        "max_drawdown_pct": -39.29,
+        "daily_series": [
+          {
+            "date": "2023-02-09",
+            "close": 56.69
+          },
+          {
+            "date": "2023-02-10",
+            "close": 56.57
+          },
+          {
+            "date": "2023-02-13",
+            "close": 57.03
+          },
+          {
+            "date": "2023-02-14",
+            "close": 56.82
+          },
+          {
+            "date": "2023-02-15",
+            "close": 57.49
+          },
+          {
+            "date": "2023-02-16",
+            "close": 56.47
+          },
+          {
+            "date": "2023-02-17",
+            "close": 56.76
+          },
+          {
+            "date": "2023-02-21",
+            "close": 55.44
+          },
+          {
+            "date": "2023-02-22",
+            "close": 55.17
+          },
+          {
+            "date": "2023-02-23",
+            "close": 55.39
+          },
+          {
+            "date": "2023-02-24",
+            "close": 55.4
+          },
+          {
+            "date": "2023-02-27",
+            "close": 55.38
+          },
+          {
+            "date": "2023-02-28",
+            "close": 55.29
+          },
+          {
+            "date": "2023-03-01",
+            "close": 54.96
+          },
+          {
+            "date": "2023-03-02",
+            "close": 53.56
+          },
+          {
+            "date": "2023-03-03",
+            "close": 54.23
+          },
+          {
+            "date": "2023-03-06",
+            "close": 53.82
+          },
+          {
+            "date": "2023-03-07",
+            "close": 52.09
+          },
+          {
+            "date": "2023-03-08",
+            "close": 51.82
+          },
+          {
+            "date": "2023-03-09",
+            "close": 47.62
+          },
+          {
+            "date": "2023-03-10",
+            "close": 45.53
+          },
+          {
+            "date": "2023-03-13",
+            "close": 39.92
+          },
+          {
+            "date": "2023-03-14",
+            "close": 40.76
+          },
+          {
+            "date": "2023-03-15",
+            "close": 40.09
+          },
+          {
+            "date": "2023-03-16",
+            "close": 41.5
+          },
+          {
+            "date": "2023-03-17",
+            "close": 39.01
+          },
+          {
+            "date": "2023-03-20",
+            "close": 39.45
+          },
+          {
+            "date": "2023-03-21",
+            "close": 41.73
+          },
+          {
+            "date": "2023-03-22",
+            "close": 39.35
+          },
+          {
+            "date": "2023-03-23",
+            "close": 38.26
+          },
+          {
+            "date": "2023-03-24",
+            "close": 39.42
+          },
+          {
+            "date": "2023-03-27",
+            "close": 39.76
+          },
+          {
+            "date": "2023-03-28",
+            "close": 39.72
+          },
+          {
+            "date": "2023-03-29",
+            "close": 40.15
+          },
+          {
+            "date": "2023-03-30",
+            "close": 39.33
+          },
+          {
+            "date": "2023-03-31",
+            "close": 39.72
+          },
+          {
+            "date": "2023-04-03",
+            "close": 39.31
+          },
+          {
+            "date": "2023-04-04",
+            "close": 38.44
+          },
+          {
+            "date": "2023-04-05",
+            "close": 38.05
+          },
+          {
+            "date": "2023-04-06",
+            "close": 38.61
+          },
+          {
+            "date": "2023-04-10",
+            "close": 38.81
+          },
+          {
+            "date": "2023-04-11",
+            "close": 38.92
+          },
+          {
+            "date": "2023-04-12",
+            "close": 38.49
+          },
+          {
+            "date": "2023-04-13",
+            "close": 39.08
+          },
+          {
+            "date": "2023-04-14",
+            "close": 38.32
+          },
+          {
+            "date": "2023-04-17",
+            "close": 39.46
+          },
+          {
+            "date": "2023-04-18",
+            "close": 38.61
+          },
+          {
+            "date": "2023-04-19",
+            "close": 40.13
+          },
+          {
+            "date": "2023-04-20",
+            "close": 39.38
+          },
+          {
+            "date": "2023-04-21",
+            "close": 38.88
+          },
+          {
+            "date": "2023-04-24",
+            "close": 38.68
+          },
+          {
+            "date": "2023-04-25",
+            "close": 37.05
+          },
+          {
+            "date": "2023-04-26",
+            "close": 37.28
+          },
+          {
+            "date": "2023-04-27",
+            "close": 37.98
+          },
+          {
+            "date": "2023-04-28",
+            "close": 38.64
+          },
+          {
+            "date": "2023-05-01",
+            "close": 37.55
+          },
+          {
+            "date": "2023-05-02",
+            "close": 35.2
+          },
+          {
+            "date": "2023-05-03",
+            "close": 34.56
+          },
+          {
+            "date": "2023-05-04",
+            "close": 32.68
+          },
+          {
+            "date": "2023-05-05",
+            "close": 34.73
+          },
+          {
+            "date": "2023-05-08",
+            "close": 34.04
+          },
+          {
+            "date": "2023-05-09",
+            "close": 33.89
+          },
+          {
+            "date": "2023-05-10",
+            "close": 33.57
+          },
+          {
+            "date": "2023-05-11",
+            "close": 32.73
+          },
+          {
+            "date": "2023-05-12",
+            "close": 32.94
+          },
+          {
+            "date": "2023-05-15",
+            "close": 33.98
+          },
+          {
+            "date": "2023-05-16",
+            "close": 33.47
+          },
+          {
+            "date": "2023-05-17",
+            "close": 35.94
+          },
+          {
+            "date": "2023-05-18",
+            "close": 36.16
+          },
+          {
+            "date": "2023-05-19",
+            "close": 35.51
+          },
+          {
+            "date": "2023-05-22",
+            "close": 36.64
+          },
+          {
+            "date": "2023-05-23",
+            "close": 37.01
+          },
+          {
+            "date": "2023-05-24",
+            "close": 36.35
+          },
+          {
+            "date": "2023-05-25",
+            "close": 36.05
+          },
+          {
+            "date": "2023-05-26",
+            "close": 36.49
+          },
+          {
+            "date": "2023-05-30",
+            "close": 36.42
+          },
+          {
+            "date": "2023-05-31",
+            "close": 35.3
+          },
+          {
+            "date": "2023-06-01",
+            "close": 36.01
+          },
+          {
+            "date": "2023-06-02",
+            "close": 38.23
+          },
+          {
+            "date": "2023-06-05",
+            "close": 37.24
+          },
+          {
+            "date": "2023-06-06",
+            "close": 39.09
+          },
+          {
+            "date": "2023-06-07",
+            "close": 40.39
+          },
+          {
+            "date": "2023-06-08",
+            "close": 39.91
+          },
+          {
+            "date": "2023-06-09",
+            "close": 39.36
+          },
+          {
+            "date": "2023-06-12",
+            "close": 39.07
+          },
+          {
+            "date": "2023-06-13",
+            "close": 39.98
+          },
+          {
+            "date": "2023-06-14",
+            "close": 38.81
+          },
+          {
+            "date": "2023-06-15",
+            "close": 39.55
+          },
+          {
+            "date": "2023-06-16",
+            "close": 39.01
+          },
+          {
+            "date": "2023-06-20",
+            "close": 38.5
+          },
+          {
+            "date": "2023-06-21",
+            "close": 37.91
+          },
+          {
+            "date": "2023-06-22",
+            "close": 36.71
+          },
+          {
+            "date": "2023-06-23",
+            "close": 36.18
+          },
+          {
+            "date": "2023-06-26",
+            "close": 36.64
+          },
+          {
+            "date": "2023-06-27",
+            "close": 37.26
+          },
+          {
+            "date": "2023-06-28",
+            "close": 37.06
+          },
+          {
+            "date": "2023-06-29",
+            "close": 37.76
+          },
+          {
+            "date": "2023-06-30",
+            "close": 37.33
+          },
+          {
+            "date": "2023-07-03",
+            "close": 38.18
+          },
+          {
+            "date": "2023-07-05",
+            "close": 37.68
+          },
+          {
+            "date": "2023-07-06",
+            "close": 37.11
+          },
+          {
+            "date": "2023-07-07",
+            "close": 37.91
+          },
+          {
+            "date": "2023-07-10",
+            "close": 38.21
+          },
+          {
+            "date": "2023-07-11",
+            "close": 38.72
+          },
+          {
+            "date": "2023-07-12",
+            "close": 39.5
+          },
+          {
+            "date": "2023-07-13",
+            "close": 40.18
+          },
+          {
+            "date": "2023-07-14",
+            "close": 39.43
+          },
+          {
+            "date": "2023-07-17",
+            "close": 40.11
+          },
+          {
+            "date": "2023-07-18",
+            "close": 41.8
+          },
+          {
+            "date": "2023-07-19",
+            "close": 43.1
+          },
+          {
+            "date": "2023-07-20",
+            "close": 42.94
+          },
+          {
+            "date": "2023-07-21",
+            "close": 42.4
+          },
+          {
+            "date": "2023-07-24",
+            "close": 43.47
+          },
+          {
+            "date": "2023-07-25",
+            "close": 42.65
+          },
+          {
+            "date": "2023-07-26",
+            "close": 44.67
+          },
+          {
+            "date": "2023-07-27",
+            "close": 43.91
+          },
+          {
+            "date": "2023-07-28",
+            "close": 44.54
+          }
+        ]
+      },
+      "total_impact_assessment": "Benchmark lost 40% of its value over 8 weeks, permanently reshaping regional bank regulatory thresholds and deposit pricing.",
+      "sources": [
+        {
+          "title": "Regional Banks Plunge as Contagion Spreads",
+          "url": "https://www.wsj.com/articles/bank-shares-plunge-as-fallout-from-svb-spreads-6a05988e"
+        }
+      ]
+    },
+    {
+      "company_name": "JPMorgan Chase & Co.",
+      "stock_ticker": "JPM",
+      "industry": "Global Systemically Important Financial Institution",
+      "incident_title": "G-SIB Safe Haven Flight & Rescue Acquisition of First Republic",
+      "event_timeframe": "March - May 2023",
+      "summary": "As regional lenders faced deposit runs, JPMorgan Chase acted as the prime beneficiary of capital flight, absorbing over $50 billion in institutional deposits. On May 1, 2023, JPM won the FDIC competitive auction to acquire First Republic Bank's $203 billion in assets and $92 billion in deposits, cementing CEO Jamie Dimon's reputation as the lender of last resort.",
+      "similarity_rationale": "Shows the mirror image of a bank run: the 'too-big-to-fail' safe haven that absorbs displaced assets and secures distressed takeover discounts.",
+      "key_parallels": [
+        "Massive safe-haven deposit inflows as corporate treasurers fled regional institutions.",
+        "Orchestrated $30B private bank deposit lifeline to First Republic in March.",
+        "Engineered government-assisted weekend acquisition with FDIC loss-sharing agreement.",
+        "Immediate accretive earnings boost ($2.6B one-time accounting gain)."
+      ],
+      "key_differences": [
+        "JPMorgan acted as the acquirer and beneficiary rather than the victim of the bank run.",
+        "G-SIB balance sheet and fortress capital ratios insulated the firm from liquidity panic."
+      ],
+      "timeline": [
+        {
+          "date": "2023-03-08",
+          "phase": "Precursor Baseline",
+          "event": "JPM stock trades at $137.80 prior to banking sector turmoil.",
+          "impact": "Pre-crisis valuation established.",
+          "stock_price": 126.49,
+          "stock_change_from_baseline_pct": -0.0,
+          "trading_volume": 10002500
+        },
+        {
+          "date": "2023-03-10",
+          "phase": "Safe Haven Inflows",
+          "event": "SVB collapse triggers tens of billions in flight-to-safety deposits moving to JPMorgan.",
+          "impact": "JPM stock dips mildly (-0.4%) far outperforming regional bank peers.",
+          "stock_price": 122.68,
+          "stock_change_from_baseline_pct": -3.01,
+          "trading_volume": 37599700
+        },
+        {
+          "date": "2023-03-16",
+          "phase": "Private Rescue Coalition",
+          "event": "Jamie Dimon leads 11 large banks in depositing $30B of uninsured funds into First Republic.",
+          "impact": "Buys critical time for FDIC resolution; JPM deposits $5B of its own cash.",
+          "stock_price": 120.02,
+          "stock_change_from_baseline_pct": -5.12,
+          "trading_volume": 24558500
+        },
+        {
+          "date": "2023-05-01",
+          "phase": "Acquisition Announcement",
+          "event": "JPMorgan acquires substantial majority of First Republic assets from FDIC with loss-share agreement.",
+          "impact": "JPM shares rise +2.1% to $141.20 as market recognizes highly favorable financial terms.",
+          "stock_price": 130.63,
+          "stock_change_from_baseline_pct": 3.27,
+          "trading_volume": 20415800
+        },
+        {
+          "date": "2023-05-22",
+          "phase": "Investor Day Triumph",
+          "event": "JPMorgan raises net interest income guidance to $84B at Investor Day following First Republic integration.",
+          "impact": "Stock begins powerful sustained rally toward all-time highs above $170.",
+          "stock_price": 127.7,
+          "stock_change_from_baseline_pct": 0.96,
+          "trading_volume": 11402500
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "JPM",
+        "baseline_date": "2023-03-08",
+        "baseline_price": 126.49,
+        "trough_date": "2023-03-24",
+        "trough_price": 114.66,
+        "max_drawdown_pct": -9.35,
+        "daily_series": [
+          {
+            "date": "2023-02-13",
+            "close": 130.87
+          },
+          {
+            "date": "2023-02-14",
+            "close": 131.45
+          },
+          {
+            "date": "2023-02-15",
+            "close": 132.0
+          },
+          {
+            "date": "2023-02-16",
+            "close": 130.18
+          },
+          {
+            "date": "2023-02-17",
+            "close": 130.57
+          },
+          {
+            "date": "2023-02-21",
+            "close": 128.17
+          },
+          {
+            "date": "2023-02-22",
+            "close": 127.19
+          },
+          {
+            "date": "2023-02-23",
+            "close": 128.21
+          },
+          {
+            "date": "2023-02-24",
+            "close": 129.36
+          },
+          {
+            "date": "2023-02-27",
+            "close": 130.49
+          },
+          {
+            "date": "2023-02-28",
+            "close": 131.58
+          },
+          {
+            "date": "2023-03-01",
+            "close": 130.85
+          },
+          {
+            "date": "2023-03-02",
+            "close": 129.49
+          },
+          {
+            "date": "2023-03-03",
+            "close": 131.87
+          },
+          {
+            "date": "2023-03-06",
+            "close": 131.1
+          },
+          {
+            "date": "2023-03-07",
+            "close": 127.24
+          },
+          {
+            "date": "2023-03-08",
+            "close": 126.49
+          },
+          {
+            "date": "2023-03-09",
+            "close": 119.64
+          },
+          {
+            "date": "2023-03-10",
+            "close": 122.68
+          },
+          {
+            "date": "2023-03-13",
+            "close": 120.48
+          },
+          {
+            "date": "2023-03-14",
+            "close": 123.57
+          },
+          {
+            "date": "2023-03-15",
+            "close": 117.73
+          },
+          {
+            "date": "2023-03-16",
+            "close": 120.02
+          },
+          {
+            "date": "2023-03-17",
+            "close": 115.48
+          },
+          {
+            "date": "2023-03-20",
+            "close": 116.71
+          },
+          {
+            "date": "2023-03-21",
+            "close": 119.84
+          },
+          {
+            "date": "2023-03-22",
+            "close": 116.74
+          },
+          {
+            "date": "2023-03-23",
+            "close": 116.43
+          },
+          {
+            "date": "2023-03-24",
+            "close": 114.66
+          },
+          {
+            "date": "2023-03-27",
+            "close": 117.94
+          },
+          {
+            "date": "2023-03-28",
+            "close": 118.3
+          },
+          {
+            "date": "2023-03-29",
+            "close": 118.54
+          },
+          {
+            "date": "2023-03-30",
+            "close": 118.18
+          },
+          {
+            "date": "2023-03-31",
+            "close": 119.62
+          },
+          {
+            "date": "2023-04-03",
+            "close": 119.48
+          },
+          {
+            "date": "2023-04-04",
+            "close": 117.88
+          },
+          {
+            "date": "2023-04-05",
+            "close": 118.06
+          },
+          {
+            "date": "2023-04-06",
+            "close": 117.93
+          },
+          {
+            "date": "2023-04-10",
+            "close": 118.32
+          },
+          {
+            "date": "2023-04-11",
+            "close": 118.9
+          },
+          {
+            "date": "2023-04-12",
+            "close": 118.88
+          },
+          {
+            "date": "2023-04-13",
+            "close": 119.33
+          },
+          {
+            "date": "2023-04-14",
+            "close": 128.34
+          },
+          {
+            "date": "2023-04-17",
+            "close": 129.36
+          },
+          {
+            "date": "2023-04-18",
+            "close": 130.81
+          },
+          {
+            "date": "2023-04-19",
+            "close": 130.65
+          },
+          {
+            "date": "2023-04-20",
+            "close": 130.27
+          },
+          {
+            "date": "2023-04-21",
+            "close": 130.02
+          },
+          {
+            "date": "2023-04-24",
+            "close": 130.19
+          },
+          {
+            "date": "2023-04-25",
+            "close": 127.36
+          },
+          {
+            "date": "2023-04-26",
+            "close": 125.11
+          },
+          {
+            "date": "2023-04-27",
+            "close": 126.79
+          },
+          {
+            "date": "2023-04-28",
+            "close": 127.89
+          },
+          {
+            "date": "2023-05-01",
+            "close": 130.63
+          },
+          {
+            "date": "2023-05-02",
+            "close": 128.52
+          },
+          {
+            "date": "2023-05-03",
+            "close": 125.8
+          },
+          {
+            "date": "2023-05-04",
+            "close": 124.08
+          },
+          {
+            "date": "2023-05-05",
+            "close": 126.5
+          },
+          {
+            "date": "2023-05-08",
+            "close": 126.81
+          },
+          {
+            "date": "2023-05-09",
+            "close": 126.2
+          },
+          {
+            "date": "2023-05-10",
+            "close": 126.26
+          },
+          {
+            "date": "2023-05-11",
+            "close": 125.86
+          },
+          {
+            "date": "2023-05-12",
+            "close": 124.06
+          },
+          {
+            "date": "2023-05-15",
+            "close": 125.11
+          },
+          {
+            "date": "2023-05-16",
+            "close": 124.26
+          },
+          {
+            "date": "2023-05-17",
+            "close": 128.08
+          },
+          {
+            "date": "2023-05-18",
+            "close": 129.06
+          },
+          {
+            "date": "2023-05-19",
+            "close": 128.76
+          },
+          {
+            "date": "2023-05-22",
+            "close": 127.7
+          },
+          {
+            "date": "2023-05-23",
+            "close": 126.36
+          },
+          {
+            "date": "2023-05-24",
+            "close": 125.21
+          },
+          {
+            "date": "2023-05-25",
+            "close": 125.51
+          },
+          {
+            "date": "2023-05-26",
+            "close": 126.69
+          },
+          {
+            "date": "2023-05-30",
+            "close": 127.17
+          },
+          {
+            "date": "2023-05-31",
+            "close": 125.55
+          },
+          {
+            "date": "2023-06-01",
+            "close": 127.28
+          },
+          {
+            "date": "2023-06-02",
+            "close": 129.95
+          },
+          {
+            "date": "2023-06-05",
+            "close": 128.68
+          },
+          {
+            "date": "2023-06-06",
+            "close": 128.91
+          },
+          {
+            "date": "2023-06-07",
+            "close": 130.16
+          },
+          {
+            "date": "2023-06-08",
+            "close": 130.19
+          },
+          {
+            "date": "2023-06-09",
+            "close": 130.45
+          },
+          {
+            "date": "2023-06-12",
+            "close": 130.44
+          },
+          {
+            "date": "2023-06-13",
+            "close": 131.39
+          },
+          {
+            "date": "2023-06-14",
+            "close": 130.9
+          },
+          {
+            "date": "2023-06-15",
+            "close": 132.38
+          },
+          {
+            "date": "2023-06-16",
+            "close": 132.53
+          },
+          {
+            "date": "2023-06-20",
+            "close": 131.86
+          },
+          {
+            "date": "2023-06-21",
+            "close": 131.66
+          },
+          {
+            "date": "2023-06-22",
+            "close": 129.13
+          },
+          {
+            "date": "2023-06-23",
+            "close": 128.45
+          },
+          {
+            "date": "2023-06-26",
+            "close": 128.77
+          },
+          {
+            "date": "2023-06-27",
+            "close": 128.78
+          },
+          {
+            "date": "2023-06-28",
+            "close": 128.21
+          },
+          {
+            "date": "2023-06-29",
+            "close": 132.69
+          },
+          {
+            "date": "2023-06-30",
+            "close": 134.55
+          },
+          {
+            "date": "2023-07-03",
+            "close": 135.63
+          },
+          {
+            "date": "2023-07-05",
+            "close": 134.73
+          }
+        ]
+      },
+      "total_impact_assessment": "Gained $100B+ in high-net-worth client assets, +$500M annual net income accretion, and stock surged to record highs.",
+      "sources": [
+        {
+          "title": "JPMorgan Wins Auction for First Republic",
+          "url": "https://www.wsj.com/articles/first-republic-bank-taken-over-by-fdic-jpmorgan-to-buy-assets-450f3f61"
+        },
+        {
+          "title": "SEC 8-K JPM First Republic Purchase",
+          "url": "https://www.sec.gov/ix?doc=/Archives/edgar/data/19617/000001961723000282/jpm-20230501.htm"
+        }
+      ]
+    },
+    {
+      "company_name": "UBS Group AG",
+      "stock_ticker": "UBS",
+      "industry": "Global Wealth Management & Investment Banking",
+      "incident_title": "Emergency State-Brokered Takeover of Credit Suisse",
+      "event_timeframe": "March 2023",
+      "summary": "On Sunday, March 19, 2023, the Swiss government, FINMA, and the Swiss National Bank forced an emergency CHF 3 billion ($3.2B) acquisition of 167-year-old Credit Suisse by its arch-rival UBS to prevent a systemic global banking panic. The deal featured a controversial wipeout of CHF 16 billion in AT1 capital bonds.",
+      "similarity_rationale": "The international epicenter of the 2023 banking crisis: an ultra-fast sovereign-engineered merger to halt cross-border financial contagion.",
+      "key_parallels": [
+        "Historic global institution suffers multi-billion deposit and wealth management outflows.",
+        "Emergency weekend negotiations bypassing normal shareholder approval votes.",
+        "Central bank provides massive liquidity backstops (CHF 100B SNB facility).",
+        "Controversial restructuring erasing subordinated debt while preserving equity value."
+      ],
+      "key_differences": [
+        "Cross-border Swiss jurisdiction with direct emergency federal decree.",
+        "Total write-down of AT1 bonds sparked international legal litigation."
+      ],
+      "timeline": [
+        {
+          "date": "2023-03-14",
+          "phase": "Precursor Baseline",
+          "event": "Credit Suisse identifies 'material weaknesses' in financial reporting controls; UBS trades at $20.08.",
+          "impact": "Pre-acquisition baseline established.",
+          "stock_price": 17.92,
+          "stock_change_from_baseline_pct": 0.0,
+          "trading_volume": 5447800
+        },
+        {
+          "date": "2023-03-15",
+          "phase": "Crisis Catalyst",
+          "event": "Saudi National Bank chairman rules out further equity investment in Credit Suisse; CS stock collapses.",
+          "impact": "Credit default swaps on Credit Suisse spike to distressed levels.",
+          "stock_price": 16.79,
+          "stock_change_from_baseline_pct": -6.3,
+          "trading_volume": 13524200
+        },
+        {
+          "date": "2023-03-19",
+          "phase": "Emergency Sunday Merger",
+          "event": "Swiss authorities broker emergency takeover of CS by UBS for CHF 3B; FINMA writes down $17B of AT1 bonds.",
+          "impact": "Systemic collapse prevented; global market panic averted.",
+          "stock_price": 16.85,
+          "stock_change_from_baseline_pct": -5.97,
+          "trading_volume": 40634500
+        },
+        {
+          "date": "2023-03-20",
+          "phase": "Market Digestion & Rebound",
+          "event": "UBS stock opens down -14% on integration risk but closes up +1.3% as analysts assess $34B accounting badwill gain.",
+          "impact": "Massive institutional buying as UBS secures immense wealth management market share at bargain price.",
+          "stock_price": 16.85,
+          "stock_change_from_baseline_pct": -5.97,
+          "trading_volume": 40634500
+        },
+        {
+          "date": "2023-08-31",
+          "phase": "Record Quarterly Profit",
+          "event": "UBS reports historic $29B Q2 net profit driven by negative goodwill from Credit Suisse acquisition.",
+          "impact": "Stock hits highest level since 2008 as integration proceeds ahead of schedule.",
+          "stock_price": 24.57,
+          "stock_change_from_baseline_pct": 37.11,
+          "trading_volume": 9977200
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "UBS",
+        "baseline_date": "2023-03-14",
+        "baseline_price": 17.92,
+        "trough_date": "2023-03-17",
+        "trough_price": 16.32,
+        "max_drawdown_pct": -8.95,
+        "daily_series": [
+          {
+            "date": "2023-02-17",
+            "close": 19.67
+          },
+          {
+            "date": "2023-02-21",
+            "close": 19.46
+          },
+          {
+            "date": "2023-02-22",
+            "close": 19.24
+          },
+          {
+            "date": "2023-02-23",
+            "close": 19.39
+          },
+          {
+            "date": "2023-02-24",
+            "close": 19.19
+          },
+          {
+            "date": "2023-02-27",
+            "close": 19.48
+          },
+          {
+            "date": "2023-02-28",
+            "close": 19.52
+          },
+          {
+            "date": "2023-03-01",
+            "close": 19.37
+          },
+          {
+            "date": "2023-03-02",
+            "close": 19.24
+          },
+          {
+            "date": "2023-03-03",
+            "close": 19.83
+          },
+          {
+            "date": "2023-03-06",
+            "close": 19.87
+          },
+          {
+            "date": "2023-03-07",
+            "close": 19.33
+          },
+          {
+            "date": "2023-03-08",
+            "close": 19.17
+          },
+          {
+            "date": "2023-03-09",
+            "close": 18.76
+          },
+          {
+            "date": "2023-03-10",
+            "close": 18.23
+          },
+          {
+            "date": "2023-03-13",
+            "close": 17.36
+          },
+          {
+            "date": "2023-03-14",
+            "close": 17.92
+          },
+          {
+            "date": "2023-03-15",
+            "close": 16.79
+          },
+          {
+            "date": "2023-03-16",
+            "close": 17.27
+          },
+          {
+            "date": "2023-03-17",
+            "close": 16.32
+          },
+          {
+            "date": "2023-03-20",
+            "close": 16.85
+          },
+          {
+            "date": "2023-03-21",
+            "close": 18.87
+          },
+          {
+            "date": "2023-03-22",
+            "close": 18.29
+          },
+          {
+            "date": "2023-03-23",
+            "close": 17.18
+          },
+          {
+            "date": "2023-03-24",
+            "close": 17.02
+          },
+          {
+            "date": "2023-03-27",
+            "close": 17.39
+          },
+          {
+            "date": "2023-03-28",
+            "close": 17.27
+          },
+          {
+            "date": "2023-03-29",
+            "close": 18.02
+          },
+          {
+            "date": "2023-03-30",
+            "close": 18.39
+          },
+          {
+            "date": "2023-03-31",
+            "close": 19.13
+          },
+          {
+            "date": "2023-04-03",
+            "close": 18.56
+          },
+          {
+            "date": "2023-04-04",
+            "close": 18.83
+          },
+          {
+            "date": "2023-04-05",
+            "close": 18.64
+          },
+          {
+            "date": "2023-04-06",
+            "close": 18.61
+          },
+          {
+            "date": "2023-04-10",
+            "close": 18.56
+          },
+          {
+            "date": "2023-04-11",
+            "close": 19.27
+          },
+          {
+            "date": "2023-04-12",
+            "close": 19.57
+          },
+          {
+            "date": "2023-04-13",
+            "close": 19.9
+          },
+          {
+            "date": "2023-04-14",
+            "close": 20.16
+          },
+          {
+            "date": "2023-04-17",
+            "close": 19.39
+          },
+          {
+            "date": "2023-04-18",
+            "close": 19.33
+          },
+          {
+            "date": "2023-04-19",
+            "close": 19.15
+          },
+          {
+            "date": "2023-04-20",
+            "close": 18.73
+          },
+          {
+            "date": "2023-04-21",
+            "close": 18.67
+          },
+          {
+            "date": "2023-04-24",
+            "close": 18.91
+          },
+          {
+            "date": "2023-04-25",
+            "close": 18.03
+          },
+          {
+            "date": "2023-04-26",
+            "close": 18.36
+          },
+          {
+            "date": "2023-04-27",
+            "close": 18.68
+          },
+          {
+            "date": "2023-04-28",
+            "close": 18.63
+          },
+          {
+            "date": "2023-05-01",
+            "close": 18.44
+          },
+          {
+            "date": "2023-05-02",
+            "close": 18.32
+          },
+          {
+            "date": "2023-05-03",
+            "close": 17.8
+          },
+          {
+            "date": "2023-05-04",
+            "close": 17.44
+          },
+          {
+            "date": "2023-05-05",
+            "close": 18.14
+          },
+          {
+            "date": "2023-05-08",
+            "close": 18.09
+          },
+          {
+            "date": "2023-05-09",
+            "close": 18.03
+          },
+          {
+            "date": "2023-05-10",
+            "close": 17.84
+          },
+          {
+            "date": "2023-05-11",
+            "close": 17.65
+          },
+          {
+            "date": "2023-05-12",
+            "close": 17.63
+          },
+          {
+            "date": "2023-05-15",
+            "close": 17.83
+          },
+          {
+            "date": "2023-05-16",
+            "close": 17.57
+          },
+          {
+            "date": "2023-05-17",
+            "close": 17.98
+          },
+          {
+            "date": "2023-05-18",
+            "close": 18.11
+          },
+          {
+            "date": "2023-05-19",
+            "close": 18.48
+          },
+          {
+            "date": "2023-05-22",
+            "close": 18.57
+          },
+          {
+            "date": "2023-05-23",
+            "close": 18.28
+          },
+          {
+            "date": "2023-05-24",
+            "close": 18.1
+          },
+          {
+            "date": "2023-05-25",
+            "close": 18.03
+          },
+          {
+            "date": "2023-05-26",
+            "close": 18.26
+          },
+          {
+            "date": "2023-05-30",
+            "close": 17.91
+          },
+          {
+            "date": "2023-05-31",
+            "close": 17.4
+          },
+          {
+            "date": "2023-06-01",
+            "close": 17.96
+          },
+          {
+            "date": "2023-06-02",
+            "close": 18.37
+          },
+          {
+            "date": "2023-06-05",
+            "close": 18.4
+          },
+          {
+            "date": "2023-06-06",
+            "close": 18.68
+          },
+          {
+            "date": "2023-06-07",
+            "close": 18.64
+          },
+          {
+            "date": "2023-06-08",
+            "close": 18.63
+          },
+          {
+            "date": "2023-06-09",
+            "close": 18.57
+          },
+          {
+            "date": "2023-06-12",
+            "close": 18.67
+          },
+          {
+            "date": "2023-06-13",
+            "close": 18.66
+          },
+          {
+            "date": "2023-06-14",
+            "close": 18.85
+          },
+          {
+            "date": "2023-06-15",
+            "close": 18.79
+          },
+          {
+            "date": "2023-06-16",
+            "close": 18.78
+          },
+          {
+            "date": "2023-06-20",
+            "close": 18.48
+          },
+          {
+            "date": "2023-06-21",
+            "close": 18.45
+          },
+          {
+            "date": "2023-06-22",
+            "close": 18.31
+          },
+          {
+            "date": "2023-06-23",
+            "close": 18.18
+          },
+          {
+            "date": "2023-06-26",
+            "close": 17.99
+          },
+          {
+            "date": "2023-06-27",
+            "close": 18.29
+          },
+          {
+            "date": "2023-06-28",
+            "close": 18.24
+          },
+          {
+            "date": "2023-06-29",
+            "close": 18.41
+          },
+          {
+            "date": "2023-06-30",
+            "close": 18.65
+          },
+          {
+            "date": "2023-07-03",
+            "close": 18.83
+          },
+          {
+            "date": "2023-07-05",
+            "close": 18.3
+          },
+          {
+            "date": "2023-07-06",
+            "close": 17.84
+          },
+          {
+            "date": "2023-07-07",
+            "close": 18.26
+          },
+          {
+            "date": "2023-07-10",
+            "close": 18.44
+          },
+          {
+            "date": "2023-07-11",
+            "close": 18.68
+          },
+          {
+            "date": "2023-07-12",
+            "close": 19.03
+          },
+          {
+            "date": "2023-07-13",
+            "close": 19.45
+          },
+          {
+            "date": "2023-07-14",
+            "close": 19.24
+          },
+          {
+            "date": "2023-07-17",
+            "close": 19.37
+          },
+          {
+            "date": "2023-07-18",
+            "close": 19.62
+          },
+          {
+            "date": "2023-07-19",
+            "close": 19.62
+          },
+          {
+            "date": "2023-07-20",
+            "close": 19.54
+          },
+          {
+            "date": "2023-07-21",
+            "close": 19.59
+          },
+          {
+            "date": "2023-07-24",
+            "close": 19.71
+          },
+          {
+            "date": "2023-07-25",
+            "close": 19.97
+          },
+          {
+            "date": "2023-07-26",
+            "close": 20.15
+          },
+          {
+            "date": "2023-07-27",
+            "close": 19.98
+          },
+          {
+            "date": "2023-07-28",
+            "close": 20.48
+          },
+          {
+            "date": "2023-07-31",
+            "close": 20.4
+          },
+          {
+            "date": "2023-08-01",
+            "close": 20.11
+          },
+          {
+            "date": "2023-08-02",
+            "close": 19.7
+          },
+          {
+            "date": "2023-08-03",
+            "close": 19.93
+          },
+          {
+            "date": "2023-08-04",
+            "close": 20.13
+          },
+          {
+            "date": "2023-08-07",
+            "close": 20.4
+          },
+          {
+            "date": "2023-08-08",
+            "close": 20.27
+          },
+          {
+            "date": "2023-08-09",
+            "close": 20.2
+          },
+          {
+            "date": "2023-08-10",
+            "close": 20.35
+          },
+          {
+            "date": "2023-08-11",
+            "close": 21.49
+          },
+          {
+            "date": "2023-08-14",
+            "close": 21.7
+          },
+          {
+            "date": "2023-08-15",
+            "close": 21.54
+          },
+          {
+            "date": "2023-08-16",
+            "close": 21.53
+          },
+          {
+            "date": "2023-08-17",
+            "close": 21.62
+          },
+          {
+            "date": "2023-08-18",
+            "close": 21.56
+          },
+          {
+            "date": "2023-08-21",
+            "close": 21.61
+          },
+          {
+            "date": "2023-08-22",
+            "close": 21.83
+          },
+          {
+            "date": "2023-08-23",
+            "close": 22.37
+          },
+          {
+            "date": "2023-08-24",
+            "close": 22.68
+          },
+          {
+            "date": "2023-08-25",
+            "close": 22.61
+          },
+          {
+            "date": "2023-08-28",
+            "close": 22.93
+          },
+          {
+            "date": "2023-08-29",
+            "close": 23.13
+          },
+          {
+            "date": "2023-08-30",
+            "close": 23.27
+          },
+          {
+            "date": "2023-08-31",
+            "close": 24.57
+          },
+          {
+            "date": "2023-09-01",
+            "close": 24.23
+          },
+          {
+            "date": "2023-09-05",
+            "close": 24.29
+          },
+          {
+            "date": "2023-09-06",
+            "close": 23.74
+          },
+          {
+            "date": "2023-09-07",
+            "close": 23.68
+          },
+          {
+            "date": "2023-09-08",
+            "close": 23.46
+          },
+          {
+            "date": "2023-09-11",
+            "close": 23.57
+          },
+          {
+            "date": "2023-09-12",
+            "close": 23.73
+          },
+          {
+            "date": "2023-09-13",
+            "close": 23.91
+          },
+          {
+            "date": "2023-09-14",
+            "close": 24.09
+          },
+          {
+            "date": "2023-09-15",
+            "close": 23.94
+          },
+          {
+            "date": "2023-09-18",
+            "close": 23.89
+          },
+          {
+            "date": "2023-09-19",
+            "close": 23.97
+          },
+          {
+            "date": "2023-09-20",
+            "close": 24.08
+          },
+          {
+            "date": "2023-09-21",
+            "close": 23.61
+          },
+          {
+            "date": "2023-09-22",
+            "close": 23.32
+          },
+          {
+            "date": "2023-09-25",
+            "close": 23.34
+          },
+          {
+            "date": "2023-09-26",
+            "close": 23.06
+          },
+          {
+            "date": "2023-09-27",
+            "close": 22.39
+          },
+          {
+            "date": "2023-09-28",
+            "close": 22.72
+          },
+          {
+            "date": "2023-09-29",
+            "close": 22.68
+          },
+          {
+            "date": "2023-10-02",
+            "close": 22.41
+          },
+          {
+            "date": "2023-10-03",
+            "close": 21.94
+          },
+          {
+            "date": "2023-10-04",
+            "close": 22.03
+          },
+          {
+            "date": "2023-10-05",
+            "close": 22.15
+          },
+          {
+            "date": "2023-10-06",
+            "close": 22.62
+          },
+          {
+            "date": "2023-10-09",
+            "close": 22.65
+          },
+          {
+            "date": "2023-10-10",
+            "close": 22.73
+          },
+          {
+            "date": "2023-10-11",
+            "close": 23.21
+          },
+          {
+            "date": "2023-10-12",
+            "close": 22.81
+          },
+          {
+            "date": "2023-10-13",
+            "close": 22.36
+          }
+        ]
+      },
+      "total_impact_assessment": "Created a $1.7 trillion wealth management behemoth; UBS stock initially dipped then rallied over 60% on negative goodwill gain.",
+      "sources": [
+        {
+          "title": "UBS Agrees to Buy Credit Suisse in Historic Deal",
+          "url": "https://www.ft.com/content/0a9446d6-f288-466e-9be7-b37936a7b212"
+        }
+      ]
+    }
+  ]
+}

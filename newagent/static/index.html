@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Company-Wise Horizontal Event & Stock Price Graph</title>
+  <!-- Chart.js for Stock Price Time-Series -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Vis.js Network for Optional Hierarchical Graph -->
+  <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              500: '#0ea5e9',
+              600: '#0284c7',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #090d16;
+      color: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      height: 8px;
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+    .horizontal-node {
+      transition: all 0.2s ease-in-out;
+    }
+    .horizontal-node:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.25);
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden bg-slate-950 text-slate-100">
+
+  <!-- Top Header Navigation -->
+  <header class="bg-slate-900/90 backdrop-blur border-b border-slate-800 px-6 py-3 flex items-center justify-between shrink-0 z-20">
+    <div class="flex items-center space-x-3">
+      <div class="p-2 bg-gradient-to-tr from-cyan-600 to-blue-500 rounded-lg shadow-md shadow-cyan-500/20">
+        <i data-lucide="git-commit" class="w-5 h-5 text-white"></i>
+      </div>
+      <div>
+        <h1 class="text-base font-bold bg-gradient-to-r from-white via-slate-200 to-cyan-400 bg-clip-text text-transparent">
+          Company-Wise Horizontal Event & Stock Graph
+        </h1>
+        <p class="text-xs text-slate-400" id="header-archetype">Loading incident data...</p>
+      </div>
+    </div>
+
+    <!-- Center Prompt Badge -->
+    <div class="hidden lg:flex items-center max-w-xl truncate px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700/60 text-xs text-slate-300">
+      <span class="text-cyan-400 font-semibold mr-2 shrink-0">Prompt:</span>
+      <span id="header-prompt" class="truncate italic">"..."</span>
+    </div>
+
+    <!-- Controls & Actions -->
+    <div class="flex items-center space-x-3">
+      <!-- Layout Mode Toggle -->
+      <div class="flex rounded-lg bg-slate-800 p-0.5 border border-slate-700 text-xs font-medium">
+        <button id="btn-mode-swimlane" onclick="setLayoutMode('swimlanes')" class="px-3 py-1.5 rounded-md bg-cyan-600 text-white flex items-center space-x-1.5 shadow">
+          <i data-lucide="columns" class="w-3.5 h-3.5"></i>
+          <span>Horizontal Tracks</span>
+        </button>
+        <button id="btn-mode-hierarchical" onclick="setLayoutMode('hierarchical')" class="px-3 py-1.5 rounded-md text-slate-400 hover:text-white flex items-center space-x-1.5">
+          <i data-lucide="network" class="w-3.5 h-3.5"></i>
+          <span>LR Tree Graph</span>
+        </button>
+      </div>
+
+      <!-- New Research Button -->
+      <button onclick="openResearchModal()" class="px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 shadow-lg shadow-cyan-500/20 transition">
+        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+        <span>New Research</span>
+      </button>
+
+      <!-- Reload Button -->
+      <button onclick="loadTimelineData()" title="Reload Data" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700">
+        <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Company Filter Tabs Bar -->
+  <div class="bg-slate-900/70 border-b border-slate-800 px-6 py-2.5 flex items-center justify-between shrink-0 overflow-x-auto custom-scrollbar">
+    <div class="flex items-center space-x-2" id="company-filter-tabs">
+      <span class="text-xs text-slate-400 font-semibold mr-1 shrink-0 flex items-center space-x-1">
+        <i data-lucide="filter" class="w-3.5 h-3.5 text-cyan-400"></i>
+        <span>Filter Company:</span>
+      </span>
+      <button onclick="filterCompany('all')" class="company-tab active px-3 py-1 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0">
+        All Companies (Parallel Swimlanes)
+      </button>
+      <!-- Dynamic company buttons injected here -->
+    </div>
+    <div class="hidden sm:flex items-center space-x-3 text-xs text-slate-400 shrink-0">
+      <span class="flex items-center space-x-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+        <span class="text-[11px]">Trigger</span>
+      </span>
+      <span class="flex items-center space-x-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block"></span>
+        <span class="text-[11px]">Outbreak</span>
+      </span>
+      <span class="flex items-center space-x-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-purple-500 inline-block"></span>
+        <span class="text-[11px]">Containment</span>
+      </span>
+      <span class="flex items-center space-x-1">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block"></span>
+        <span class="text-[11px]">Aftermath</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Main Content Layout (Left: Tracks / Right: Inspector) -->
+  <div class="flex-1 flex overflow-hidden relative">
+
+    <!-- Center Scrollable Container for Horizontal Tracks -->
+    <div class="flex-1 flex flex-col overflow-y-auto custom-scrollbar p-6 space-y-6" id="main-content-scroll">
+
+      <!-- View 1: Horizontal Company Swimlanes (Default, Uncluttered) -->
+      <div id="view-swimlanes" class="space-y-6">
+        <!-- Injected Company Rows -->
+      </div>
+
+      <!-- View 2: Left-to-Right Hierarchical Network Graph -->
+      <div id="view-hierarchical" class="hidden w-full h-[650px] bg-slate-900/60 rounded-2xl border border-slate-800 relative">
+        <div id="hierarchical-network" class="w-full h-full"></div>
+        <div class="absolute top-4 left-4 bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-800 text-xs text-slate-300">
+          Left-to-Right Hierarchical Tree (Clutter-Free Fixed Layout)
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Side Panel: Interactive Node Inspector Drawer -->
+    <div id="inspector-panel" class="w-96 bg-slate-900/95 border-l border-slate-800 flex flex-col shrink-0 custom-scrollbar overflow-y-auto z-10 shadow-2xl">
+      
+      <!-- Panel Header -->
+      <div class="p-4 border-b border-slate-800 bg-slate-900/50 flex items-center justify-between sticky top-0 backdrop-blur z-10">
+        <div class="flex items-center space-x-2">
+          <i data-lucide="crosshair" class="w-4 h-4 text-cyan-400"></i>
+          <span class="font-bold text-sm text-slate-200">Milestone Forensics</span>
+        </div>
+        <span id="inspector-type" class="text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+          SELECT A NODE
+        </span>
+      </div>
+
+      <!-- Panel Body Content -->
+      <div class="p-5 space-y-5" id="inspector-content">
+
+        <!-- Default Blank State -->
+        <div id="inspector-empty" class="text-center py-20 space-y-3">
+          <div class="w-12 h-12 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center mx-auto text-slate-400">
+            <i data-lucide="mouse-pointer" class="w-6 h-6"></i>
+          </div>
+          <h3 class="text-sm font-semibold text-slate-300">Click Any Horizontal Node</h3>
+          <p class="text-xs text-slate-500 max-w-xs mx-auto">
+            Click on any milestone node to view the exact closing stock price, trading volume, % change vs baseline, and impact analysis.
+          </p>
+        </div>
+
+        <!-- Dynamic Milestone Content Card (hidden by default) -->
+        <div id="inspector-details" class="hidden space-y-5">
+
+          <!-- Primary Header Card -->
+          <div class="p-4 rounded-xl bg-gradient-to-b from-slate-800/80 to-slate-800/40 border border-slate-700/80 shadow-md space-y-2">
+            <div class="flex items-center justify-between">
+              <span id="node-company" class="text-xs font-bold text-cyan-400 uppercase tracking-wide">Company</span>
+              <span id="node-phase" class="text-[11px] px-2 py-0.5 rounded-full font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20">Phase</span>
+            </div>
+            <h2 id="node-title" class="text-sm font-bold text-white leading-tight">Milestone Event</h2>
+            <div class="flex items-center text-xs text-slate-400 space-x-2 pt-1">
+              <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-500"></i>
+              <span id="node-date" class="font-mono">Date</span>
+            </div>
+          </div>
+
+          <!-- Stock Price at this Node -->
+          <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-3">
+            <div class="flex items-center justify-between border-b border-slate-800/60 pb-2">
+              <span class="text-xs text-slate-400 font-medium">Stock Price At That Time</span>
+              <span id="node-stock-ticker" class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">TICKER</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <span class="text-[10px] text-slate-500 uppercase">Closing Share Price</span>
+                <div id="node-stock-price" class="text-xl font-bold font-mono text-emerald-400">$0.00</div>
+              </div>
+              <div>
+                <span class="text-[10px] text-slate-500 uppercase">Change vs Baseline</span>
+                <div id="node-stock-change" class="text-xl font-bold font-mono text-red-400">-0.0%</div>
+              </div>
+            </div>
+            <div class="pt-2 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+              <span>Trading Volume:</span>
+              <span id="node-stock-volume" class="font-mono font-medium text-slate-200">0</span>
+            </div>
+          </div>
+
+          <!-- Milestone Event Description -->
+          <div class="space-y-1.5">
+            <span class="text-xs font-semibold text-slate-300 flex items-center space-x-1.5">
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span>Factual Event Description</span>
+            </span>
+            <div id="node-event-desc" class="text-xs text-slate-300 leading-relaxed bg-slate-900/60 p-3 rounded-lg border border-slate-800">
+              Description of the milestone event.
+            </div>
+          </div>
+
+          <!-- Impact & Consequences -->
+          <div class="space-y-1.5">
+            <span class="text-xs font-semibold text-rose-300 flex items-center space-x-1.5">
+              <i data-lucide="alert-triangle" class="w-3.5 h-3.5 text-rose-400"></i>
+              <span>Measurable Impact</span>
+            </span>
+            <div id="node-impact-desc" class="text-xs text-rose-200/90 leading-relaxed bg-rose-950/20 p-3 rounded-lg border border-rose-900/40">
+              Impact statement.
+            </div>
+          </div>
+
+          <!-- Mini Sparkline for this company -->
+          <div class="space-y-1.5">
+            <span class="text-xs font-semibold text-slate-300 flex items-center space-x-1.5">
+              <i data-lucide="line-chart" class="w-3.5 h-3.5 text-cyan-400"></i>
+              <span>Stock Price Curve & Milestone Position</span>
+            </span>
+            <div class="h-28 bg-slate-950 p-2 rounded-lg border border-slate-800 relative">
+              <canvas id="miniSparkline"></canvas>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Modal: Live Deep Research Prompt -->
+  <div id="modal-research" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl p-6 space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+        <div class="flex items-center space-x-2">
+          <div class="p-1.5 bg-cyan-500/10 text-cyan-400 rounded-lg">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <h3 class="text-base font-bold text-white">Run New Deep Research</h3>
+        </div>
+        <button onclick="closeResearchModal()" class="text-slate-400 hover:text-white">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <label class="block text-xs font-semibold text-slate-300">
+          Enter Scenario or News Prompt:
+        </label>
+        <textarea id="input-research-prompt" rows="3" class="w-full bg-slate-950 border border-slate-700 rounded-lg p-3 text-xs text-white focus:outline-none focus:border-cyan-500 placeholder-slate-500" placeholder="e.g., A cryptocurrency exchange secretly misappropriated billions in customer funds to prop up its trading arm and collapsed"></textarea>
+
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span>Number of Companies to Research:</span>
+          <select id="input-companies-count" class="bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-slate-200">
+            <option value="5" selected>5 Companies</option>
+            <option value="6">6 Companies</option>
+            <option value="8">8 Companies</option>
+            <option value="10">10 Companies</option>
+          </select>
+        </div>
+
+        <!-- Sample Quick Prompts -->
+        <div class="space-y-1.5 pt-2">
+          <span class="text-[11px] text-slate-500 font-semibold uppercase">Or Select a Scenario:</span>
+          <div class="grid grid-cols-1 gap-1.5 text-xs">
+            <button onclick="setPrompt('A major cybersecurity glitch or faulty vendor update takes down airlines, banks, and hospital IT systems worldwide')" class="text-left p-2 rounded bg-slate-800/60 hover:bg-slate-800 text-slate-300 truncate border border-slate-700/50">
+              ⚡ Cybersecurity Glitch & Global Cloud Outage
+            </button>
+            <button onclick="setPrompt('A CEO is ousted by the board over governance disagreements and rehired days later following employee revolt')" class="text-left p-2 rounded bg-slate-800/60 hover:bg-slate-800 text-slate-300 truncate border border-slate-700/50">
+              👔 CEO Boardroom Coup & Reinstatement (OpenAI, Apple)
+            </button>
+            <button onclick="setPrompt('A bank suffers an acute digital bank run and sudden collapse due to unrealized bond portfolio losses')" class="text-left p-2 rounded bg-slate-800/60 hover:bg-slate-800 text-slate-300 truncate border border-slate-700/50">
+              🏦 Digital Bank Run & Sudden Failure (SVB, Signature)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-slate-800 flex items-center justify-end space-x-3">
+        <button onclick="closeResearchModal()" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium">
+          Cancel
+        </button>
+        <button id="btn-submit-research" onclick="triggerDeepResearch()" class="px-4 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white text-xs font-semibold flex items-center space-x-1.5 shadow">
+          <span>Start Research</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex flex-col items-center justify-center space-y-4 hidden">
+    <div class="relative w-16 h-16">
+      <div class="w-16 h-16 rounded-full border-4 border-slate-800 border-t-cyan-500 animate-spin"></div>
+      <div class="absolute inset-0 flex items-center justify-center">
+        <i data-lucide="network" class="w-6 h-6 text-cyan-400 animate-pulse"></i>
+      </div>
+    </div>
+    <div class="text-center space-y-1">
+      <h3 class="text-base font-bold text-white" id="loading-text">Deep Research Agent Active...</h3>
+      <p class="text-xs text-slate-400 max-w-sm">
+        Querying Tavily Live News, reconstructing timeline milestones, and fetching real-time historical stock prices.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let timelineData = null;
+    let selectedCompanyFilter = 'all';
+    let miniSparklineChart = null;
+    let hierarchicalNetwork = null;
+    let companyCharts = {};
+
+    // Load Data
+    async function loadTimelineData() {
+      try {
+        const response = await fetch('/api/timeline');
+        if (!response.ok) throw new Error('API request failed');
+        timelineData = await response.json();
+        renderDashboard(timelineData);
+      } catch (err) {
+        console.warn('API error, attempting fallback to local file or embedded data:', err);
+        try {
+          if (typeof EMBEDDED_TIMELINE_DATA !== 'undefined') {
+            timelineData = EMBEDDED_TIMELINE_DATA;
+          } else {
+            const fileResp = await fetch('similar_news_timeline.json');
+            timelineData = await fileResp.json();
+          }
+          renderDashboard(timelineData);
+        } catch (e2) {
+          alert('Could not load timeline data. Make sure agent.py has been run.');
+        }
+      }
+    }
+
+    // Render Dashboard
+    function renderDashboard(data) {
+      document.getElementById('header-archetype').textContent = data.incident_category || 'Corporate Crisis Forensics';
+      document.getElementById('header-prompt').textContent = `"${data.query_prompt || ''}"`;
+
+      const companies = data.similar_company_events || [];
+
+      // Render Company Filter Tabs
+      renderCompanyFilterTabs(companies);
+
+      // Render Horizontal Company Swimlanes
+      renderHorizontalSwimlanes(companies);
+
+      // Render Hierarchical Vis.js Network (Left-to-Right)
+      renderHierarchicalNetwork(data);
+
+      lucide.createIcons();
+    }
+
+    // Render Company Filter Tabs
+    function renderCompanyFilterTabs(companies) {
+      const tabsContainer = document.getElementById('company-filter-tabs');
+      // Keep first 'All' tab, remove previous dynamic ones
+      tabsContainer.querySelectorAll('.dynamic-tab').forEach(el => el.remove());
+
+      companies.forEach((comp, idx) => {
+        const ticker = comp.stock_ticker || 'N/A';
+        const sm = comp.stock_metrics;
+        const ddStr = sm ? `${sm.max_drawdown_pct.toFixed(1)}%` : '';
+
+        const btn = document.createElement('button');
+        btn.className = 'dynamic-tab px-3 py-1 rounded-full text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700/80 shrink-0 transition flex items-center space-x-1.5';
+        btn.innerHTML = `<span>${comp.company_name}</span> <span class="font-mono text-[10px] text-red-400 font-bold">${ddStr}</span>`;
+        btn.onclick = () => filterCompany(idx.toString());
+        tabsContainer.appendChild(btn);
+      });
+    }
+
+    // Filter Company View
+    function filterCompany(companyIdx) {
+      selectedCompanyFilter = companyIdx;
+
+      // Update Tab Styles
+      const allTabs = document.querySelectorAll('#company-filter-tabs button');
+      allTabs.forEach(t => {
+        t.className = t.className.replace('bg-cyan-500/20 text-cyan-300 border-cyan-500/30', 'bg-slate-800 text-slate-300 border-slate-700/80');
+      });
+
+      if (companyIdx === 'all') {
+        allTabs[0].className = 'px-3 py-1 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0';
+      } else {
+        const targetTab = allTabs[parseInt(companyIdx) + 1];
+        if (targetTab) {
+          targetTab.className = 'dynamic-tab px-3 py-1 rounded-full text-xs font-medium bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 shrink-0 transition flex items-center space-x-1.5';
+        }
+      }
+
+      // Show/Hide Swimlane Cards
+      const swimlanes = document.querySelectorAll('.company-swimlane-card');
+      swimlanes.forEach(card => {
+        const cIdx = card.getAttribute('data-company-index');
+        if (companyIdx === 'all' || cIdx === companyIdx) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Render Horizontal Company Swimlanes
+    function renderHorizontalSwimlanes(companies) {
+      const container = document.getElementById('view-swimlanes');
+      container.innerHTML = '';
+      companyCharts = {};
+
+      companies.forEach((comp, compIdx) => {
+        const sm = comp.stock_metrics;
+        const ticker = comp.stock_ticker || 'N/A';
+        const dd = sm ? sm.max_drawdown_pct : null;
+        const ddColor = dd !== null && dd < -10 ? 'text-rose-400 bg-rose-500/10 border-rose-500/20' : 'text-amber-400 bg-amber-500/10 border-amber-500/20';
+
+        const card = document.createElement('div');
+        card.className = 'company-swimlane-card bg-slate-900/80 border border-slate-800 rounded-2xl shadow-xl overflow-hidden';
+        card.setAttribute('data-company-index', compIdx.toString());
+
+        // Card Header (Company Info)
+        const headerHtml = `
+          <div class="px-6 py-4 bg-slate-900/90 border-b border-slate-800/80 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-600 to-indigo-600 flex items-center justify-center font-bold text-white shadow-md">
+                ${ticker.slice(0, 4)}
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h2 class="text-base font-bold text-white">${comp.company_name}</h2>
+                  <span class="text-xs font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold">${ticker}</span>
+                  <span class="text-xs px-2 py-0.5 rounded ${ddColor} border font-bold font-mono">
+                    Peak Drop: ${dd !== null ? dd.toFixed(1) + '%' : 'N/A'}
+                  </span>
+                </div>
+                <p class="text-xs text-slate-400 truncate max-w-xl">${comp.incident_title} (${comp.event_timeframe})</p>
+              </div>
+            </div>
+
+            <!-- Financial Quick Stats -->
+            <div class="flex items-center space-x-4 text-xs font-mono">
+              <div class="text-right">
+                <span class="text-[10px] text-slate-500 uppercase block">Baseline Price</span>
+                <span class="font-bold text-slate-300">${sm ? '$' + sm.baseline_price.toFixed(2) : 'N/A'}</span>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] text-slate-500 uppercase block">Crisis Trough</span>
+                <span class="font-bold text-rose-400">${sm ? '$' + sm.trough_price.toFixed(2) : 'N/A'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        // Horizontal Connected Node Track
+        const milestones = comp.timeline || [];
+        let nodesHtml = '';
+
+        milestones.forEach((m, mIdx) => {
+          const price = m.stock_price !== null && m.stock_price !== undefined ? `$${m.stock_price.toFixed(2)}` : 'N/A';
+          const chg = m.stock_change_from_baseline_pct !== null && m.stock_change_from_baseline_pct !== undefined
+            ? `${m.stock_change_from_baseline_pct > 0 ? '+' : ''}${m.stock_change_from_baseline_pct.toFixed(1)}%`
+            : null;
+
+          const chgClass = chg && parseFloat(chg) < 0 ? 'bg-rose-500/15 text-rose-400 border-rose-500/30' : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+
+          // Phase color badges
+          let phaseBg = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+          let phaseDot = 'bg-amber-400';
+          const pLower = m.phase.toLowerCase();
+          if (pLower.includes('outbreak') || pLower.includes('crisis') || pLower.includes('crash')) {
+            phaseBg = 'bg-rose-500/15 text-rose-400 border-rose-500/30';
+            phaseDot = 'bg-rose-400';
+          } else if (pLower.includes('contain') || pLower.includes('resol')) {
+            phaseBg = 'bg-purple-500/15 text-purple-300 border-purple-500/30';
+            phaseDot = 'bg-purple-400';
+          } else if (pLower.includes('aftermath') || pLower.includes('review') || pLower.includes('legal')) {
+            phaseBg = 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30';
+            phaseDot = 'bg-emerald-400';
+          }
+
+          // Node Card
+          nodesHtml += `
+            <div class="flex items-center shrink-0">
+              <div onclick='inspectNode(${JSON.stringify({ type: "milestone", milestone: m, company: comp }).replace(/'/g, "&apos;")})'
+                   class="horizontal-node w-64 bg-slate-950/90 border border-slate-800 hover:border-cyan-500/70 rounded-xl p-3.5 cursor-pointer shadow-lg space-y-2 shrink-0">
+                
+                <!-- Phase & Date Header -->
+                <div class="flex items-center justify-between text-xs">
+                  <span class="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${phaseBg}">
+                    <span class="w-1.5 h-1.5 rounded-full ${phaseDot}"></span>
+                    <span>${m.phase}</span>
+                  </span>
+                  <span class="text-[11px] font-mono text-slate-400">${m.date.slice(0, 10)}</span>
+                </div>
+
+                <!-- Stock Price Badge Mapped on Node -->
+                <div class="flex items-baseline justify-between pt-1 border-t border-slate-800/80">
+                  <span class="text-[11px] text-slate-500 font-medium">Stock Price:</span>
+                  <div class="flex items-center space-x-1.5">
+                    <span class="font-mono font-bold text-white text-sm">${price}</span>
+                    ${chg ? `<span class="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${chgClass}">${chg}</span>` : ''}
+                  </div>
+                </div>
+
+                <!-- Event Snippet -->
+                <p class="text-xs text-slate-300 line-clamp-2 leading-relaxed">
+                  ${m.event}
+                </p>
+
+                <!-- Impact Indicator -->
+                <div class="text-[10px] text-rose-300/80 truncate flex items-center space-x-1 pt-1">
+                  <i data-lucide="alert-circle" class="w-3 h-3 text-rose-400 shrink-0"></i>
+                  <span class="truncate">${m.impact}</span>
+                </div>
+              </div>
+
+              <!-- Connecting Directional Arrow (if not last) -->
+              ${mIdx < milestones.length - 1 ? `
+                <div class="flex flex-col items-center justify-center px-3 text-slate-600">
+                  <div class="w-8 h-0.5 bg-gradient-to-r from-slate-700 via-cyan-500/50 to-slate-700"></div>
+                  <i data-lucide="chevron-right" class="w-4 h-4 text-cyan-400/70 -mt-2.5"></i>
+                </div>
+              ` : ''}
+            </div>
+          `;
+        });
+
+        // Integrated Company Stock Trajectory Chart
+        const chartCanvasId = `chart-company-${compIdx}`;
+        const bodyHtml = `
+          <div class="p-6 space-y-5">
+            
+            <!-- Horizontal Node Chain -->
+            <div>
+              <div class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 mb-2.5 flex items-center space-x-1.5">
+                <i data-lucide="git-commit" class="w-3.5 h-3.5 text-cyan-400"></i>
+                <span>Chronological Event Milestone Nodes (Mapped with Stock Prices)</span>
+              </div>
+              <div class="flex items-center overflow-x-auto custom-scrollbar pb-3 pt-1 px-1">
+                ${nodesHtml}
+              </div>
+            </div>
+
+            <!-- Synchronized Stock Price Trajectory for this Company -->
+            <div class="pt-4 border-t border-slate-800/80">
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[11px] font-semibold uppercase tracking-wider text-slate-400 flex items-center space-x-1.5">
+                  <i data-lucide="trending-down" class="w-3.5 h-3.5 text-cyan-400"></i>
+                  <span>${comp.company_name} (${ticker}) Historical Stock Curve Around Incident Window</span>
+                </span>
+                <span class="text-xs text-slate-500 font-mono">
+                  ${sm ? `${sm.baseline_date} → ${sm.trough_date}` : ''}
+                </span>
+              </div>
+              <div class="h-36 bg-slate-950/70 rounded-xl p-3 border border-slate-800/80 relative">
+                <canvas id="${chartCanvasId}"></canvas>
+              </div>
+            </div>
+
+          </div>
+        `;
+
+        card.innerHTML = headerHtml + bodyHtml;
+        container.appendChild(card);
+
+        // Render Individual Company Chart
+        renderSingleCompanyChart(chartCanvasId, comp);
+      });
+    }
+
+    // Render Individual Company Chart
+    function renderSingleCompanyChart(canvasId, comp) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return;
+
+      const sm = comp.stock_metrics;
+      if (!sm || !sm.daily_series || sm.daily_series.length === 0) return;
+
+      const labels = sm.daily_series.map(d => d.date);
+      const prices = sm.daily_series.map(d => d.close);
+
+      // Milestone marker highlights
+      const milestoneDates = new Set((comp.timeline || []).map(m => m.date.slice(0, 10)));
+      const pointColors = sm.daily_series.map(d => milestoneDates.has(d.date) ? '#f43f5e' : 'transparent');
+      const pointRadius = sm.daily_series.map(d => milestoneDates.has(d.date) ? 5 : 0);
+
+      const ctx = canvas.getContext('2d');
+      companyCharts[canvasId] = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: `${comp.stock_ticker || comp.company_name} Close Price ($)`,
+            data: prices,
+            borderColor: '#0ea5e9',
+            backgroundColor: 'rgba(14, 165, 233, 0.08)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.15,
+            pointBackgroundColor: pointColors,
+            pointBorderColor: '#ffffff',
+            pointRadius: pointRadius,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              callbacks: {
+                label: ctx => `$${ctx.raw ? ctx.raw.toFixed(2) : ''}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#64748b', maxTicksLimit: 10, font: { size: 10 } },
+              grid: { color: '#1e293b' }
+            },
+            y: {
+              ticks: { color: '#64748b', callback: v => `$${v}`, font: { size: 10 } },
+              grid: { color: '#1e293b' }
+            }
+          }
+        }
+      });
+    }
+
+    // Render Hierarchical Vis.js Network (Left-to-Right Fixed Layout)
+    function renderHierarchicalNetwork(data) {
+      const container = document.getElementById('hierarchical-network');
+      const nodes = [];
+      const edges = [];
+
+      (data.similar_company_events || []).forEach((comp, cIdx) => {
+        const compId = `h-comp-${cIdx}`;
+        const sm = comp.stock_metrics;
+        const ticker = comp.stock_ticker || 'N/A';
+        const ddStr = sm ? `${sm.max_drawdown_pct.toFixed(1)}%` : '';
+
+        // Company Node (Left-most)
+        nodes.push({
+          id: compId,
+          label: `${comp.company_name}\n[${ticker}] ${ddStr}`,
+          shape: 'box',
+          margin: 10,
+          color: { background: '#1e293b', border: '#0ea5e9' },
+          font: { color: '#ffffff', size: 12, bold: true },
+          level: 0,
+          customData: { type: 'company', company: comp }
+        });
+
+        // Horizontal Milestones
+        let prevId = compId;
+        (comp.timeline || []).forEach((m, mIdx) => {
+          const mId = `h-m-${cIdx}-${mIdx}`;
+          const price = m.stock_price !== null ? `$${m.stock_price.toFixed(2)}` : '';
+          const chg = m.stock_change_from_baseline_pct !== null ? `${m.stock_change_from_baseline_pct.toFixed(1)}%` : '';
+
+          let mColor = '#f59e0b';
+          const pLower = m.phase.toLowerCase();
+          if (pLower.includes('outbreak') || pLower.includes('crisis')) mColor = '#f43f5e';
+          else if (pLower.includes('contain') || pLower.includes('resol')) mColor = '#10b981';
+
+          nodes.push({
+            id: mId,
+            label: `${m.phase}\n${m.date.slice(0, 10)}\n${price} (${chg})`,
+            shape: 'box',
+            margin: 8,
+            color: { background: '#090d16', border: mColor },
+            font: { color: '#f1f5f9', size: 10, face: 'monospace' },
+            level: mIdx + 1,
+            customData: { type: 'milestone', milestone: m, company: comp }
+          });
+
+          edges.push({
+            from: prevId,
+            to: mId,
+            arrows: 'to',
+            color: { color: '#334155', highlight: '#0ea5e9' },
+            width: 2
+          });
+
+          prevId = mId;
+        });
+      });
+
+      const options = {
+        layout: {
+          hierarchical: {
+            direction: 'LR',
+            sortMethod: 'directed',
+            levelSeparation: 220,
+            nodeSpacing: 110
+          }
+        },
+        physics: false, // Strict fixed positions, ZERO floating clutter
+        interaction: { hover: true }
+      };
+
+      if (hierarchicalNetwork) hierarchicalNetwork.destroy();
+      hierarchicalNetwork = new vis.Network(container, { nodes: new vis.DataSet(nodes), edges: new vis.DataSet(edges) }, options);
+
+      hierarchicalNetwork.on('click', params => {
+        if (params.nodes.length > 0) {
+          const selId = params.nodes[0];
+          const nObj = nodes.find(n => n.id === selId);
+          if (nObj && nObj.customData) {
+            inspectNode(nObj.customData);
+          }
+        }
+      });
+    }
+
+    // Inspect Node in Right Side Panel
+    function inspectNode(data) {
+      document.getElementById('inspector-empty').classList.add('hidden');
+      document.getElementById('inspector-details').classList.remove('hidden');
+
+      if (data.type === 'milestone') {
+        const m = data.milestone;
+        const comp = data.company;
+
+        document.getElementById('inspector-type').textContent = 'EVENT MILESTONE';
+        document.getElementById('node-company').textContent = `${comp.company_name} (${comp.stock_ticker || 'N/A'})`;
+        document.getElementById('node-phase').textContent = m.phase;
+        document.getElementById('node-title').textContent = m.event.slice(0, 60) + '...';
+        document.getElementById('node-date').textContent = m.date;
+
+        document.getElementById('node-stock-ticker').textContent = comp.stock_ticker || 'N/A';
+        document.getElementById('node-stock-price').textContent = m.stock_price !== null ? `$${m.stock_price.toFixed(2)}` : 'N/A';
+        
+        const chgEl = document.getElementById('node-stock-change');
+        if (m.stock_change_from_baseline_pct !== null) {
+          const val = m.stock_change_from_baseline_pct;
+          chgEl.textContent = `${val > 0 ? '+' : ''}${val.toFixed(2)}%`;
+          chgEl.className = val < 0 ? 'text-xl font-bold font-mono text-red-400' : 'text-xl font-bold font-mono text-emerald-400';
+        } else {
+          chgEl.textContent = 'N/A';
+        }
+
+        document.getElementById('node-stock-volume').textContent = m.trading_volume ? m.trading_volume.toLocaleString() : 'N/A';
+        document.getElementById('node-event-desc').textContent = m.event;
+        document.getElementById('node-impact-desc').textContent = m.impact;
+
+        renderMiniSparkline(comp, m.date);
+      }
+
+      lucide.createIcons();
+    }
+
+    // Mini Sparkline in Side Panel
+    function renderMiniSparkline(comp, highlightDate) {
+      const canvas = document.getElementById('miniSparkline');
+      if (miniSparklineChart) miniSparklineChart.destroy();
+
+      const sm = comp.stock_metrics;
+      if (!sm || !sm.daily_series || sm.daily_series.length === 0) return;
+
+      const labels = sm.daily_series.map(d => d.date.slice(5));
+      const prices = sm.daily_series.map(d => d.close);
+
+      const pointColors = sm.daily_series.map(d => {
+        if (highlightDate && d.date.slice(0, 10) === highlightDate.slice(0, 10)) return '#f43f5e';
+        return 'transparent';
+      });
+      const pointRadius = sm.daily_series.map(d => {
+        if (highlightDate && d.date.slice(0, 10) === highlightDate.slice(0, 10)) return 6;
+        return 0;
+      });
+
+      miniSparklineChart = new Chart(canvas, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            data: prices,
+            borderColor: '#38bdf8',
+            borderWidth: 2,
+            backgroundColor: 'rgba(56, 189, 248, 0.1)',
+            fill: true,
+            pointBackgroundColor: pointColors,
+            pointBorderColor: '#ffffff',
+            pointRadius: pointRadius,
+            tension: 0.2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { display: false },
+            y: { display: true, grid: { color: '#1e293b' }, ticks: { color: '#64748b', font: { size: 9 } } }
+          }
+        }
+      });
+    }
+
+    // Layout Mode Toggle (Swimlanes vs Hierarchical)
+    function setLayoutMode(mode) {
+      const swimlanes = document.getElementById('view-swimlanes');
+      const hierarchical = document.getElementById('view-hierarchical');
+      const btnSwimlane = document.getElementById('btn-mode-swimlane');
+      const btnHierarchical = document.getElementById('btn-mode-hierarchical');
+
+      if (mode === 'swimlanes') {
+        swimlanes.classList.remove('hidden');
+        hierarchical.classList.add('hidden');
+        btnSwimlane.className = 'px-3 py-1.5 rounded-md bg-cyan-600 text-white flex items-center space-x-1.5 shadow';
+        btnHierarchical.className = 'px-3 py-1.5 rounded-md text-slate-400 hover:text-white flex items-center space-x-1.5';
+      } else {
+        swimlanes.classList.add('hidden');
+        hierarchical.classList.remove('hidden');
+        btnHierarchical.className = 'px-3 py-1.5 rounded-md bg-cyan-600 text-white flex items-center space-x-1.5 shadow';
+        btnSwimlane.className = 'px-3 py-1.5 rounded-md text-slate-400 hover:text-white flex items-center space-x-1.5';
+        if (hierarchicalNetwork) hierarchicalNetwork.fit();
+      }
+    }
+
+    // Research Modal Handlers
+    function openResearchModal() { document.getElementById('modal-research').classList.remove('hidden'); }
+    function closeResearchModal() { document.getElementById('modal-research').classList.add('hidden'); }
+    function setPrompt(text) { document.getElementById('input-research-prompt').value = text; }
+
+    async function triggerDeepResearch() {
+      const promptText = document.getElementById('input-research-prompt').value.trim();
+      const count = parseInt(document.getElementById('input-companies-count').value, 10);
+      if (!promptText) { alert('Please enter a research prompt scenario.'); return; }
+
+      closeResearchModal();
+      document.getElementById('loading-overlay').classList.remove('hidden');
+
+      try {
+        const resp = await fetch('/api/research', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ prompt: promptText, companies: count })
+        });
+        if (!resp.ok) throw new Error('Research failed on backend.');
+        timelineData = await resp.json();
+        renderDashboard(timelineData);
+      } catch (err) {
+        alert('Error executing deep research: ' + err.message);
+      } finally {
+        document.getElementById('loading-overlay').classList.add('hidden');
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', loadTimelineData);
+  </script>
+</body>
+</html>

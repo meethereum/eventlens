@@ -10,7 +10,7 @@ import time
 import uuid
 from datetime import date, datetime, timezone
 from statistics import median
-from typing import Any
+from typing import Any, Optional
 
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse
@@ -19,6 +19,7 @@ from pydantic import BaseModel, Field
 from app.core.demo_router import run_analysis
 from app.core.run_store import get as get_run
 from app.precedents.engine import find_precedents
+from app.precedents.timeline import get_timeline_data, load_timeline_data, run_timeline_research
 from app.scoring.aggregate import aggregate_from_cards
 from app.scoring.simulation import (
     ScenarioOverrides as SimulationOverrides,
@@ -386,6 +387,36 @@ async def precedents(
             else "No verified precedent dataset is installed. Build it with backend/scripts/build_precedents.py."
         ),
     }
+
+
+class PrecedentResearchRequest(BaseModel):
+    prompt: str = Field(..., description="Corporate crisis or news event scenario to research")
+    companies: int = Field(5, ge=5, le=10, description="Number of major companies to research (5 to 10)")
+
+
+@router.get("/precedents/timeline")
+@router.get("/timeline")
+async def get_precedent_timeline(
+    prompt: Optional[str] = Query(None, description="Event scenario prompt to match precedents for"),
+    ticker: Optional[str] = Query(None, description="Target company stock ticker symbol"),
+    event_type: Optional[str] = Query(None, description="Type or category of corporate event"),
+):
+    """Return the structured deep research incident timeline with mapped stock prices for the event."""
+    try:
+        return get_timeline_data(prompt=prompt, ticker=ticker, event_type=event_type)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@router.post("/precedents/research")
+@router.post("/research")
+async def trigger_precedent_research(req: PrecedentResearchRequest):
+    """Trigger deep research for a corporate crisis prompt and return updated timeline."""
+    try:
+        result = await run_timeline_research(prompt=req.prompt, companies=req.companies)
+        return result
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Research execution failed: {exc}")
 
 
 def _unusual_days(card) -> list[dict[str, Any]]:
