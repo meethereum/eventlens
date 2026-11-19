@@ -2,30 +2,19 @@ import { useState, useEffect, useMemo, useCallback } from 'react'
 import ReactECharts from 'echarts-for-react'
 import {
   Sparkles,
-  TrendingUp,
   TrendingDown,
-  Layers,
-  LineChart,
-  Target,
-  Clock,
-  ExternalLink,
-  GitCommit,
-  Columns,
   Network,
-  Filter,
+  Columns,
   Calendar,
   AlertTriangle,
-  FileText,
   X,
-  ChevronRight,
   RefreshCw,
-  Activity,
-  ShieldAlert,
-  Sliders,
-  DollarSign,
   ArrowRight,
-  Search,
   Loader2,
+  ExternalLink,
+  LineChart,
+  ChevronDown,
+  ChevronUp,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type {
@@ -34,6 +23,7 @@ import type {
   TimelineMilestone,
 } from '@/types'
 import { DEFAULT_TIMELINE_DATA } from '@/lib/defaultTimelineData'
+import { companyName } from '@/lib/companies'
 
 interface Props {
   ticker?: string
@@ -43,39 +33,21 @@ interface Props {
   query?: string
 }
 
-type ViewMode = 'tracks' | 'tree' | 'cohort'
+type ViewMode = 'tracks' | 'tree'
 
 const QUICK_PROMPTS = [
-  {
-    title: '👔 Executive Ouster & Board Coup (Intel, Starbucks, Disney, Boeing)',
-    prompt:
-      'A Fortune 500 board abruptly forces out the CEO amidst operational underperformance, manufacturing delays, or strategic misalignment',
-  },
-  {
-    title: '🏦 Digital Bank Run & Liquidity Crisis (Schwab, Western Alliance, SVB)',
-    prompt:
-      'A major commercial bank suffers an acute digital bank run and sudden collapse due to unrealized bond portfolio losses and uninsured deposit flight',
-  },
-  {
-    title: '⚖️ Antitrust & Monopolistic Lawsuit (Apple, Google, Microsoft, Meta)',
-    prompt:
-      'A dominant technology or industrial corporation faces major regulatory enforcement, DOJ antitrust lawsuit, or government antitrust trial',
-  },
-  {
-    title: '🚨 Manufacturing Defect & Safety Grounding (Boeing, Southwest, GM)',
-    prompt:
-      'A major manufacturer or transportation company suffers catastrophic operational failure, safety quality defect, or regulatory grounding',
-  },
-  {
-    title: '📉 Earnings Guidance Cliff & Restructuring (Intel, Meta, Snap, Nvidia)',
-    prompt:
-      'A market-leading corporation reports unexpected revenue collapse, sharp margin compression, or slashes forward guidance triggering aggressive restructuring',
-  },
-  {
-    title: '🛡️ Global Cybersecurity Glitch & Outage (CrowdStrike, UnitedHealth, AWS)',
-    prompt:
-      'A major cybersecurity glitch or faulty vendor update takes down airlines, banks, and hospital IT systems worldwide',
-  },
+  { title: 'Executive ouster at a large manufacturer',
+    prompt: 'A Fortune 500 board abruptly forces out the CEO amidst operational underperformance, manufacturing delays, or strategic misalignment' },
+  { title: 'Digital bank run and liquidity crisis',
+    prompt: 'A major commercial bank suffers an acute digital bank run due to unrealized bond losses and uninsured deposit flight' },
+  { title: 'Antitrust lawsuit against a tech giant',
+    prompt: 'A dominant technology corporation faces a major DOJ antitrust lawsuit or regulatory enforcement action' },
+  { title: 'Manufacturing defect and safety grounding',
+    prompt: 'A major manufacturer suffers a safety quality defect or regulatory grounding of its product line' },
+  { title: 'Earnings cliff and restructuring',
+    prompt: 'A market-leading company reports unexpected revenue collapse and slashes forward guidance, triggering restructuring' },
+  { title: 'Major cybersecurity outage',
+    prompt: 'A cybersecurity glitch takes down airlines, banks, and hospital IT systems worldwide' },
 ]
 
 export default function PrecedentPanel({
@@ -85,944 +57,457 @@ export default function PrecedentPanel({
   marketMood = 'mixed',
   query = '',
 }: Props) {
-  // Determine effective active prompt dynamically based on user query, ticker, or eventType
   const effectivePrompt = useMemo(() => {
     const q = (query || '').trim()
     if (q) return q
-    if (ticker && eventType && eventType !== 'Corporate Incident' && eventType !== 'Incident & Crisis Forensics') {
-      return `${ticker}: ${eventType}`
-    }
-    if (ticker && ticker !== 'UNKNOWN') {
-      return `${ticker} corporate crisis and market reaction`
+    if (ticker && eventType && eventType !== 'Corporate Incident') {
+      const co = ({ NVDA:'Nvidia',INTC:'Intel',AAPL:'Apple',MSFT:'Microsoft',
+                     GM:'General Motors',SBUX:'Starbucks',AMZN:'Amazon',DIS:'Disney',
+                     BA:'Boeing',RTX:'RTX',XOM:'ExxonMobil',CVX:'Chevron',
+                     JPM:'JPMorgan Chase',SCHW:'Charles Schwab',UNH:'UnitedHealth',
+                   } as Record<string,string>)[ticker.toUpperCase()] ?? ticker
+      return `${co}: ${eventType}`
     }
     return DEFAULT_TIMELINE_DATA.query_prompt
   }, [query, ticker, eventType])
 
-  // State
-  const [timelineData, setTimelineData] = useState<DeepResearchTimelineOutput>(DEFAULT_TIMELINE_DATA)
+  const [timelineData, setTimelineData]       = useState<DeepResearchTimelineOutput>(DEFAULT_TIMELINE_DATA)
   const [selectedCompanyIdx, setSelectedCompanyIdx] = useState<string>('all')
-  const [viewMode, setViewMode] = useState<ViewMode>('tracks')
-  const [isFetchingTimeline, setIsFetchingTimeline] = useState(false)
-  const [selectedMilestone, setSelectedMilestone] = useState<{
-    milestone: TimelineMilestone
-    company: CompanyIncidentReport
-  } | null>(null)
+  const [viewMode, setViewMode]               = useState<ViewMode>('tracks')
+  const [isFetching, setIsFetching]           = useState(false)
+  const [inspector, setInspector]             = useState<{ milestone: TimelineMilestone; company: CompanyIncidentReport } | null>(null)
+  const [expandedCompanies, setExpandedCompanies] = useState<Set<string>>(new Set())
 
-  // Research modal state
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [researchPrompt, setResearchPrompt] = useState(effectivePrompt)
-  const [companyCount, setCompanyCount] = useState<number>(5)
-  const [isResearching, setIsResearching] = useState(false)
-  const [loadingStep, setLoadingStep] = useState<string>('Analyzing scenario...')
-  const [researchError, setResearchError] = useState<string | null>(null)
+  // Research modal
+  const [isModalOpen, setIsModalOpen]         = useState(false)
+  const [researchPrompt, setResearchPrompt]   = useState(effectivePrompt)
+  const [companyCount, setCompanyCount]       = useState(5)
+  const [isResearching, setIsResearching]     = useState(false)
+  const [loadingStep, setLoadingStep]         = useState('')
+  const [researchError, setResearchError]     = useState<string | null>(null)
 
-  // Keep research modal prompt in sync with active event
   useEffect(() => {
-    if (effectivePrompt) {
-      setResearchPrompt(effectivePrompt)
-    }
+    if (effectivePrompt) setResearchPrompt(effectivePrompt)
   }, [effectivePrompt])
 
-  // Fetch timeline data for the active event query
-  const fetchTimeline = useCallback(
-    async (targetPrompt: string, targetTicker?: string, targetEventType?: string) => {
-      setIsFetchingTimeline(true)
-      try {
-        const params = new URLSearchParams()
-        if (targetPrompt) params.set('prompt', targetPrompt)
-        if (targetTicker) params.set('ticker', targetTicker)
-        if (targetEventType) params.set('event_type', targetEventType)
-
-        const res = await fetch(`/api/precedents/timeline?${params.toString()}`)
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = await res.json()
-        if (data && data.similar_company_events?.length > 0) {
-          setTimelineData(data)
-          setSelectedCompanyIdx('all')
-          if (data.similar_company_events[0]?.timeline?.length > 0) {
-            setSelectedMilestone({
-              company: data.similar_company_events[0],
-              milestone: data.similar_company_events[0].timeline[0],
-            })
-          }
-        }
-      } catch (err) {
-        console.warn('Failed fetching timeline for prompt, using fallback:', err)
-      } finally {
-        setIsFetchingTimeline(false)
+  const fetchTimeline = useCallback(async (prompt: string, t?: string, et?: string) => {
+    setIsFetching(true)
+    try {
+      const p = new URLSearchParams()
+      if (prompt) p.set('prompt', prompt)
+      if (t) p.set('ticker', t)
+      if (et) p.set('event_type', et)
+      const res = await fetch(`/api/precedents/timeline?${p}`)
+      if (!res.ok) throw new Error()
+      const data = await res.json()
+      if (data?.similar_company_events?.length > 0) {
+        setTimelineData(data)
+        setSelectedCompanyIdx('all')
+        setExpandedCompanies(new Set())
       }
-    },
-    [],
-  )
+    } catch { /* use default */ }
+    finally { setIsFetching(false) }
+  }, [])
 
-  // Re-fetch timeline whenever the event query, ticker, or event type changes
   useEffect(() => {
     fetchTimeline(effectivePrompt, ticker, eventType)
   }, [effectivePrompt, ticker, eventType, fetchTimeline])
 
-  // Auto-select first milestone for inspector if none selected
-  useEffect(() => {
-    if (!selectedMilestone && timelineData?.similar_company_events?.length > 0) {
-      const firstComp = timelineData.similar_company_events[0]
-      if (firstComp.timeline?.length > 0) {
-        setSelectedMilestone({
-          company: firstComp,
-          milestone: firstComp.timeline[0],
-        })
-      }
-    }
-  }, [timelineData, selectedMilestone])
-
-  // Trigger Live Deep Research
-  const handleTriggerResearch = async () => {
+  const handleResearch = async () => {
     if (!researchPrompt.trim()) return
     setIsResearching(true)
     setResearchError(null)
-
     const steps = [
-      'Deconstructing scenario dimensions and causal mechanisms...',
-      'Querying live corporate news & historical precedents...',
-      'Extracting verified dates, triggers, causes & impacts...',
-      'Mapping historical daily stock prices via yfinance...',
-      'Synthesizing cross-company failure vectors and valuation drawdowns...',
+      'Looking for similar past events...',
+      'Checking company histories...',
+      'Mapping stock prices...',
+      'Pulling milestones...',
+      'Finishing up...',
     ]
-
-    let stepIdx = 0
-    const interval = setInterval(() => {
-      stepIdx = (stepIdx + 1) % steps.length
-      setLoadingStep(steps[stepIdx])
-    }, 3200)
-
+    let idx = 0
+    const timer = setInterval(() => { idx = (idx + 1) % steps.length; setLoadingStep(steps[idx]) }, 3000)
     try {
       const res = await fetch('/api/precedents/research', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: researchPrompt.trim(),
-          companies: companyCount,
-        }),
+        body: JSON.stringify({ prompt: researchPrompt.trim(), companies: companyCount }),
       })
-
-      if (!res.ok) {
-        throw new Error(`Research request failed (${res.status})`)
-      }
-
+      if (!res.ok) throw new Error(`Failed (${res.status})`)
       const data = await res.json()
-      if (data && data.similar_company_events) {
+      if (data?.similar_company_events) {
         setTimelineData(data)
         setSelectedCompanyIdx('all')
-        if (data.similar_company_events[0]?.timeline?.length > 0) {
-          setSelectedMilestone({
-            company: data.similar_company_events[0],
-            milestone: data.similar_company_events[0].timeline[0],
-          })
-        }
+        setExpandedCompanies(new Set())
       }
       setIsModalOpen(false)
-    } catch (err) {
-      console.error('Deep research error:', err)
-      setResearchError((err as Error).message || 'Failed to complete deep research.')
+    } catch (e) {
+      setResearchError((e as Error).message)
     } finally {
-      clearInterval(interval)
+      clearInterval(timer)
       setIsResearching(false)
     }
   }
 
   const companies = timelineData.similar_company_events || []
-  const filteredCompanies =
-    selectedCompanyIdx === 'all'
-      ? companies
-      : companies.filter((_, idx) => idx.toString() === selectedCompanyIdx)
+  const filtered = selectedCompanyIdx === 'all'
+    ? companies
+    : companies.filter((_, i) => i.toString() === selectedCompanyIdx)
+
+  const toggleExpand = (key: string) =>
+    setExpandedCompanies(prev => {
+      const next = new Set(prev)
+      next.has(key) ? next.delete(key) : next.add(key)
+      return next
+    })
 
   return (
-    <section className="glass-panel p-6 space-y-6 relative overflow-hidden">
-      {/* ── Top Header Navigation Bar ───────────────────────────────── */}
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border/70 pb-4">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-accent/15 text-accent-glow border border-accent/30 shadow-sm">
-              <GitCommit className="w-5 h-5" />
-            </div>
-            <div>
-              <h2 className="text-lg font-bold text-text-primary tracking-tight">
-                Deep Research Corporate Incident & Stock Price Timeline
-              </h2>
-              <p className="text-xs text-text-muted">
-                {timelineData.incident_category || 'Historical Corporate Crises Forensics'}
-              </p>
-            </div>
-          </div>
-        </div>
+    <section className="glass-panel p-5 space-y-5 relative">
 
-        {/* Center / Right Control Actions */}
-        <div className="flex flex-wrap items-center gap-2.5">
-          {/* View Mode Toggle */}
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-4">
+        <div>
+          <h2 className="text-base font-semibold text-text-primary">Similar past events</h2>
+          <p className="text-xs text-text-muted mt-0.5">
+            What happened at other companies when something similar occurred
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          {/* View toggle */}
           <div className="inline-flex rounded-lg border border-border bg-surface-3 p-0.5 text-xs">
-            <button
-              type="button"
-              onClick={() => setViewMode('tracks')}
-              className={cn(
-                'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors',
-                viewMode === 'tracks'
-                  ? 'bg-accent/20 text-accent-glow border border-accent/30 shadow-sm'
-                  : 'text-text-muted hover:text-text-secondary',
-              )}
-            >
-              <Columns className="w-3.5 h-3.5" />
-              <span>Parallel Tracks</span>
+            <button type="button" onClick={() => setViewMode('tracks')}
+              className={cn('inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors',
+                viewMode === 'tracks' ? 'bg-accent/20 text-accent-glow' : 'text-text-muted hover:text-text-secondary')}>
+              <Columns className="w-3.5 h-3.5" /><span>Timeline</span>
             </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('tree')}
-              className={cn(
-                'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors',
-                viewMode === 'tree'
-                  ? 'bg-accent/20 text-accent-glow border border-accent/30 shadow-sm'
-                  : 'text-text-muted hover:text-text-secondary',
-              )}
-            >
-              <Network className="w-3.5 h-3.5" />
-              <span>LR Tree Graph</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('cohort')}
-              className={cn(
-                'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors',
-                viewMode === 'cohort'
-                  ? 'bg-accent/20 text-accent-glow border border-accent/30 shadow-sm'
-                  : 'text-text-muted hover:text-text-secondary',
-              )}
-            >
-              <LineChart className="w-3.5 h-3.5" />
-              <span>Cohort Stats</span>
+            <button type="button" onClick={() => setViewMode('tree')}
+              className={cn('inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md font-medium transition-colors',
+                viewMode === 'tree' ? 'bg-accent/20 text-accent-glow' : 'text-text-muted hover:text-text-secondary')}>
+              <Network className="w-3.5 h-3.5" /><span>Tree</span>
             </button>
           </div>
 
-          {/* New Deep Research Button */}
-          <button
-            type="button"
-            onClick={() => setIsModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-accent to-blue-600 hover:from-accent-glow hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-accent/20 transition-all active:scale-95"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>New Research</span>
+          <button type="button" onClick={() => setIsModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent hover:bg-accent-glow text-white text-xs font-medium transition-all">
+            <Sparkles className="w-3.5 h-3.5" /><span>Find more</span>
           </button>
 
-          {/* Reload Button */}
-          <button
-            type="button"
-            onClick={() => fetchTimeline(effectivePrompt, ticker, eventType)}
-            disabled={isFetchingTimeline}
-            title="Refresh precedents for active query"
-            className="p-1.5 rounded-lg border border-border bg-surface-2 hover:bg-surface-3 text-text-muted hover:text-text-primary transition disabled:opacity-50"
-          >
-            <RefreshCw className={cn('w-4 h-4', isFetchingTimeline && 'animate-spin text-accent-glow')} />
+          <button type="button" onClick={() => fetchTimeline(effectivePrompt, ticker, eventType)} disabled={isFetching}
+            className="p-1.5 rounded-lg border border-border bg-surface-2 hover:bg-surface-3 text-text-muted hover:text-text-primary transition disabled:opacity-50">
+            <RefreshCw className={cn('w-4 h-4', isFetching && 'animate-spin text-accent-glow')} />
           </button>
         </div>
       </div>
 
-      {/* ── Active Prompt Context Banner ────────────────────────────── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-surface-2/90 border border-border/80 text-xs">
-        <div className="flex items-center gap-2 min-w-0">
-          <span className="text-2xs uppercase tracking-wider font-semibold text-accent-glow shrink-0">
-            Current Scenario Prompt:
+      {/* Scenario context */}
+      <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-surface-2 border border-border/60 text-xs">
+        <span className="text-text-muted shrink-0">Matching:</span>
+        {isFetching ? (
+          <span className="flex items-center gap-1.5 text-accent-glow">
+            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+            Searching...
           </span>
-          {isFetchingTimeline ? (
-            <span className="flex items-center gap-1.5 text-accent-glow italic font-serif">
-              <Loader2 className="w-3.5 h-3.5 animate-spin" />
-              <span>Matching corporate precedents & stock histories for "{effectivePrompt}"...</span>
-            </span>
-          ) : (
-            <span className="text-text-secondary truncate italic font-serif">
-              "{timelineData.query_prompt}"
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2 text-2xs text-text-muted font-mono shrink-0">
-          <span>{companies.length} Major Companies Investigated</span>
-          <span>·</span>
-          <span>Generated: {timelineData.generated_at.slice(0, 10)}</span>
-        </div>
+        ) : (
+          <span className="text-text-secondary truncate italic">"{timelineData.query_prompt}"</span>
+        )}
+        <span className="ml-auto text-text-muted shrink-0 font-mono">{companies.length} companies</span>
       </div>
 
-      {/* ── Company Filter Tabs & Phase Legend Bar ───────────────────── */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 pb-3">
-        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-1">
-          <span className="text-xs font-semibold text-text-muted flex items-center gap-1 mr-1 shrink-0">
-            <Filter className="w-3.5 h-3.5 text-accent-glow" />
-            <span>Filter:</span>
-          </span>
-
-          <button
-            type="button"
-            onClick={() => setSelectedCompanyIdx('all')}
-            className={cn(
-              'px-3 py-1 rounded-full text-xs font-medium border shrink-0 transition-all',
-              selectedCompanyIdx === 'all'
-                ? 'bg-accent/20 text-accent-glow border-accent/40 font-semibold shadow-sm'
-                : 'bg-surface-2 text-text-muted border-border hover:bg-surface-3 hover:text-text-secondary',
-            )}
-          >
-            All Companies ({companies.length})
+      {/* Company filter */}
+      <div className="flex flex-wrap gap-1.5">
+        <button type="button" onClick={() => setSelectedCompanyIdx('all')}
+          className={cn('px-2.5 py-1 rounded-full text-xs border transition-all',
+            selectedCompanyIdx === 'all'
+              ? 'bg-accent/20 text-accent-glow border-accent/40'
+              : 'bg-surface-2 text-text-muted border-border hover:text-text-secondary')}>
+          All
+        </button>
+        {companies.map((c, i) => (
+          <button key={c.company_name + i} type="button" onClick={() => setSelectedCompanyIdx(i.toString())}
+            className={cn('px-2.5 py-1 rounded-full text-xs border transition-all',
+              selectedCompanyIdx === i.toString()
+                ? 'bg-accent/20 text-accent-glow border-accent/40'
+                : 'bg-surface-2 text-text-muted border-border hover:text-text-secondary')}>
+            {c.company_name}
           </button>
+        ))}
+      </div>
 
-          {companies.map((comp, idx) => {
-            const isSelected = selectedCompanyIdx === idx.toString()
-            const dd = comp.stock_metrics?.max_drawdown_pct
-            const ddFormatted = dd !== undefined ? `${dd.toFixed(1)}%` : ''
-            const tickerStr = comp.stock_ticker || 'N/A'
+      {/* ── TRACKS VIEW ─────────────────────────────────────────────── */}
+      {viewMode === 'tracks' && (
+        <div className="space-y-3">
+          {filtered.map((comp, ci) => {
+            const sm = comp.stock_metrics
+            const dd = sm?.max_drawdown_pct
+            const key = comp.company_name + ci
+            const isExpanded = expandedCompanies.has(key)
+            const milestones = comp.timeline || []
 
             return (
-              <button
-                key={comp.company_name + idx}
-                type="button"
-                onClick={() => setSelectedCompanyIdx(idx.toString())}
-                className={cn(
-                  'px-3 py-1 rounded-full text-xs font-medium border shrink-0 transition-all flex items-center gap-1.5',
-                  isSelected
-                    ? 'bg-accent/20 text-accent-glow border-accent/40 font-semibold shadow-sm'
-                    : 'bg-surface-2 text-text-muted border-border hover:bg-surface-3 hover:text-text-secondary',
+              <div key={key} className="rounded-xl border border-border/70 bg-surface-2/60 overflow-hidden">
+                {/* Company row — always visible */}
+                <button type="button" onClick={() => toggleExpand(key)}
+                  className="w-full flex items-center justify-between gap-3 px-4 py-3 hover:bg-surface-3/50 transition-colors text-left">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-text-primary truncate">
+                          {comp.company_name}
+                        </span>
+                        {dd !== undefined && (
+                          <span className="text-xs font-mono font-medium text-headwind shrink-0">
+                            −{Math.abs(dd).toFixed(1)}%
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-xs text-text-muted truncate">{comp.incident_title} · {comp.event_timeframe}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    {sm && (
+                      <div className="hidden sm:flex items-center gap-4 text-xs font-mono text-text-muted">
+                        <span>${sm.baseline_price.toFixed(0)} → <span className="text-headwind">${sm.trough_price.toFixed(0)}</span></span>
+                      </div>
+                    )}
+                    {isExpanded ? <ChevronUp className="w-4 h-4 text-text-muted" /> : <ChevronDown className="w-4 h-4 text-text-muted" />}
+                  </div>
+                </button>
+
+                {/* Expanded: milestones + chart */}
+                {isExpanded && (
+                  <div className="border-t border-border/50 px-4 pb-4 pt-3 space-y-4">
+                    {/* Milestone tiles */}
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                      {milestones.map((m, mi) => {
+                        const isSelected = inspector?.milestone === m && inspector?.company === comp
+                        const pc = getPhaseColors(m.phase)
+                        const chg = m.stock_change_from_baseline_pct
+                        return (
+                          <button key={m.date + mi} type="button"
+                            onClick={() => setInspector({ milestone: m, company: comp })}
+                            className={cn(
+                              'text-left p-3 rounded-lg border space-y-1.5 transition-all',
+                              isSelected
+                                ? 'border-accent bg-accent/10 ring-1 ring-accent/30'
+                                : 'border-border bg-surface-3/50 hover:border-accent/40',
+                            )}>
+                            <div className="flex items-center justify-between gap-1">
+                              <span className={cn('text-2xs font-medium px-1.5 py-0.5 rounded-full border', pc.badge)}>
+                                {m.phase}
+                              </span>
+                              {chg !== null && chg !== undefined && (
+                                <span className={cn('text-2xs font-mono font-bold', chg < 0 ? 'text-headwind' : 'text-tailwind')}>
+                                  {chg > 0 ? '+' : ''}{chg.toFixed(1)}%
+                                </span>
+                              )}
+                            </div>
+                            <p className="text-xs text-text-secondary line-clamp-2 leading-relaxed">{m.event}</p>
+                            <div className="text-2xs text-text-muted font-mono">{m.date.slice(0, 10)}</div>
+                          </button>
+                        )
+                      })}
+                    </div>
+
+                    {/* Stock chart */}
+                    {sm?.daily_series && sm.daily_series.length > 0 && (
+                      <div className="h-28 rounded-lg bg-surface-1/80 border border-border/50 p-2">
+                        <ReactECharts option={buildStockChart(comp)} style={{ height: '100%', width: '100%' }} notMerge />
+                      </div>
+                    )}
+                  </div>
                 )}
-              >
-                <span>{comp.company_name}</span>
-                <span className="font-mono text-2xs font-bold text-headwind">
-                  {ddFormatted}
-                </span>
-              </button>
+              </div>
             )
           })}
         </div>
+      )}
 
-        {/* Phase Color Legend */}
-        <div className="hidden sm:flex items-center gap-3 text-2xs text-text-muted">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-amber-400" />
-            <span>Trigger</span>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-rose-500" />
-            <span>Outbreak</span>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-purple-400" />
-            <span>Containment</span>
-          </span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400" />
-            <span>Aftermath</span>
-          </span>
+      {/* ── TREE VIEW ───────────────────────────────────────────────── */}
+      {viewMode === 'tree' && (
+        <div className="rounded-xl border border-border/70 bg-surface-2/60 p-4 space-y-3">
+          <div className="flex items-center justify-between border-b border-border/50 pb-2">
+            <div className="flex items-center gap-2">
+              <Network className="w-4 h-4 text-accent-glow" />
+              <span className="text-xs font-medium text-text-primary">
+                Drag nodes to rearrange · Scroll to zoom · Click a milestone node to inspect it
+              </span>
+            </div>
+            <div className="flex items-center gap-3 text-2xs text-text-muted">
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-sm bg-accent/60 inline-block" /> Company</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-amber-400 inline-block" /> Trigger</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-rose-500 inline-block" /> Crisis</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-purple-400 inline-block" /> Containment</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-3 rounded-full bg-emerald-400 inline-block" /> Aftermath</span>
+            </div>
+          </div>
+          <div className="rounded-lg bg-surface-1/80 border border-border/50 overflow-hidden" style={{ height: '420px' }}>
+            <ReactECharts
+              option={buildGraphOption(filtered, timelineData.incident_category)}
+              style={{ height: '100%', width: '100%' }}
+              onEvents={{
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                click: (params: any) => {
+                  const d = params?.data?.customData
+                  if (d?.type === 'milestone') setInspector({ milestone: d.milestone, company: d.company })
+                },
+              }}
+              notMerge
+            />
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* ── Main Canvas Layout: Visualizer on Left + Forensics Inspector on Right ── */}
-      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
-        {/* Left Column (8 cols): Horizontal Parallel Tracks or LR Tree */}
-        <div className="xl:col-span-8 space-y-6">
-          {/* VIEW 1: Parallel Swimlane Tracks */}
-          {viewMode === 'tracks' && (
-            <div className="space-y-6">
-              {filteredCompanies.map((comp, compIdx) => {
-                const sm = comp.stock_metrics
-                const tickerStr = comp.stock_ticker || 'N/A'
-                const dd = sm ? sm.max_drawdown_pct : null
-                const milestones = comp.timeline || []
+      {/* Executive synthesis */}
+      {timelineData.executive_synthesis && (
+        <div className="rounded-xl border border-border/50 bg-surface-2/50 p-4 space-y-2">
+          <div className="flex items-center gap-2 text-xs font-medium text-text-secondary">
+            <Sparkles className="w-3.5 h-3.5 text-accent-glow" />
+            What these precedents have in common
+          </div>
+          <p className="text-sm text-text-secondary leading-relaxed">
+            {timelineData.executive_synthesis.replace(/\*\*/g, '').split('\n\n')[0]}
+          </p>
+        </div>
+      )}
 
-                return (
-                  <article
-                    key={comp.company_name + compIdx}
-                    className="rounded-2xl border border-border/80 bg-surface-2/70 backdrop-blur-sm overflow-hidden shadow-lg transition-all hover:border-border"
-                  >
-                    {/* Company Header Card */}
-                    <div className="p-4 bg-surface-3/80 border-b border-border/70 flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-accent to-blue-700 flex items-center justify-center font-mono font-bold text-white text-xs shadow-md">
-                          {tickerStr.slice(0, 4)}
-                        </div>
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <h3 className="text-sm font-bold text-text-primary">
-                              {comp.company_name}
-                            </h3>
-                            <span className="text-2xs font-mono font-semibold px-2 py-0.5 rounded bg-surface-1 border border-border text-text-secondary">
-                              {tickerStr}
-                            </span>
-                            {dd !== null && (
-                              <span className="text-2xs font-mono font-bold px-2 py-0.5 rounded bg-headwind-dim text-headwind border border-headwind/20">
-                                Peak Drop: {dd.toFixed(1)}%
-                              </span>
-                            )}
-                          </div>
-                          <p className="text-2xs text-text-muted truncate max-w-md mt-0.5">
-                            {comp.incident_title} ({comp.event_timeframe})
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* Stock Baseline vs Trough */}
-                      <div className="flex items-center gap-4 text-xs font-mono">
-                        <div className="text-right">
-                          <span className="text-3xs uppercase text-text-muted block">
-                            Baseline Price
-                          </span>
-                          <span className="font-semibold text-text-primary">
-                            {sm ? `$${sm.baseline_price.toFixed(2)}` : 'N/A'}
-                          </span>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-3xs uppercase text-text-muted block">
-                            Crisis Trough
-                          </span>
-                          <span className="font-semibold text-headwind">
-                            {sm ? `$${sm.trough_price.toFixed(2)}` : 'N/A'}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="p-5 space-y-4">
-                      {/* Horizontal Milestone Nodes Sequence */}
-                      <div className="space-y-2">
-                        <span className="text-2xs uppercase tracking-wider font-semibold text-text-muted flex items-center gap-1.5">
-                          <GitCommit className="w-3.5 h-3.5 text-accent-glow" />
-                          <span>Event Milestone Nodes (Stock Prices Mapped Directly)</span>
-                        </span>
-
-                        <div className="flex items-center overflow-x-auto scrollbar-thin scrollbar-thumb-border pb-3 pt-1 px-1 gap-0">
-                          {milestones.map((m, mIdx) => {
-                            const isSelected =
-                              selectedMilestone?.milestone === m &&
-                              selectedMilestone?.company === comp
-
-                            const phaseColor = getPhaseColors(m.phase)
-                            const priceStr =
-                              m.stock_price !== null && m.stock_price !== undefined
-                                ? `$${m.stock_price.toFixed(2)}`
-                                : 'N/A'
-                            const chg = m.stock_change_from_baseline_pct
-
-                            return (
-                              <div key={m.date + mIdx} className="flex items-center shrink-0">
-                                <div
-                                  onClick={() =>
-                                    setSelectedMilestone({ milestone: m, company: comp })
-                                  }
-                                  className={cn(
-                                    'w-64 rounded-xl p-3.5 cursor-pointer shadow-md space-y-2.5 transition-all text-left border shrink-0',
-                                    isSelected
-                                      ? 'bg-surface-3 border-accent ring-1 ring-accent/40 scale-[1.02] shadow-accent/10 shadow-lg'
-                                      : 'bg-surface-1/90 border-border/80 hover:border-accent/40 hover:bg-surface-3/60',
-                                  )}
-                                >
-                                  {/* Phase & Date Badge */}
-                                  <div className="flex items-center justify-between text-xs">
-                                    <span
-                                      className={cn(
-                                        'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-2xs font-semibold border',
-                                        phaseColor.badge,
-                                      )}
-                                    >
-                                      <span
-                                        className={cn('w-1.5 h-1.5 rounded-full', phaseColor.dot)}
-                                      />
-                                      <span>{m.phase}</span>
-                                    </span>
-                                    <span className="text-2xs font-mono text-text-muted">
-                                      {m.date.slice(0, 10)}
-                                    </span>
-                                  </div>
-
-                                  {/* Real Stock Price Mapped onto Node */}
-                                  <div className="flex items-baseline justify-between pt-1 border-t border-border/60">
-                                    <span className="text-2xs text-text-muted font-medium">
-                                      Closing Price:
-                                    </span>
-                                    <div className="flex items-center gap-1.5">
-                                      <span className="font-mono font-bold text-text-primary text-xs">
-                                        {priceStr}
-                                      </span>
-                                      {chg !== null && chg !== undefined && (
-                                        <span
-                                          className={cn(
-                                            'text-3xs font-mono font-bold px-1.5 py-0.5 rounded border',
-                                            chg < 0
-                                              ? 'bg-headwind-dim text-headwind border-headwind/20'
-                                              : 'bg-tailwind-dim text-tailwind border-tailwind/20',
-                                          )}
-                                        >
-                                          {chg > 0 ? '+' : ''}
-                                          {chg.toFixed(1)}%
-                                        </span>
-                                      )}
-                                    </div>
-                                  </div>
-
-                                  {/* Event Description Snippet */}
-                                  <p className="text-xs text-text-secondary line-clamp-2 leading-relaxed">
-                                    {m.event}
-                                  </p>
-
-                                  {/* Impact Snippet */}
-                                  <div className="text-2xs text-headwind truncate flex items-center gap-1 pt-0.5">
-                                    <AlertTriangle className="w-3 h-3 text-headwind shrink-0" />
-                                    <span className="truncate">{m.impact}</span>
-                                  </div>
-                                </div>
-
-                                {/* Connecting Chevron Arrow */}
-                                {mIdx < milestones.length - 1 && (
-                                  <div className="flex flex-col items-center justify-center px-2 text-border">
-                                    <div className="w-6 h-0.5 bg-gradient-to-r from-border via-accent/40 to-border" />
-                                    <ChevronRight className="w-4 h-4 text-accent/60 -mt-2.5" />
-                                  </div>
-                                )}
-                              </div>
-                            )
-                          })}
-                        </div>
-                      </div>
-
-                      {/* Integrated Company Stock Trajectory Chart */}
-                      {sm && sm.daily_series?.length > 0 && (
-                        <div className="pt-3 border-t border-border/60 space-y-1.5">
-                          <div className="flex items-center justify-between text-2xs text-text-muted font-mono">
-                            <span className="flex items-center gap-1 uppercase tracking-wider font-semibold">
-                              <TrendingDown className="w-3.5 h-3.5 text-accent-glow" />
-                              <span>{comp.company_name} Historical Stock Curve</span>
-                            </span>
-                            <span>
-                              {sm.baseline_date} → {sm.trough_date}
-                            </span>
-                          </div>
-
-                          <div className="h-32 rounded-xl bg-surface-1/90 border border-border/60 p-2">
-                            <ReactECharts
-                              option={buildCompanyStockChartOption(comp)}
-                              style={{ height: '100%', width: '100%' }}
-                              notMerge
-                            />
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </article>
-                )
-              })}
+      {/* ── INSPECTOR SLIDE-IN ───────────────────────────────────────── */}
+      {inspector && (
+        <>
+          <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={() => setInspector(null)} />
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm flex flex-col bg-surface-1 border-l border-border shadow-2xl">
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border shrink-0">
+              <div className="min-w-0">
+                <div className="text-xs font-medium text-text-muted">{inspector.company.company_name}</div>
+                <div className={cn('inline-flex items-center gap-1 mt-1 text-2xs font-medium px-2 py-0.5 rounded-full border',
+                  getPhaseColors(inspector.milestone.phase).badge)}>
+                  {inspector.milestone.phase}
+                </div>
+              </div>
+              <button onClick={() => setInspector(null)}
+                className="p-1.5 rounded-lg hover:bg-surface-3 text-text-muted hover:text-text-primary transition">
+                <X className="w-4 h-4" />
+              </button>
             </div>
-          )}
 
-          {/* VIEW 2: Left-to-Right Hierarchical Tree Graph */}
-          {viewMode === 'tree' && (
-            <div className="rounded-2xl border border-border/80 bg-surface-2/80 p-5 space-y-4 shadow-xl">
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <div className="flex items-center gap-2">
-                  <Network className="w-4 h-4 text-accent-glow" />
-                  <span className="text-xs font-semibold text-text-primary">
-                    Interactive Left-to-Right Incident & Stock Milestone Tree
-                  </span>
+            <div className="flex-1 overflow-y-auto p-5 space-y-4">
+              {/* Event */}
+              <div>
+                <p className="text-sm font-medium text-text-primary leading-snug">{inspector.milestone.event}</p>
+                <div className="flex items-center gap-1.5 mt-2 text-xs text-text-muted">
+                  <Calendar className="w-3.5 h-3.5" />
+                  <span className="font-mono">{inspector.milestone.date.slice(0, 10)}</span>
                 </div>
-                <span className="text-2xs text-text-muted">
-                  Click any node to view milestone forensics
-                </span>
               </div>
 
-              <div className="h-[620px] rounded-xl bg-surface-1/90 border border-border/60 p-2">
-                <ReactECharts
-                  option={buildHierarchicalTreeOption(timelineData)}
-                  style={{ height: '100%', width: '100%' }}
-                  onEvents={{
-                    click: (params: any) => {
-                      const custom = params?.data?.customData
-                      if (custom?.type === 'milestone') {
-                        setSelectedMilestone({
-                          milestone: custom.milestone,
-                          company: custom.company,
-                        })
-                      }
-                    },
-                  }}
-                  notMerge
-                />
-              </div>
-            </div>
-          )}
-
-          {/* VIEW 3: Cohort Stats & Return Corridor */}
-          {viewMode === 'cohort' && (
-            <div className="space-y-6">
-              {/* Cohort KPI Cards */}
-              <div className="grid gap-3 sm:grid-cols-4">
-                <div className="rounded-xl border border-border bg-surface-2 p-3.5">
-                  <span className="text-2xs font-semibold text-text-muted uppercase tracking-wider">
-                    Average Peak Drawdown
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-xl font-mono font-bold text-headwind">
-                      {(
-                        companies.reduce(
-                          (acc, c) => acc + (c.stock_metrics?.max_drawdown_pct || 0),
-                          0,
-                        ) / (companies.length || 1)
-                      ).toFixed(1)}
-                      %
-                    </span>
-                    <span className="text-2xs text-text-muted">mean trough</span>
+              {/* Stock price */}
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-surface-3/60 rounded-lg p-3">
+                  <div className="text-2xs text-text-muted mb-1">Stock price that day</div>
+                  <div className="text-lg font-mono font-bold text-text-primary">
+                    {inspector.milestone.stock_price != null
+                      ? `$${inspector.milestone.stock_price.toFixed(2)}`
+                      : '—'}
                   </div>
                 </div>
-
-                <div className="rounded-xl border border-border bg-surface-2 p-3.5">
-                  <span className="text-2xs font-semibold text-text-muted uppercase tracking-wider">
-                    Deepest Crisis Loss
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-xl font-mono font-bold text-headwind">
-                      {Math.min(
-                        ...companies.map(c => c.stock_metrics?.max_drawdown_pct || 0),
-                      ).toFixed(1)}
-                      %
-                    </span>
-                    <span className="text-2xs text-text-muted">max drop</span>
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-border bg-surface-2 p-3.5">
-                  <span className="text-2xs font-semibold text-text-muted uppercase tracking-wider">
-                    Total Companies
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-xl font-mono font-bold text-text-primary">
-                      {companies.length}
-                    </span>
-                    <span className="text-2xs text-text-muted">deep researched</span>
-                  </div>
-                </div>
-
-                <div className="rounded-xl border border-border bg-surface-2 p-3.5">
-                  <span className="text-2xs font-semibold text-text-muted uppercase tracking-wider">
-                    Milestones Analyzed
-                  </span>
-                  <div className="flex items-baseline gap-2 mt-1">
-                    <span className="text-xl font-mono font-bold text-tailwind">
-                      {companies.reduce((acc, c) => acc + (c.timeline?.length || 0), 0)}
-                    </span>
-                    <span className="text-2xs text-text-muted">price-mapped</span>
+                <div className="bg-surface-3/60 rounded-lg p-3">
+                  <div className="text-2xs text-text-muted mb-1">Change from before event</div>
+                  <div className={cn('text-lg font-mono font-bold',
+                    (inspector.milestone.stock_change_from_baseline_pct ?? 0) < 0 ? 'text-headwind' : 'text-tailwind')}>
+                    {inspector.milestone.stock_change_from_baseline_pct != null
+                      ? `${inspector.milestone.stock_change_from_baseline_pct > 0 ? '+' : ''}${inspector.milestone.stock_change_from_baseline_pct.toFixed(1)}%`
+                      : '—'}
                   </div>
                 </div>
               </div>
 
-              {/* Multi-Company Drawdown Comparison Chart */}
-              <div className="rounded-2xl border border-border/80 bg-surface-2/80 p-5 space-y-3">
-                <div className="flex items-center justify-between border-b border-border/60 pb-2">
-                  <span className="text-xs font-semibold text-text-primary">
-                    Multi-Company Stock Drawdown Curves Relative to Incident Baseline (100)
-                  </span>
-                  <span className="text-2xs text-text-muted font-mono">
-                    Trading Days Normalized to Day 0
-                  </span>
+              {/* Impact */}
+              <div className="bg-headwind-dim/40 border border-headwind/20 rounded-lg p-3">
+                <div className="flex items-center gap-1.5 text-xs font-medium text-headwind mb-1">
+                  <AlertTriangle className="w-3.5 h-3.5" /> What happened
                 </div>
-                <div className="h-64 rounded-xl bg-surface-1/90 border border-border/60 p-2">
-                  <ReactECharts
-                    option={buildCohortComparisonOption(companies)}
-                    style={{ height: '100%', width: '100%' }}
-                    notMerge
-                  />
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ── Cross-Cutting Executive Synthesis Card ────────────────── */}
-          {timelineData.executive_synthesis && (
-            <div className="rounded-2xl border border-accent/30 bg-surface-2/90 p-5 space-y-4 shadow-md">
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-accent-glow" />
-                  <h3 className="text-xs font-bold text-text-primary uppercase tracking-wider">
-                    Cross-Company Incident Forensics & Market Reaction Synthesis
-                  </h3>
-                </div>
-                <span className="text-2xs font-semibold px-2 py-0.5 rounded-full bg-tailwind-dim text-tailwind border border-tailwind/20">
-                  Deep Research Verified
-                </span>
+                <p className="text-xs text-text-secondary leading-relaxed">{inspector.milestone.impact}</p>
               </div>
 
-              {/* Core Themes Pills */}
-              {timelineData.core_themes && timelineData.core_themes.length > 0 && (
-                <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-2xs font-semibold text-text-muted mr-1">
-                    Key Themes:
-                  </span>
-                  {timelineData.core_themes.map((theme, i) => (
-                    <span
-                      key={i}
-                      className="text-2xs font-medium px-2.5 py-0.5 rounded-full bg-surface-3 border border-border text-text-secondary"
-                    >
-                      {theme}
-                    </span>
-                  ))}
+              {/* Mini sparkline */}
+              {inspector.company.stock_metrics?.daily_series && (
+                <div className="space-y-1.5">
+                  <div className="text-2xs text-text-muted flex items-center gap-1">
+                    <LineChart className="w-3.5 h-3.5" /> Stock path — red dot = this event
+                  </div>
+                  <div className="h-24 rounded-lg bg-surface-1/80 border border-border/50 p-2">
+                    <ReactECharts
+                      option={buildSparkline(inspector.company, inspector.milestone.date)}
+                      style={{ height: '100%', width: '100%' }} notMerge />
+                  </div>
                 </div>
               )}
 
-              {/* Markdown-style synthesis text */}
-              <div className="text-xs text-text-secondary leading-relaxed space-y-3 pt-1">
-                {timelineData.executive_synthesis
-                  .split('\n\n')
-                  .filter(Boolean)
-                  .map((para, pIdx) => (
-                    <p key={pIdx}>{para.replace(/\*\*/g, '')}</p>
-                  ))}
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Right Column (4 cols): Interactive Milestone Forensics Inspector */}
-        <div className="xl:col-span-4 sticky top-20 space-y-4">
-          <div className="rounded-2xl border border-border/90 bg-surface-2/95 backdrop-blur-md p-5 shadow-2xl space-y-5">
-            {/* Inspector Header */}
-            <div className="flex items-center justify-between border-b border-border/70 pb-3">
-              <div className="flex items-center gap-2">
-                <Activity className="w-4 h-4 text-accent-glow" />
-                <span className="text-xs font-bold text-text-primary uppercase tracking-wider">
-                  Milestone Forensics
-                </span>
-              </div>
-              <span className="text-3xs uppercase font-mono font-bold px-2 py-0.5 rounded bg-accent/15 text-accent-glow border border-accent/30">
-                INSPECTOR ACTIVE
-              </span>
-            </div>
-
-            {selectedMilestone ? (
-              <div className="space-y-4">
-                {/* Milestone Title & Phase Box */}
-                <div className="p-3.5 rounded-xl bg-surface-1 border border-border/80 space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-accent-glow uppercase tracking-wide">
-                      {selectedMilestone.company.company_name}
-                    </span>
-                    <span
-                      className={cn(
-                        'text-2xs px-2 py-0.5 rounded-full font-semibold border',
-                        getPhaseColors(selectedMilestone.milestone.phase).badge,
-                      )}
-                    >
-                      {selectedMilestone.milestone.phase}
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-semibold text-text-primary leading-snug">
-                    {selectedMilestone.milestone.event}
-                  </h4>
-                  <div className="flex items-center gap-2 text-2xs text-text-muted pt-1 border-t border-border/50">
-                    <Calendar className="w-3.5 h-3.5 text-text-muted" />
-                    <span className="font-mono">{selectedMilestone.milestone.date}</span>
-                  </div>
-                </div>
-
-                {/* Stock Price Card on Milestone Date */}
-                <div className="p-4 rounded-xl bg-surface-3/80 border border-border space-y-3">
-                  <div className="flex items-center justify-between border-b border-border/60 pb-2 text-2xs text-text-muted">
-                    <span>Stock Price at Milestone Date</span>
-                    <span className="font-mono font-semibold px-1.5 py-0.5 rounded bg-surface-1 text-text-secondary border border-border">
-                      {selectedMilestone.company.stock_ticker || 'N/A'}
-                    </span>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <span className="text-3xs text-text-muted uppercase block">
-                        Closing Price
-                      </span>
-                      <div className="text-lg font-mono font-bold text-tailwind">
-                        {selectedMilestone.milestone.stock_price !== null &&
-                        selectedMilestone.milestone.stock_price !== undefined
-                          ? `$${selectedMilestone.milestone.stock_price.toFixed(2)}`
-                          : 'N/A'}
-                      </div>
-                    </div>
-                    <div>
-                      <span className="text-3xs text-text-muted uppercase block">
-                        Change vs Baseline
-                      </span>
-                      <div
-                        className={cn(
-                          'text-lg font-mono font-bold',
-                          selectedMilestone.milestone.stock_change_from_baseline_pct !== null &&
-                            selectedMilestone.milestone.stock_change_from_baseline_pct !== undefined &&
-                            selectedMilestone.milestone.stock_change_from_baseline_pct < 0
-                            ? 'text-headwind'
-                            : 'text-tailwind',
-                        )}
-                      >
-                        {selectedMilestone.milestone.stock_change_from_baseline_pct !== null &&
-                        selectedMilestone.milestone.stock_change_from_baseline_pct !== undefined
-                          ? `${
-                              selectedMilestone.milestone.stock_change_from_baseline_pct > 0
-                                ? '+'
-                                : ''
-                            }${selectedMilestone.milestone.stock_change_from_baseline_pct.toFixed(
-                              1,
-                            )}%`
-                          : 'N/A'}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="pt-2 border-t border-border/60 flex items-center justify-between text-2xs text-text-muted font-mono">
-                    <span>Trading Volume:</span>
-                    <span className="text-text-primary font-semibold">
-                      {selectedMilestone.milestone.trading_volume
-                        ? selectedMilestone.milestone.trading_volume.toLocaleString()
-                        : 'N/A'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Measurable Impact & Consequences */}
+              {/* Parallels */}
+              {inspector.company.key_parallels?.length > 0 && (
                 <div className="space-y-1.5">
-                  <span className="text-2xs font-semibold text-headwind flex items-center gap-1.5 uppercase tracking-wide">
-                    <ShieldAlert className="w-3.5 h-3.5 text-headwind" />
-                    <span>Measurable Impact</span>
-                  </span>
-                  <div className="text-xs text-text-secondary leading-relaxed bg-headwind-dim/40 p-3 rounded-xl border border-headwind/20">
-                    {selectedMilestone.milestone.impact}
-                  </div>
+                  <div className="text-xs font-medium text-text-secondary">Why this case is similar</div>
+                  <ul className="space-y-1">
+                    {inspector.company.key_parallels.slice(0, 3).map((p, i) => (
+                      <li key={i} className="flex items-start gap-1.5 text-xs text-text-muted">
+                        <span className="text-tailwind mt-0.5 shrink-0">•</span> {p}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              )}
 
-                {/* Mini Stock Sparkline Highlight */}
-                {selectedMilestone.company.stock_metrics?.daily_series && (
-                  <div className="space-y-1.5">
-                    <span className="text-2xs font-semibold text-text-muted flex items-center gap-1.5 uppercase tracking-wide">
-                      <LineChart className="w-3.5 h-3.5 text-accent-glow" />
-                      <span>Stock Path & Milestone Marker (Red Dot)</span>
-                    </span>
-                    <div className="h-28 rounded-xl bg-surface-1/90 border border-border p-2">
-                      <ReactECharts
-                        option={buildMiniSparklineOption(
-                          selectedMilestone.company,
-                          selectedMilestone.milestone.date,
-                        )}
-                        style={{ height: '100%', width: '100%' }}
-                        notMerge
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Key Parallels & Differences */}
-                {selectedMilestone.company.key_parallels?.length > 0 && (
-                  <div className="space-y-1.5 pt-1">
-                    <span className="text-2xs font-semibold text-text-muted uppercase tracking-wider block">
-                      Key Parallels to Current Scenario:
-                    </span>
-                    <ul className="space-y-1 text-2xs text-text-secondary">
-                      {selectedMilestone.company.key_parallels.slice(0, 3).map((p, idx) => (
-                        <li key={idx} className="flex items-start gap-1.5">
-                          <span className="text-tailwind mt-0.5">•</span>
-                          <span>{p}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-
-                {/* Sources & Citations */}
-                {selectedMilestone.company.sources?.length > 0 && (
-                  <div className="pt-2 border-t border-border/60 space-y-1.5">
-                    <span className="text-2xs font-semibold text-text-muted uppercase tracking-wider block">
-                      Verified Citations & Sources:
-                    </span>
-                    <div className="space-y-1">
-                      {selectedMilestone.company.sources.slice(0, 2).map((s, idx) => (
-                        <a
-                          key={idx}
-                          href={s.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-between text-2xs text-accent-glow hover:underline truncate"
-                        >
-                          <span className="truncate">{s.title}</span>
-                          <ExternalLink className="w-3 h-3 shrink-0 ml-1 opacity-70" />
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="py-16 text-center text-xs text-text-muted space-y-2">
-                <Target className="w-6 h-6 mx-auto text-text-muted opacity-50" />
-                <p>Click any milestone node to inspect its forensic stock data.</p>
-              </div>
-            )}
+              {/* Sources */}
+              {inspector.company.sources?.length > 0 && (
+                <div className="space-y-1.5 pt-2 border-t border-border/50">
+                  <div className="text-2xs text-text-muted font-medium">Sources</div>
+                  {inspector.company.sources.slice(0, 2).map((s, i) => (
+                    <a key={i} href={s.url} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center justify-between text-2xs text-accent-glow hover:underline truncate">
+                      <span className="truncate">{s.title}</span>
+                      <ExternalLink className="w-3 h-3 ml-1 shrink-0 opacity-70" />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
-      {/* ── New Deep Research Modal ──────────────────────────────────── */}
+      {/* ── RESEARCH MODAL ──────────────────────────────────────────── */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-surface-1 border border-border rounded-2xl w-full max-w-xl shadow-2xl p-6 space-y-5 animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between border-b border-border/70 pb-3">
-              <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-accent/15 text-accent-glow">
-                  <Sparkles className="w-5 h-5" />
-                </div>
-                <h3 className="text-base font-bold text-text-primary">
-                  Run Deep Research on Corporate Incident
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="text-text-muted hover:text-text-primary transition"
-              >
-                <X className="w-5 h-5" />
+        <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface-1 border border-border rounded-2xl w-full max-w-lg shadow-2xl p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border/60 pb-3">
+              <h3 className="text-sm font-semibold text-text-primary">Find similar past events</h3>
+              <button type="button" onClick={() => setIsModalOpen(false)}
+                className="text-text-muted hover:text-text-primary transition">
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-3">
-              <label className="block text-xs font-semibold text-text-secondary">
-                Enter Scenario or News Description:
-              </label>
-              <textarea
-                rows={3}
-                value={researchPrompt}
-                onChange={e => setResearchPrompt(e.target.value)}
-                placeholder="e.g., A Fortune 500 board abruptly forces out the CEO amidst manufacturing delays and operating losses..."
-                className="w-full bg-surface-2 border border-border rounded-xl p-3 text-xs text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent"
-              />
+              <label className="block text-xs text-text-secondary">Describe the scenario:</label>
+              <textarea rows={3} value={researchPrompt} onChange={e => setResearchPrompt(e.target.value)}
+                placeholder="e.g., A major company abruptly replaces its CEO after a period of poor results..."
+                className="w-full bg-surface-2 border border-border rounded-xl p-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-accent" />
 
               <div className="flex items-center justify-between text-xs text-text-muted">
-                <span>Number of Corporate Analogs to Discover:</span>
-                <select
-                  value={companyCount}
-                  onChange={e => setCompanyCount(parseInt(e.target.value, 10))}
-                  className="bg-surface-2 border border-border rounded-lg px-2.5 py-1 text-xs text-text-primary focus:outline-none"
-                >
-                  <option value={5}>5 Major Companies</option>
-                  <option value={6}>6 Major Companies</option>
-                  <option value={8}>8 Major Companies</option>
-                  <option value={10}>10 Major Companies</option>
+                <span>Number of companies to find:</span>
+                <select value={companyCount} onChange={e => setCompanyCount(parseInt(e.target.value, 10))}
+                  className="bg-surface-2 border border-border rounded-lg px-2.5 py-1 text-xs text-text-primary focus:outline-none">
+                  {[3, 5, 8, 10].map(n => <option key={n} value={n}>{n} companies</option>)}
                 </select>
               </div>
 
-              {/* Sample Quick Scenarios */}
-              <div className="space-y-1.5 pt-2">
-                <span className="text-3xs uppercase tracking-wider font-semibold text-text-muted">
-                  Or select a benchmark scenario:
-                </span>
-                <div className="grid grid-cols-1 gap-1.5 text-xs">
-                  {QUICK_PROMPTS.map((p, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      onClick={() => setResearchPrompt(p.prompt)}
-                      className="text-left p-2 rounded-lg bg-surface-2 hover:bg-surface-3 border border-border/70 text-text-secondary hover:text-text-primary transition truncate"
-                    >
-                      {p.title}
-                    </button>
-                  ))}
-                </div>
+              <div className="space-y-1.5">
+                <div className="text-2xs text-text-muted">Or pick an example:</div>
+                {QUICK_PROMPTS.map((p, i) => (
+                  <button key={i} type="button" onClick={() => setResearchPrompt(p.prompt)}
+                    className="w-full text-left p-2.5 rounded-lg bg-surface-2 hover:bg-surface-3 border border-border/60 text-xs text-text-secondary hover:text-text-primary transition">
+                    {p.title}
+                  </button>
+                ))}
               </div>
 
               {researchError && (
@@ -1032,46 +517,27 @@ export default function PrecedentPanel({
               )}
             </div>
 
-            <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/70">
-              <button
-                type="button"
-                onClick={() => setIsModalOpen(false)}
-                className="px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 text-xs font-medium text-text-muted hover:text-text-primary transition"
-              >
+            <div className="flex items-center justify-end gap-3 pt-2 border-t border-border/60">
+              <button type="button" onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 rounded-lg bg-surface-2 hover:bg-surface-3 text-xs text-text-muted hover:text-text-primary transition">
                 Cancel
               </button>
-              <button
-                type="button"
-                onClick={handleTriggerResearch}
-                disabled={isResearching || !researchPrompt.trim()}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent hover:bg-accent-glow text-white text-xs font-semibold shadow-md shadow-accent/20 transition disabled:opacity-50"
-              >
-                <span>Execute Deep Research</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+              <button type="button" onClick={handleResearch} disabled={isResearching || !researchPrompt.trim()}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-accent hover:bg-accent-glow text-white text-xs font-medium transition disabled:opacity-50">
+                Search <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* ── Research Execution Loading Overlay ───────────────────────── */}
+      {/* Research loading overlay */}
       {isResearching && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-4 space-y-4">
-          <div className="relative w-16 h-16">
-            <div className="w-16 h-16 rounded-full border-4 border-surface-3 border-t-accent animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Network className="w-6 h-6 text-accent-glow animate-pulse" />
-            </div>
-          </div>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex flex-col items-center justify-center gap-4">
+          <div className="w-12 h-12 rounded-full border-4 border-surface-3 border-t-accent animate-spin" />
           <div className="text-center space-y-1">
-            <h3 className="text-base font-bold text-text-primary">
-              Deep Research Agent Active...
-            </h3>
-            <p className="text-xs text-accent-glow font-mono max-w-sm">{loadingStep}</p>
-            <p className="text-3xs text-text-muted">
-              Querying neural search, identifying companies, fetching historical yfinance stock
-              prices & milestones.
-            </p>
+            <p className="text-sm font-medium text-text-primary">Searching past events...</p>
+            <p className="text-xs text-accent-glow font-mono">{loadingStep}</p>
           </div>
         </div>
       )}
@@ -1079,288 +545,228 @@ export default function PrecedentPanel({
   )
 }
 
-// ---------------------------------------------------------------------------
-// Helpers & ECharts Option Builders
-// ---------------------------------------------------------------------------
+// ── Helpers ─────────────────────────────────────────────────────────────────
 
 function getPhaseColors(phase: string) {
   const p = phase.toLowerCase()
-  if (p.includes('outbreak') || p.includes('crisis') || p.includes('crash') || p.includes('loss')) {
-    return {
-      badge: 'bg-headwind-dim text-headwind border-headwind/30',
-      dot: 'bg-rose-500',
-    }
-  }
-  if (p.includes('contain') || p.includes('resol') || p.includes('rollback')) {
-    return {
-      badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30',
-      dot: 'bg-purple-400',
-    }
-  }
-  if (p.includes('aftermath') || p.includes('review') || p.includes('legal') || p.includes('rebound')) {
-    return {
-      badge: 'bg-tailwind-dim text-tailwind border-tailwind/30',
-      dot: 'bg-emerald-400',
-    }
-  }
-  // Default Trigger / Precursor
-  return {
-    badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
-    dot: 'bg-amber-400',
-  }
+  if (p.includes('outbreak') || p.includes('crisis') || p.includes('crash'))
+    return { badge: 'bg-headwind-dim text-headwind border-headwind/30', dot: 'bg-rose-500' }
+  if (p.includes('contain') || p.includes('resol'))
+    return { badge: 'bg-purple-500/15 text-purple-300 border-purple-500/30', dot: 'bg-purple-400' }
+  if (p.includes('aftermath') || p.includes('rebound'))
+    return { badge: 'bg-tailwind-dim text-tailwind border-tailwind/30', dot: 'bg-emerald-400' }
+  return { badge: 'bg-amber-500/15 text-amber-300 border-amber-500/30', dot: 'bg-amber-400' }
 }
 
-function buildCompanyStockChartOption(comp: CompanyIncidentReport) {
+function buildStockChart(comp: CompanyIncidentReport) {
   const sm = comp.stock_metrics
-  if (!sm || !sm.daily_series?.length) return {}
-
+  if (!sm?.daily_series?.length) return {}
   const dates = sm.daily_series.map(d => d.date)
   const prices = sm.daily_series.map(d => d.close)
-  const milestoneDates = new Set((comp.timeline || []).map(m => m.date.slice(0, 10)))
-
+  const mDates = new Set((comp.timeline || []).map(m => m.date.slice(0, 10)))
   return {
     backgroundColor: 'transparent',
-    grid: { left: 40, right: 15, top: 12, bottom: 20 },
-    tooltip: {
-      trigger: 'axis',
-      backgroundColor: '#0f172a',
-      borderColor: '#334155',
-      textStyle: { color: '#f1f5f9', fontSize: 11 },
-      formatter: (params: any) => {
-        if (!params || !params.length) return ''
-        const date = params[0].axisValue
-        const price = params[0].value
-        const isMilestone = milestoneDates.has(date)
-        return `<b>${date}</b><br/>Closing Price: <b>$${Number(price).toFixed(2)}</b>${
-          isMilestone ? '<br/><span style="color:#f43f5e">● Incident Milestone</span>' : ''
-        }`
-      },
-    },
-    xAxis: {
-      type: 'category',
-      data: dates,
-      axisLabel: { color: '#64748b', fontSize: 9 },
-      axisLine: { lineStyle: { color: '#334155' } },
-    },
-    yAxis: {
-      type: 'value',
-      scale: true,
-      axisLabel: {
-        color: '#64748b',
-        fontSize: 9,
-        formatter: (v: number) => `$${v}`,
-      },
-      splitLine: { lineStyle: { color: '#1e293b', type: 'dashed' } },
-    },
-    series: [
-      {
-        name: comp.stock_ticker || comp.company_name,
-        type: 'line',
-        data: prices,
-        smooth: true,
-        lineStyle: { width: 2, color: '#38bdf8' },
-        areaStyle: {
-          color: {
-            type: 'linear',
-            x: 0,
-            y: 0,
-            x2: 0,
-            y2: 1,
-            colorStops: [
-              { offset: 0, color: 'rgba(56, 189, 248, 0.25)' },
-              { offset: 1, color: 'rgba(56, 189, 248, 0.0)' },
-            ],
-          },
-        },
-        symbol: (val: any, params: any) => {
-          const date = dates[params.dataIndex]
-          return milestoneDates.has(date) ? 'circle' : 'none'
-        },
-        symbolSize: 8,
-        itemStyle: {
-          color: '#f43f5e',
-          borderColor: '#ffffff',
-          borderWidth: 1.5,
-        },
-      },
-    ],
+    grid: { left: 36, right: 10, top: 8, bottom: 18 },
+    xAxis: { type: 'category', data: dates, axisLabel: { color: '#64748b', fontSize: 9 }, axisLine: { lineStyle: { color: '#334155' } } },
+    yAxis: { type: 'value', scale: true, axisLabel: { color: '#64748b', fontSize: 9, formatter: (v: number) => `$${v}` }, splitLine: { lineStyle: { color: '#1e293b', type: 'dashed' } } },
+    series: [{
+      type: 'line', data: prices, smooth: true,
+      lineStyle: { width: 1.5, color: '#38bdf8' },
+      areaStyle: { color: { type: 'linear', x: 0, y: 0, x2: 0, y2: 1, colorStops: [{ offset: 0, color: 'rgba(56,189,248,0.2)' }, { offset: 1, color: 'rgba(56,189,248,0)' }] } },
+      symbol: (_v: any, p: any) => mDates.has(dates[p.dataIndex]) ? 'circle' : 'none',
+      symbolSize: 6,
+      itemStyle: { color: '#f43f5e', borderColor: '#fff', borderWidth: 1.5 },
+    }],
   }
 }
 
-function buildMiniSparklineOption(comp: CompanyIncidentReport, highlightDate: string) {
+function buildSparkline(comp: CompanyIncidentReport, highlightDate: string) {
   const sm = comp.stock_metrics
-  if (!sm || !sm.daily_series?.length) return {}
-
+  if (!sm?.daily_series?.length) return {}
   const dates = sm.daily_series.map(d => d.date)
   const prices = sm.daily_series.map(d => d.close)
-  const targetDateStr = highlightDate.slice(0, 10)
-
+  const target = highlightDate.slice(0, 10)
   return {
     backgroundColor: 'transparent',
-    grid: { left: 30, right: 10, top: 8, bottom: 15 },
-    xAxis: {
-      type: 'category',
-      data: dates,
-      show: false,
-    },
-    yAxis: {
-      type: 'value',
-      scale: true,
-      axisLabel: { color: '#64748b', fontSize: 8 },
-      splitLine: { show: false },
-    },
-    series: [
-      {
-        type: 'line',
-        data: prices,
-        smooth: true,
-        lineStyle: { width: 1.5, color: '#0ea5e9' },
-        areaStyle: { color: 'rgba(14, 165, 233, 0.1)' },
-        symbol: (val: any, params: any) => {
-          return dates[params.dataIndex] === targetDateStr ? 'circle' : 'none'
-        },
-        symbolSize: 7,
-        itemStyle: {
-          color: '#f43f5e',
-          borderColor: '#ffffff',
-          borderWidth: 2,
-        },
-      },
-    ],
+    grid: { left: 28, right: 8, top: 6, bottom: 14 },
+    xAxis: { type: 'category', data: dates, show: false },
+    yAxis: { type: 'value', scale: true, axisLabel: { color: '#64748b', fontSize: 8 }, splitLine: { show: false } },
+    series: [{
+      type: 'line', data: prices, smooth: true,
+      lineStyle: { width: 1.5, color: '#0ea5e9' },
+      areaStyle: { color: 'rgba(14,165,233,0.1)' },
+      symbol: (_v: any, p: any) => dates[p.dataIndex] === target ? 'circle' : 'none',
+      symbolSize: 7,
+      itemStyle: { color: '#f43f5e', borderColor: '#fff', borderWidth: 2 },
+    }],
   }
 }
 
-function buildHierarchicalTreeOption(data: DeepResearchTimelineOutput) {
-  const treeData = {
-    name: data.incident_category || 'Incident Root',
-    itemStyle: { color: '#0284c7' },
-    children: (data.similar_company_events || []).map(comp => ({
-      name: `${comp.company_name}\n[${comp.stock_ticker || 'N/A'}] Peak: ${
-        comp.stock_metrics?.max_drawdown_pct !== undefined
-          ? `${comp.stock_metrics.max_drawdown_pct.toFixed(1)}%`
-          : ''
-      }`,
-      itemStyle: { color: '#1e293b', borderColor: '#38bdf8' },
+
+
+
+function buildGraphOption(companies: CompanyIncidentReport[], rootLabel?: string) {
+  function phaseColor(phase: string): string {
+    const p = phase.toLowerCase()
+    if (p.includes('outbreak') || p.includes('crisis') || p.includes('crash')) return '#f43f5e'
+    if (p.includes('contain') || p.includes('resol')) return '#a855f7'
+    if (p.includes('aftermath') || p.includes('rebound')) return '#10b981'
+    return '#f59e0b'
+  }
+
+  const nodes: object[] = []
+  const edges: object[] = []
+
+  // Root node — centred, fixed
+  const rootId = 'root'
+  const shortRoot = rootLabel
+    ? (rootLabel.length > 28 ? rootLabel.slice(0, 26) + '…' : rootLabel).split(':')[0].trim()
+    : 'Event'
+
+  nodes.push({
+    id: rootId,
+    name: shortRoot,
+    x: 0, y: 0,
+    fixed: true,
+    symbolSize: 36,
+    symbol: 'roundRect',
+    itemStyle: { color: '#1d4ed8', borderColor: '#60a5fa', borderWidth: 2 },
+    label: { show: true, fontSize: 11, fontWeight: 700, color: '#f1f5f9', position: 'inside' },
+    customData: { type: 'root' },
+  })
+
+  // Place companies in a ring around the root
+  const angleStep = (2 * Math.PI) / Math.max(companies.length, 1)
+  const compRadius = 220
+
+  companies.forEach((comp, ci) => {
+    const compId = `comp-${ci}`
+    const angle = ci * angleStep - Math.PI / 2
+    const cx = Math.cos(angle) * compRadius
+    const cy = Math.sin(angle) * compRadius
+    const dd = comp.stock_metrics?.max_drawdown_pct
+    const shortName = comp.company_name.length > 16
+      ? comp.company_name.slice(0, 15) + '…'
+      : comp.company_name
+    const compLabel = dd !== undefined
+      ? `${shortName}\n−${Math.abs(dd).toFixed(1)}%`
+      : shortName
+
+    nodes.push({
+      id: compId,
+      name: compLabel,
+      x: cx, y: cy,
+      symbolSize: 28,
+      symbol: 'roundRect',
+      itemStyle: { color: '#0f2744', borderColor: '#38bdf8', borderWidth: 2 },
+      label: {
+        show: true,
+        fontSize: 10,
+        fontWeight: 600,
+        color: '#e2e8f0',
+        position: 'outside',
+        // Push label away from centre
+        offset: [Math.cos(angle) * 10, Math.sin(angle) * 10],
+      },
       customData: { type: 'company', company: comp },
-      children: (comp.timeline || []).map(m => {
-        const price =
-          m.stock_price !== null && m.stock_price !== undefined
-            ? `$${m.stock_price.toFixed(1)}`
-            : ''
-        const chg =
-          m.stock_change_from_baseline_pct !== null &&
-          m.stock_change_from_baseline_pct !== undefined
-            ? `${m.stock_change_from_baseline_pct > 0 ? '+' : ''}${m.stock_change_from_baseline_pct.toFixed(1)}%`
-            : ''
+    })
 
-        let nodeColor = '#f59e0b'
-        const p = m.phase.toLowerCase()
-        if (p.includes('outbreak') || p.includes('crisis')) nodeColor = '#f43f5e'
-        else if (p.includes('contain') || p.includes('resol')) nodeColor = '#10b981'
+    edges.push({
+      source: rootId,
+      target: compId,
+      lineStyle: { color: '#334155', width: 1.5, curveness: 0 },
+    })
 
-        return {
-          name: `${m.phase}\n${m.date.slice(5)}\n${price} (${chg})`,
-          itemStyle: { color: '#090d16', borderColor: nodeColor },
-          customData: { type: 'milestone', milestone: m, company: comp },
-        }
-      }),
-    })),
-  }
+    // Place milestones in a smaller arc around each company
+    const milestones = comp.timeline || []
+    const mAngleSpread = Math.PI * 0.7
+    const mRadius = 110
 
-  return {
-    backgroundColor: 'transparent',
-    tooltip: { trigger: 'item', triggerOn: 'mousemove' },
-    series: [
-      {
-        type: 'tree',
-        data: [treeData],
-        top: '4%',
-        left: '12%',
-        bottom: '4%',
-        right: '20%',
-        symbolSize: 9,
-        orient: 'LR',
-        initialTreeDepth: 3,
-        label: {
-          position: 'right',
-          verticalAlign: 'middle',
-          align: 'left',
-          fontSize: 10,
-          color: '#cbd5e1',
-          fontFamily: 'monospace',
-        },
-        leaves: {
-          label: {
-            position: 'right',
-            verticalAlign: 'middle',
-            align: 'left',
-          },
-        },
-        lineStyle: {
-          color: '#334155',
-          curveness: 0.5,
-        },
-        expandAndCollapse: false,
-        animationDuration: 550,
-      },
-    ],
-  }
-}
+    milestones.forEach((m, mi) => {
+      const nodeId = `${compId}-m${mi}`
+      const mAngle = milestones.length === 1
+        ? angle
+        : angle + (mi / (milestones.length - 1) - 0.5) * mAngleSpread
+      const mx = cx + Math.cos(mAngle) * mRadius
+      const my = cy + Math.sin(mAngle) * mRadius
+      const chg = m.stock_change_from_baseline_pct
+      const color = phaseColor(m.phase)
+      const shortPhase = m.phase.split('/')[0].split(' ')[0]  // first word only
+      const chgStr = chg !== null && chg !== undefined
+        ? ` ${chg > 0 ? '+' : ''}${chg.toFixed(1)}%`
+        : ''
 
-function buildCohortComparisonOption(companies: CompanyIncidentReport[]) {
-  const series = companies.map((c, i) => {
-    const sm = c.stock_metrics
-    const data =
-      sm?.daily_series?.map((d, dIdx) => [dIdx, (d.close / sm.baseline_price) * 100]) || []
+      nodes.push({
+        id: nodeId,
+        name: `${shortPhase}${chgStr}`,
+        x: mx, y: my,
+        symbolSize: 16,
+        symbol: 'circle',
+        itemStyle: { color: '#0f172a', borderColor: color, borderWidth: 2 },
+        label: { show: true, fontSize: 9, color: '#cbd5e1', position: 'right', distance: 6 },
+        customData: { type: 'milestone', milestone: m, company: comp },
+      })
 
-    const colors = ['#38bdf8', '#f43f5e', '#a855f7', '#34d399', '#fbbf24', '#ec4899']
-    return {
-      name: `${c.company_name} (${c.stock_ticker || 'N/A'})`,
-      type: 'line',
-      data,
-      smooth: true,
-      showSymbol: false,
-      lineStyle: { width: 2, color: colors[i % colors.length] },
-    }
+      // Chain milestones sequentially: company → m0 → m1 → m2…
+      const source = mi === 0 ? compId : `${compId}-m${mi - 1}`
+      edges.push({
+        source,
+        target: nodeId,
+        lineStyle: { color: color + '90', width: 1.2, curveness: 0.15 },
+      })
+    })
   })
 
   return {
     backgroundColor: 'transparent',
-    grid: { left: 45, right: 20, top: 30, bottom: 25 },
     tooltip: {
-      trigger: 'axis',
-      backgroundColor: '#0f172a',
-      borderColor: '#334155',
-      textStyle: { color: '#f1f5f9', fontSize: 11 },
+      trigger: 'item',
+      backgroundColor: '#141820',
+      borderColor: '#1f2937',
+      extraCssText: 'max-width:280px; white-space:normal; word-break:break-word;',
+      textStyle: { color: '#f1f5f9', fontSize: 11, lineHeight: 18 },
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       formatter: (params: any) => {
-        if (!params || !params.length) return ''
-        let html = `<b>Day ${params[0].value[0]}</b><br/>`
-        params.forEach((item: any) => {
-          const val = item.value[1]
-          html += `<span style="color:${item.color}">●</span> ${item.seriesName}: <b>${val.toFixed(1)}</b> (${val >= 100 ? '+' : ''}${(val - 100).toFixed(1)}%)<br/>`
-        })
-        return html
+        const d = params?.data
+        if (!d?.customData) return ''
+        if (d.customData.type === 'milestone') {
+          const m = d.customData.milestone as TimelineMilestone
+          const chg = m.stock_change_from_baseline_pct
+          const chgHtml = chg !== null && chg !== undefined
+            ? `<span style="color:${chg < 0 ? '#f87171' : '#34d399'};font-weight:600">${chg > 0 ? '+' : ''}${chg.toFixed(1)}%</span>`
+            : ''
+          return `<b>${m.phase}</b> · <span style="color:#94a3b8">${m.date.slice(0, 10)}</span><br/>${m.event.length > 100 ? m.event.slice(0, 100) + '…' : m.event}${chgHtml ? '<br/>Stock move: ' + chgHtml : ''}`
+        }
+        if (d.customData.type === 'company') {
+          const c = d.customData.company as CompanyIncidentReport
+          const dd = c.stock_metrics?.max_drawdown_pct
+          return `<b>${c.company_name}</b><br/>${c.incident_title}${dd !== undefined ? `<br/><span style="color:#f87171">Peak drop: −${Math.abs(dd).toFixed(1)}%</span>` : ''}`
+        }
+        return `<b>${(d.name as string).split('\n')[0]}</b>`
       },
     },
-    legend: {
-      textStyle: { color: '#94a3b8', fontSize: 10 },
-      top: 0,
-      type: 'scroll',
-    },
-    xAxis: {
-      type: 'value',
-      name: 'Relative Trading Days',
-      nameTextStyle: { color: '#64748b', fontSize: 9 },
-      axisLabel: { color: '#64748b', fontSize: 9 },
-      splitLine: { show: false },
-    },
-    yAxis: {
-      type: 'value',
-      name: 'Indexed (Day 0 = 100)',
-      nameTextStyle: { color: '#64748b', fontSize: 9 },
-      axisLabel: { color: '#64748b', fontSize: 9 },
-      splitLine: { lineStyle: { color: '#1e293b', type: 'dashed' } },
-    },
-    series,
+    series: [{
+      type: 'graph',
+      layout: 'force',
+      data: nodes,
+      edges,
+      roam: true,
+      draggable: true,
+      focusNodeAdjacency: true,
+      force: {
+        repulsion: 300,
+        gravity: 0.04,
+        edgeLength: [70, 130],
+        layoutAnimation: true,
+        friction: 0.6,
+      },
+      lineStyle: { opacity: 0.7 },
+      emphasis: {
+        focus: 'adjacency',
+        lineStyle: { width: 2.5, opacity: 1 },
+        label: { show: true, fontSize: 11, fontWeight: 700 },
+      },
+      cursor: 'pointer',
+    }],
   }
 }

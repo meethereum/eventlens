@@ -162,15 +162,15 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
     # ── Metrics ───────────────────────────────────────────────────────────
     metrics: list[Metric] = []
     if bank:
-        metrics.append(Metric(name="Equity/Assets (CET1 proxy)", value=round(equity_assets or 0, 2), unit="%"))
+        metrics.append(Metric(name="Equity/Assets (CET1 proxy)", value=round(equity_assets, 2) if equity_assets is not None else None, unit="%"))
         metrics.append(Metric(name="Current ratio", value="N/A", unit="", note="Bank — not applicable"))
         metrics.append(Metric(name="Interest coverage", value="N/A", unit="", note="Bank — excluded per sector rules"))
-        metrics.append(Metric(name="Operating margin", value=round(operating_margin or 0, 2), unit="%"))
+        metrics.append(Metric(name="Operating margin", value=round(operating_margin, 2) if operating_margin is not None else None, unit="%"))
     else:
-        metrics.append(Metric(name="Current ratio", value=round(current_ratio or 0, 2), unit="x"))
-        metrics.append(Metric(name="Debt/Equity", value=round(debt_equity or 0, 2), unit="x"))
-        metrics.append(Metric(name="Interest coverage", value=round(interest_coverage or 0, 2), unit="x"))
-        metrics.append(Metric(name="Operating margin", value=round(operating_margin or 0, 2), unit="%"))
+        metrics.append(Metric(name="Current ratio", value=round(current_ratio, 2) if current_ratio is not None else None, unit="x"))
+        metrics.append(Metric(name="Debt/Equity", value=round(debt_equity, 2) if debt_equity is not None else None, unit="x"))
+        metrics.append(Metric(name="Interest coverage", value=round(interest_coverage, 2) if interest_coverage is not None else None, unit="x"))
+        metrics.append(Metric(name="Operating margin", value=round(operating_margin, 2) if operating_margin is not None else None, unit="%"))
     if cash is not None:
         metrics.append(Metric(name="Cash", value=round(cash / 1e9, 2), unit="$B"))
 

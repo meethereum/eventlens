@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import time
 from pathlib import Path
 from typing import AsyncIterator
@@ -15,6 +16,7 @@ from typing import AsyncIterator
 from app.core.events import RunContext, SSEEvent
 
 FIXTURE_DIR = Path(__file__).parent.parent.parent / "fixtures"
+logger = logging.getLogger("eventlens.fixtures")
 
 # ---------------------------------------------------------------------------
 # Fixture selection
@@ -99,6 +101,39 @@ async def replay_fixture(
 
         event_type = ev["type"]
         data = ev.get("data", {})
+
+        # Older fixtures contain legacy verdict prose with symbols and technical jargon.
+        # The final verdict is rebuilt from the plain findings below.
+        if event_type == "verdict_delta":
+            continue
+
+        if event_type == "card_done":
+            try:
+                from app.cards.plain_language import enrich_card
+                from app.core.models import CardOutput
+
+                card = CardOutput(**data["card"])
+                data = {"card": enrich_card(card, ctx.ticker).model_dump()}
+            except Exception as exc:
+                logger.warning("Could not convert a demo finding to plain language: %s", exc)
+
+        if event_type == "verdict_done":
+            from app.llm.synthesis import _build_fallback
+
+            parsed = ctx.parsed
+            data = {
+                "verdict": _build_fallback(
+                    ctx.query,
+                    {
+                        "ticker": ctx.ticker,
+                        "event_type": parsed.event_type if parsed else "company event",
+                        "horizon_days": ctx.horizon_days,
+                    },
+                    ctx.cards,
+                    ctx.aggregate,
+                    [],
+                ).model_dump(),
+            }
 
         # Fixture files contain the ID from their original recording.  A replay
         # has a fresh run ID, so keep the payload in sync with the SSE envelope

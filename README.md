@@ -1,6 +1,6 @@
 # EventLens v1
 
-A financial research assistant. Ask a question about a company event ("Intel's CEO was just ousted, what should I expect?") and EventLens analyses it across 10 fixed criteria — USD strength, rates, oil, market regime, sector momentum, cross-sector dependencies, geopolitical risk, financial health, earnings, and valuation — computes evidence-weighted scenario confidence using real FRED, SEC EDGAR, and market data, then has an LLM write an analyst-style research note from the card outputs.
+A financial event research assistant. Ask what happened or why a company event matters; EventLens examines ten evidence factors — USD strength, rates, oil, market regime, sector momentum, cross-sector dependencies, geopolitical risk, financial health, earnings, and valuation — then explains the available evidence using FRED, SEC EDGAR, and market data. The analysis is descriptive, not an investment recommendation or forecast.
 
 ---
 
@@ -33,20 +33,19 @@ http://localhost:8080
    └── /api/* → proxy → FastAPI (backend container, port 8000)
                          ├── POST /api/analyze   SSE stream
                          ├── GET  /api/health
-                         ├── GET  /api/cards/{id}/inspect
+                         ├── GET  /api/cards/{id}/inspect (internal factor ID)
                          ├── POST /api/simulate
                          ├── POST /api/simulate/explain
                          ├── GET  /api/precedents
-                         ├── GET  /api/cards/{id}/unusual-days
+                         ├── GET  /api/cards/{id}/unusual-days (internal factor ID)
                          ├── POST /api/explain-day
-                         └── POST /api/baseline  plain-LLM comparison
 ```
 
 ### Backend stack
 - **Python 3.11**, FastAPI, sse-starlette, uvicorn
 - **Data**: FRED API, yfinance, SEC EDGAR, optional Finnhub company news, Caldara-Iacoviello GPR index
 - **Cache**: diskcache (named Docker volume, survives restarts)
-- **Math**: numpy, scipy — all scoring is deterministic code, no LLM inside cards
+- **Math**: numpy, scipy — all evidence-factor scoring is deterministic code, no LLM inside the calculations
 
 ### Frontend stack
 - **Vite + React + TypeScript**, Tailwind CSS, shadcn/ui
@@ -60,27 +59,27 @@ http://localhost:8080
 User query
     │
     ▼ LLM call 1 (parse)
-{ticker, event_type, as_of, intent}
+{company, event_type, as_of, intent}
     │
     ▼ scope check
-10 cards fetched concurrently ──────────────────────────────────────────────
-  C1 USD Strength       (FRED DTWEXBGS)
-  C2 Rates & Inflation  (FRED DGS10, DFF, T10Y2Y, CPIAUCSL)
-  C3 Oil & Energy       (FRED DCOILWTICO, DCOILBRENTEU)
-  C4 Market Regime      (yfinance SPY, FRED VIXCLS)
-  C5 Sector Strength    (yfinance stock vs sector ETF vs SPY)
-  C6 Cross-Sector Dep.  (curated dependencies.json + yfinance proxies)
-  C7 Geopolitics        (GPR index + FRED USEPUINDXD)
-  C8 Financial Health   (SEC EDGAR XBRL)
-  C9 Earnings & Growth  (SEC EDGAR XBRL + yfinance)
-  C10 Valuation & Momentum (SEC EDGAR XBRL + yfinance)
+10 evidence factors fetched concurrently ───────────────────────────────────
+  USD Strength                    (FRED DTWEXBGS)
+  Rates & Inflation               (FRED DGS10, DFF, T10Y2Y, CPIAUCSL)
+  Oil & Energy                    (FRED DCOILWTICO, DCOILBRENTEU)
+  Market Regime                   (yfinance SPY, FRED VIXCLS)
+  Sector Relative Performance     (yfinance company vs sector ETF vs SPY)
+  Business Dependencies           (curated dependencies.json + yfinance proxies)
+  Geopolitical Risk               (GPR index + FRED USEPUINDXD)
+  Financial Health                (SEC EDGAR XBRL)
+  Earnings & Growth               (SEC EDGAR XBRL + yfinance)
+  Valuation & Momentum            (SEC EDGAR XBRL + yfinance)
     │
     ▼ aggregation math (scipy Beta CIs, Shannon entropy)
-{composite_signal, evidence_strength, scenario_scores, card_contributions}
+{composite_signal, evidence_strength, scenario_scores, factor_contributions}
     │
     ▼ LLM call 2 (synthesise)
-analyst research note (headline, summary, key drivers, counter-evidence,
-                       scenarios, disclaimer)
+plain-language evidence summary (headline, key findings, limitations,
+                                  deterministic evidence profiles, sources)
 ```
 
 ---
@@ -142,7 +141,8 @@ The status pill shows "fallback model" when this activates.
 ### Rate limiting
 
 ```env
-LLM_RPM_LIMIT=25     # client-side requests/minute cap
+LLM_RPM_LIMIT=1      # one model request per minute
+LLM_MAX_TOKENS=2000  # overview response budget
 LLM_TIMEOUT_S=60     # per-request timeout
 LLM_MAX_INPUT_TOKENS=4000  # input truncation ceiling
 ```
@@ -153,12 +153,12 @@ LLM_MAX_INPUT_TOKENS=4000  # input truncation ceiling
 
 With no keys set, EventLens boots in demo mode and replays recorded fixtures for four scripted queries:
 
-| Query | Ticker | As-of |
+| Example query | Company | As-of |
 |---|---|---|
-| Intel's CEO was just ousted. What should I expect? | INTC | 2024-12-02 |
-| Russia has invaded Ukraine and oil is spiking. How does that affect Exxon? | XOM | 2022-02-25 |
-| Silicon Valley Bank just collapsed. What does that mean for JPMorgan? | JPM | 2023-03-13 |
-| Nvidia fell sharply after the DeepSeek news. Is that company-specific or sector-wide? | NVDA | 2025-01-28 |
+| Intel's CEO was just ousted. What should I expect? | Intel | 2024-12-02 |
+| Russia has invaded Ukraine and oil is spiking. How does that affect Exxon? | ExxonMobil | 2022-02-25 |
+| Silicon Valley Bank just collapsed. What does that mean for JPMorgan? | JPMorgan Chase | 2023-03-13 |
+| Nvidia fell sharply after the DeepSeek news. Is that company-specific or sector-wide? | Nvidia | 2025-01-28 |
 
 To force demo mode: `DEMO_MODE=1`  
 To force live mode: `DEMO_MODE=0`  
@@ -201,24 +201,24 @@ docker compose exec backend python -m pytest tests/ -v
 60 unit tests across four files:
 - `tests/test_scoring_math.py` — z-score, correlation, macro signal, quality
 - `tests/test_aggregation.py` — golden-number tests for each aggregation formula component
-- `tests/test_golden.py` — full 10-card golden test verifying scenario distribution, credible intervals, and contributions
+- `tests/test_golden.py` — full 10-factor golden test verifying scenario distribution, credible intervals, and contributions
 - `tests/test_new_features.py` — scenario sensitivity, precedent date filtering, unusual-day detection, and feature API flows
 
 ---
 
 ## Covered universe (v1)
 
-| Ticker | Sector |
+| Company | Sector |
 |---|---|
-| NVDA, INTC, AAPL, MSFT | Technology (XLK) |
-| GM, SBUX, AMZN | Consumer Discretionary (XLY) |
-| DIS | Communication Services (XLC) |
-| BA, RTX | Industrials (XLI) |
-| XOM, CVX | Energy (XLE) |
-| JPM, SCHW | Financials (XLF) |
-| UNH | Health Care (XLV) |
+| Nvidia, Intel, Apple, Microsoft | Technology (XLK) |
+| General Motors, Starbucks, Amazon | Consumer Discretionary (XLY) |
+| Disney | Communication Services (XLC) |
+| Boeing, RTX Corporation | Industrials (XLI) |
+| ExxonMobil, Chevron | Energy (XLE) |
+| JPMorgan Chase, Charles Schwab | Financials (XLF) |
+| UnitedHealth | Health Care (XLV) |
 
-Queries about other tickers get a "not covered in v1" message.
+Queries about companies outside this list get a "not covered in v1" message.
 
 ---
 
@@ -237,7 +237,7 @@ docker compose -f docker-compose.yml -f docker-compose.dev.yml up --build
 
 After an analysis completes, the UI offers three additional views:
 
-- **What-if simulator** — applies deterministic changes to linked evidence cards and presents a plain-language outlook with ranked drivers. The explicit explanation action may make one cached LLM call; slider updates do not.
+- **What-if simulator** — applies deterministic changes to linked evidence factors and presents a plain-language explanation. The explicit explanation action may make one cached LLM call; slider updates do not.
 - **Similar past events** — ranks locally stored, source-linked precedents and charts normalized 60-trading-day outcomes. Build the static library with `docker compose exec backend python -m scripts.build_precedents`, then verify it with `docker compose exec backend python -m scripts.validate_precedents --check-urls`.
 - **Unusual-day explanation** — shows robust outliers in the adjusted-close price chart, then provides a cited comparison with sector, market, SEC filings, and optional Finnhub headlines. Demo runs must use only fixture evidence; live explanations use a cited template if news or the LLM is unavailable.
 
@@ -249,22 +249,19 @@ The checked-in precedent file currently has no verified records. The old four-ro
 
 ## What's not in v1
 
-- **C11 Historical Precedent** — locked card, coming in v2
 - **Verified precedent library** — not bundled yet; the static dataset stays empty until at least 100 complete, source-checked records are available
-- **Graph/vector memory** — no vector database, LangChain, LangGraph, or embeddings
-- **Auth** — none
-- **Buy/sell advice** — explicitly refused; EventLens is descriptive only
-- **LLM inside cards** — all card logic is deterministic code
-
----
+- **Graph/vector memory** — no vector database, embeddings, or graph retrieval
+- **Authentication** — none
+- **Investment recommendations** — explicitly refused; EventLens is descriptive only
+- **LLM-based calculations** — all evidence-factor scoring is deterministic code
 
 ## Scoring math (brief)
 
-Macro cards (C1–C4, C7):  
+Macro evidence factors (US dollar, rates, oil, market regime, geopolitical risk):  
 `s = sign(ρ) × tanh(z / 2)` where z is the 20-day change z-scored over 756 trading days, and ρ is the 252-day Pearson correlation between the stock's daily returns and the factor's daily changes.
 
 Aggregation:  
-`e_i = 0.6 × w_i × q_i` (evidence per card, discounted for correlation)  
+`e_i = 0.6 × w_i × q_i` (evidence weight, discounted for correlation)  
 `p_k = (E_k + 1) / (Σ E + 3)` (Dirichlet posterior, α=1)  
 `Evidence strength = 1 − H(p) / ln(3)` (normalised Shannon entropy)
 

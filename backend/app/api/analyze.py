@@ -127,24 +127,6 @@ async def run_status(run_id: str):
     }
 
 
-# ---------------------------------------------------------------------------
-# POST /api/baseline — plain LLM comparison (no card context)
-# ---------------------------------------------------------------------------
-
-class BaselineRequest(BaseModel):
-    query: str
-
-
-@router.post("/baseline")
-async def baseline(req: BaselineRequest):
-    """Plain LLM response with no card context — for the stretch comparison toggle."""
-    from app.llm.baseline import get_baseline_response
-    import asyncio
-    loop = asyncio.get_event_loop()
-    result = await loop.run_in_executor(None, get_baseline_response, req.query)
-    return result
-
-
 class SimulationRequest(BaseModel):
     run_id: str
     usd_pct: float = Field(default=0, ge=-20, le=20)

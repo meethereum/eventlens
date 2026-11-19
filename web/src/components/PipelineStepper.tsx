@@ -6,10 +6,10 @@ type Phase = AnalysisState['phase']
 
 const STEPS: { id: Phase; label: string; detail: string }[] = [
   { id: 'parsing',      label: 'Understanding your question', detail: 'Identifying the company and event' },
-  { id: 'scope_check',  label: 'Checking coverage',           detail: 'Verifying we cover this company'  },
-  { id: 'fetching',     label: 'Gathering data',              detail: 'Fetching from 10 sources'          },
-  { id: 'scoring',      label: 'Computing signals',           detail: 'Running the evidence math'         },
-  { id: 'synthesising', label: 'Writing analysis',            detail: 'AI is drafting the research note'  },
+  { id: 'scope_check',  label: 'Checking availability',       detail: 'Checking whether this company is covered' },
+  { id: 'fetching',     label: 'Gathering evidence',          detail: 'Collecting data across 10 factors' },
+  { id: 'scoring',      label: 'Putting findings together',   detail: 'Comparing the available checks'    },
+  { id: 'synthesising', label: 'Explaining the evidence',     detail: 'Preparing a concise summary'       },
 ]
 
 const PHASE_ORDER: Phase[] = ['idle','parsing','scope_check','fetching','scoring','synthesising','done','error']
@@ -44,7 +44,7 @@ export default function PipelineStepper({ phase, timings }: Props) {
             style={{ width: `${(phaseIndex(phase) / (PHASE_ORDER.length - 1)) * 100}%` }}
           />
         </div>
-        <span className="text-xs text-text-secondary whitespace-nowrap">
+        <span className="text-base text-text-primary whitespace-nowrap">
           {isDone ? 'Done' : isError ? 'Error' : STEPS.find(s => s.id === phase)?.label ?? 'Running…'}
         </span>
       </div>
@@ -74,18 +74,18 @@ export default function PipelineStepper({ phase, timings }: Props) {
 
                 <div>
                   <div className={cn(
-                    'text-xs font-medium',
+                    'text-base font-medium',
                     status === 'done'    && 'text-tailwind',
                     status === 'active'  && 'text-accent-glow',
-                    status === 'pending' && 'text-text-muted',
+                    status === 'pending' && 'text-text-secondary',
                   )}>
                     {step.label}
                   </div>
                   {status === 'active' && (
-                    <div className="text-2xs text-text-muted">{step.detail}</div>
+                    <div className="text-base text-text-secondary">{step.detail}</div>
                   )}
                   {timing !== undefined && status === 'done' && (
-                    <div className="text-2xs text-text-muted font-mono">{timing}ms</div>
+                    <div className="text-base text-text-secondary">Step complete</div>
                   )}
                 </div>
               </div>
@@ -116,7 +116,7 @@ export default function PipelineStepper({ phase, timings }: Props) {
               )}>
                 <Check className="w-3 h-3" />
               </div>
-              <span className={cn('text-xs font-medium', isDone ? 'text-tailwind' : 'text-headwind')}>
+              <span className={cn('text-base font-medium', isDone ? 'text-green-200' : 'text-red-200')}>
                 {isDone ? 'Analysis complete' : 'Something went wrong'}
               </span>
             </div>

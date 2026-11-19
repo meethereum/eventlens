@@ -18,16 +18,15 @@ export default function EmptyState({ onSelect }: Props) {
       {/* Hero text */}
       <div className="mb-10 max-w-xl">
         <h2 className="text-2xl font-semibold text-text-primary mb-3 leading-tight">
-          What's happening with a company you follow?
+          What happened to a company you follow?
         </h2>
-        <p className="text-base text-text-muted leading-relaxed">
-          Ask a plain-English question about any company event.
-          EventLens analyses 10 factors — from interest rates to supply chains —
-          and explains what it means in simple terms.
+        <p className="text-base text-text-secondary leading-relaxed">
+          Ask what happened or why a company event matters.
+          EventLens weighs ten evidence factors and explains what the available data supports.
         </p>
       </div>
 
-      {/* Example cards */}
+      {/* Example questions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl">
         {EXAMPLE_QUERIES.map(eq => (
           <button
@@ -36,21 +35,21 @@ export default function EmptyState({ onSelect }: Props) {
             className="group text-left glass-panel p-4 hover:border-accent/30 hover:shadow-glow-accent transition-all"
           >
             <div className="min-w-0">
-              <div className="text-sm font-semibold text-text-secondary group-hover:text-accent-glow transition-colors mb-1">
+              <div className="text-base font-semibold text-text-primary group-hover:text-accent-glow transition-colors mb-1">
                 {eq.chipLabel}
               </div>
-              <div className="text-xs text-text-muted leading-relaxed line-clamp-2">{eq.query}</div>
+              <div className="text-base text-text-secondary leading-relaxed line-clamp-2">{eq.query}</div>
             </div>
           </button>
         ))}
       </div>
 
       {/* How it works */}
-      <div className="mt-10 flex items-center gap-6 text-xs text-text-muted">
+      <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-base text-text-secondary">
         {[
-          '10 data sources analysed',
-          'Evidence-weighted scoring',
-          'AI-written research note',
+          'Ten evidence factors',
+          'Transparent scoring',
+          'Findings with their sources',
         ].map(text => (
           <div key={text} className="flex items-center gap-1.5">
             <span className="w-1 h-1 rounded-full bg-border" />

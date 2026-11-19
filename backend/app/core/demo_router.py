@@ -246,7 +246,7 @@ async def _live_analysis(ctx: RunContext) -> AsyncIterator[str]:
     ctx.verdict = verdict
 
     # Stream summary word by word
-    text_to_stream = verdict.summary
+    text_to_stream = verdict.answer
     for word in text_to_stream.split():
         await asyncio.sleep(0.04)
         yield SSEEvent(
@@ -329,11 +329,9 @@ async def _not_in_fixture_response(ctx: RunContext) -> AsyncIterator[str]:
             "ticker": ctx.ticker or "",
             "reason": "no_fixture",
             "refusal_message": (
-                "EventLens is running in demo mode and this query doesn't match one of the four scripted demos. "
-                "Try: \"Intel's CEO was just ousted. What should I expect?\" (INTC, 2024-12-02), "
-                "\"Russia has invaded Ukraine and oil is spiking. How does that affect Exxon?\" (XOM, 2022-02-25), "
-                "\"Silicon Valley Bank just collapsed. What does that mean for JPMorgan?\" (JPM, 2023-03-13), or "
-                "\"Nvidia fell sharply after the DeepSeek news. Is that company-specific or sector-wide?\" (NVDA, 2025-01-28)."
+                "EventLens is using example data, and this question does not match a saved example. "
+                "Try asking about Intel's chief executive change, oil prices and ExxonMobil, "
+                "the bank failures and JPMorgan Chase, or Nvidia's recent share price change."
             ),
         },
     ).to_sse()

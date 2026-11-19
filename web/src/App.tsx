@@ -1,13 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { AnimatePresence, motion } from 'framer-motion'
-import {
-  FileText,
-  Sliders,
-  TrendingUp,
-  LayoutGrid,
-  Layers,
-} from 'lucide-react'
+import { companyName } from '@/lib/companies'
 import TopBar from '@/components/TopBar'
 import QueryBar from '@/components/QueryBar'
 import PipelineStepper from '@/components/PipelineStepper'
@@ -20,13 +14,11 @@ import RefusalCard from '@/components/RefusalCard'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import WhatIfPanel from '@/components/WhatIfPanel'
 import PrecedentPanel from '@/components/PrecedentPanel'
-import BaselineComparison from '@/components/BaselineComparison'
 import Sidebar, { type TabId } from '@/components/Sidebar'
 import { useAnalysis } from '@/hooks/useAnalysis'
 import type { CardOutput, HealthResponse } from '@/types'
 import type { SubmitPayload } from '@/components/QueryBar'
 import { MOCK_HEALTH } from '@/lib/mockData'
-import { cn } from '@/lib/utils'
 
 export default function App() {
   const { state, run, reset } = useAnalysis()
@@ -37,7 +29,7 @@ export default function App() {
   // Dynamic page title
   useEffect(() => {
     if (state.parsed?.ticker && state.phase !== 'idle') {
-      document.title = `${state.parsed.ticker} — EventLens`
+      document.title = `${companyName(state.parsed.ticker)} — EventLens`
     } else {
       document.title = 'EventLens — Financial Event Analysis'
     }
@@ -74,14 +66,6 @@ export default function App() {
   const handleReset = () => {
     reset()
   }
-
-  const TABS: Array<{ id: TabId; label: string; icon: typeof FileText }> = [
-    { id: 'verdict', label: 'Executive Verdict', icon: FileText },
-    { id: 'simulator', label: 'What-If Lab', icon: Sliders },
-    { id: 'precedents', label: 'Precedents', icon: TrendingUp },
-    { id: 'cards', label: 'Cards Grid', icon: LayoutGrid },
-    { id: 'all', label: 'Full Briefing', icon: Layers },
-  ]
 
   return (
     <div className="min-h-dvh bg-surface bg-grid relative">
@@ -139,10 +123,8 @@ export default function App() {
                     {/* Left Sidebar */}
                     <Sidebar
                       ticker={state.parsed?.ticker}
-                      asOf={state.parsed?.as_of}
                       eventType={state.parsed?.event_type}
                       compositeSignal={state.aggregate?.composite_signal}
-                      phase={state.phase}
                       cards={state.cards}
                       activeTab={activeTab}
                       onSelectTab={setActiveTab}
@@ -155,7 +137,7 @@ export default function App() {
                     <div className="flex-1 min-w-0 w-full space-y-6">
                       <PipelineStepper
                         phase={state.phase}
-                        timings={state.pipelineTimings}
+                        timings={{}}
                       />
 
                       {/* Refusal card */}
@@ -166,33 +148,7 @@ export default function App() {
                         />
                       ) : (
                         <>
-                          {/* Navigation Bar atop Main Canvas */}
-                          <div className="flex items-center justify-between gap-2 border-b border-border/60 pb-2">
-                            <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none">
-                              {TABS.map(tab => {
-                                const Icon = tab.icon
-                                const isActive = activeTab === tab.id
-                                return (
-                                  <button
-                                    key={tab.id}
-                                    type="button"
-                                    onClick={() => setActiveTab(tab.id)}
-                                    className={cn(
-                                      'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0',
-                                      isActive
-                                        ? 'bg-accent/15 text-accent-glow border border-accent/30 shadow-sm'
-                                        : 'text-text-muted hover:text-text-secondary hover:bg-surface-2',
-                                    )}
-                                  >
-                                    <Icon className="w-3.5 h-3.5" />
-                                    <span>{tab.label}</span>
-                                  </button>
-                                )
-                              })}
-                            </div>
-                          </div>
-
-                          {/* Tab 1: Executive Verdict */}
+                          {/* Overview */}
                           {(activeTab === 'verdict' || activeTab === 'all') && (
                             <section className="space-y-6">
                               {(state.aggregate ||
@@ -201,22 +157,14 @@ export default function App() {
                                 <div className="space-y-5">
                                   <VerdictPanel
                                     verdict={state.verdict}
-                                    aggregate={state.aggregate}
                                     verdictStream={state.verdictStream}
                                     cards={state.cards}
-                                    ticker={state.parsed?.ticker}
-                                    onCitationClick={id => {
+                                    aggregate={state.aggregate}
+                                    onFindingClick={id => {
                                       const c = state.cards[id]
                                       if (c) setInspectedCard(c)
                                     }}
                                   />
-
-                                  {state.phase === 'done' && (
-                                    <BaselineComparison
-                                      query={state.query}
-                                      verdict={state.verdict}
-                                    />
-                                  )}
                                 </div>
                               )}
                             </section>
@@ -228,15 +176,15 @@ export default function App() {
                               {state.phase === 'done' && state.runId && state.aggregate ? (
                                 <WhatIfPanel runId={state.runId} />
                               ) : (
-                                <div className="glass-panel p-8 text-center text-xs text-text-muted">
-                                  What-If Lab activates once analysis synthesis completes.
+                                  <div className="glass-panel p-8 text-center text-xs text-text-muted">
+                                  Sensitivity analysis is available when the evidence summary completes.
                                 </div>
                               )}
                             </section>
                           )}
 
-                          {/* Tab 3: Historical Precedents */}
-                          {(activeTab === 'precedents' || activeTab === 'all') && (
+                          {/* Past Events */}
+                          {activeTab === 'precedents' && (
                             <section>
                               <PrecedentPanel
                                 ticker={state.parsed?.ticker || 'INTC'}
@@ -248,12 +196,12 @@ export default function App() {
                             </section>
                           )}
 
-                          {/* Tab 4: All 10 Evidence Cards Grid */}
+                          {/* Evidence factors */}
                           {(activeTab === 'cards' || activeTab === 'all') && (
                             <section className="space-y-3">
                               {activeTab === 'all' && (
                                 <h3 className="text-sm font-semibold text-text-primary px-1">
-                                  All 10 Evidence Cards
+                                  Evidence factors
                                 </h3>
                               )}
                               <CardGrid

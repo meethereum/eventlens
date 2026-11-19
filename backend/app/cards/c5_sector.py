@@ -122,11 +122,11 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
     ]
 
     metrics = [
-        Metric(name=f"{ticker} 5d",     value=round(ret_5["stock"] or 0, 2),  unit="%"),
-        Metric(name=f"{ticker} 20d",    value=round(ret_20["stock"] or 0, 2), unit="%"),
-        Metric(name=f"{ticker} 60d",    value=round(ret_60["stock"] or 0, 2), unit="%"),
-        Metric(name=f"{sector_etf} 20d", value=round(ret_20["etf"] or 0, 2),   unit="%"),
-        Metric(name="SPY 20d",          value=round(ret_20["spy"] or 0, 2),   unit="%"),
+        Metric(name=f"{ticker} 5d",     value=round(ret_5["stock"], 2) if ret_5["stock"] is not None else None, unit="%"),
+        Metric(name=f"{ticker} 20d",    value=round(ret_20["stock"], 2) if ret_20["stock"] is not None else None, unit="%"),
+        Metric(name=f"{ticker} 60d",    value=round(ret_60["stock"], 2) if ret_60["stock"] is not None else None, unit="%"),
+        Metric(name=f"{sector_etf} 20d", value=round(ret_20["etf"], 2) if ret_20["etf"] is not None else None, unit="%"),
+        Metric(name="SPY 20d",          value=round(ret_20["spy"], 2) if ret_20["spy"] is not None else None, unit="%"),
         Metric(name="Driver classification", value=classification, unit=""),
     ]
 

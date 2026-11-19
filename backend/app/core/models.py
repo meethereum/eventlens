@@ -4,7 +4,7 @@ Shared Pydantic models used across the application.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -87,6 +87,10 @@ class CardOutput(BaseModel):
     warnings: list[str] = []
 
     error_message: str | None = None
+    plain_title: str = ""
+    plain_summary: str = ""
+    direction: Literal["against", "for", "neutral"] = "neutral"
+    strength: Literal["strong", "moderate", "slight"] = "slight"
 
 
 # ---------------------------------------------------------------------------
@@ -122,16 +126,45 @@ class AggregateResult(BaseModel):
     card_contributions: dict[str, float]   # card_id -> contribution
 
 
+class OverviewPoint(BaseModel):
+    title: str
+    explanation: str
+    findings: list[str]
+    direction: Literal["against", "for"]
+    strength: Literal["strong", "moderate", "slight"]
+
+
+class OverviewWatchItem(BaseModel):
+    what: str
+    why: str
+    findings: list[str]
+
+
+class OverviewScenario(BaseModel):
+    id: Literal["against", "mixed", "for"]
+    name: str
+    score: float = 0.0
+    what_it_looks_like: str
+    signs: str
+
+
 class VerdictOutput(BaseModel):
     # ``model_used`` is part of the public response contract. Permit that
     # field name without Pydantic treating the ``model_`` prefix as reserved.
     model_config = ConfigDict(protected_namespaces=())
 
-    headline: str
-    summary: str
+    headline: str = ""
+    answer: str = ""
+    how_sure_level: Literal["High", "Medium", "Low"] = "Low"
+    how_sure_reason: str = ""
+    points: list[OverviewPoint] = []
+    unknowns: list[str] = []
+    watch: list[OverviewWatchItem] = []
+    scenarios: list[OverviewScenario] = []
+    scenario_split: dict[str, float] = {}
+    summary: str = ""  # legacy fixture compatibility
     key_drivers: list[dict[str, str]] = []
     counter_evidence: list[dict[str, str]] = []
-    scenarios: list[dict[str, Any]] = []
     confidence_statement: str = ""
     data_gaps: list[str] = []
     disclaimer: str = ""

@@ -40,8 +40,8 @@ export default function TopBar({ health }: Props) {
 
         {/* Right side */}
         {health.demo_mode && (
-          <span className="text-xs font-medium text-amber border border-amber/20 bg-amber-muted px-2.5 py-1 rounded-full">
-            Demo
+          <span className="text-base font-medium text-amber border border-amber/20 bg-amber-muted px-2.5 py-1 rounded-full">
+            Example data
           </span>
         )}
       </div>

@@ -84,6 +84,8 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
     # ── Quality ───────────────────────────────────────────────────────────
     fields_ok = sum(x is not None and x == x for x in [rate_10y, delta_20_bp, spread, cpi_yoy])
     q = quality_score(last_date, fields_ok, 4, TAU_DAILY)
+    if delta_20_bp is None:
+        warnings.append("Insufficient data for 20-day rate change")
 
     # ── Reasoning ─────────────────────────────────────────────────────────
     bp_str  = f"{delta_20_bp_rounded:+.0f}bp" if delta_20_bp is not None else "N/A"
@@ -113,7 +115,7 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
 
     metrics = [
         Metric(name="10y yield",         value=rate_10y,              unit="%"),
-        Metric(name="20d change",         value=delta_20_bp_rounded,   unit="bp"),
+        Metric(name="20d change",         value=delta_20_bp_rounded if delta_20_bp is not None else None, unit="bp"),
         Metric(name="Yield curve (10y–2y)", value=spread,              unit="%"),
         Metric(name="CPI YoY",            value=cpi_yoy,               unit="%"),
     ]

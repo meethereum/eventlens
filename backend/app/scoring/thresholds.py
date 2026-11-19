@@ -10,10 +10,13 @@ from pathlib import Path
 
 import yaml
 
-CONFIG_PATH = Path(os.environ.get(
+_CONFIG_DIR = Path(os.environ.get(
     "CONFIG_DIR",
     str(Path(__file__).parent.parent.parent / "config"),
-)) / "thresholds.yaml"
+))
+if not (_CONFIG_DIR / "thresholds.yaml").exists():
+    _CONFIG_DIR = Path(__file__).resolve().parents[3] / "config"
+CONFIG_PATH = _CONFIG_DIR / "thresholds.yaml"
 
 
 @lru_cache(maxsize=1)
@@ -35,10 +38,7 @@ def is_bank(ticker: str) -> bool:
 def get_sector_for_ticker(ticker: str) -> str | None:
     """Return the sector name for a ticker from sector_map, or None."""
     try:
-        sector_map_path = Path(os.environ.get(
-            "CONFIG_DIR",
-            str(Path(__file__).parent.parent.parent / "config"),
-        )) / "sector_map.yaml"
+        sector_map_path = _CONFIG_DIR / "sector_map.yaml"
         with open(sector_map_path) as f:
             sm = yaml.safe_load(f)
         info = sm.get("ticker_sector", {}).get(ticker.upper())
@@ -61,6 +61,24 @@ def get_threshold(metric: str, ticker: str | None = None) -> dict:
             base = {**base, **overrides[sector][metric]}
 
     return base
+
+
+def overview_confidence(coverage: float, agreement: float) -> str:
+    """Return a confidence label using configured coverage and agreement cutoffs."""
+    cfg = _load().get("overview_confidence", {})
+    high = cfg.get("high", {})
+    medium = cfg.get("medium", {})
+    if (
+        coverage >= high.get("minimum_coverage", 0.8)
+        and agreement >= high.get("minimum_agreement", 0.55)
+    ):
+        return "High"
+    if (
+        coverage >= medium.get("minimum_coverage", 0.5)
+        and agreement >= medium.get("minimum_agreement", 0.3)
+    ):
+        return "Medium"
+    return "Low"
 
 
 def band_score(value: float | None, strong: float, weak: float, inverted: bool = False) -> float:

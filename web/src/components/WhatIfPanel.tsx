@@ -75,7 +75,7 @@ const SLIDERS = [
     key: 'oil_pct',
     label: 'Oil Price Change',
     short: 'Oil',
-    card: 'C3 (Oil & Energy)',
+    factor: 'Oil prices',
     min: -20,
     max: 20,
     step: 1,
@@ -86,7 +86,7 @@ const SLIDERS = [
     key: 'usd_pct',
     label: 'US Dollar (DXY) Change',
     short: 'USD',
-    card: 'C1 (USD Strength)',
+    factor: 'US dollar strength',
     min: -20,
     max: 20,
     step: 1,
@@ -97,7 +97,7 @@ const SLIDERS = [
     key: 'yield_bp',
     label: '10-Year Yield Change',
     short: '10Y Yield',
-    card: 'C2 (Rates & Inflation)',
+    factor: 'Interest rates and inflation',
     min: -100,
     max: 100,
     step: 5,
@@ -108,7 +108,7 @@ const SLIDERS = [
     key: 'vix_pct',
     label: 'Market Volatility (VIX)',
     short: 'VIX',
-    card: 'C4 (Market Regime)',
+    factor: 'Market regime',
     min: -30,
     max: 30,
     step: 1,
@@ -311,7 +311,7 @@ export default function WhatIfPanel({ runId }: Props) {
               </div>
 
               <div className="flex items-center justify-between text-2xs text-text-muted mb-2">
-                <span>{slider.card}</span>
+                <span>Evidence factor: {slider.factor}</span>
                 <span>{isShifted ? 'Active override' : 'Baseline (0)'}</span>
               </div>
 
@@ -350,7 +350,7 @@ export default function WhatIfPanel({ runId }: Props) {
       {/* Main Results View */}
       {result && (
         <div className="space-y-5 pt-2">
-          {/* Top Comparison Card: Composite Score Shift */}
+          {/* Overall composite signal */}
           <div className="rounded-xl border border-border bg-surface-2 p-5 space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
@@ -630,7 +630,7 @@ export default function WhatIfPanel({ runId }: Props) {
               <div className="mt-3 text-xs text-text-muted space-y-2 bg-surface-2 p-3.5 rounded-lg border border-border">
                 <p>
                   The simulator applies an illustrative bounded adjustment (&plusmn;0.25 max) directly to the evidence
-                  cards linked to the adjusted factors, taking into account each company's historical factor correlation direction (direction = sign(&rho;)).
+                  evidence linked to the adjusted factors, taking into account each company's historical factor correlation direction (direction = sign(&rho;)).
                 </p>
                 <p>
                   It then recomputes the Dirichlet posterior distribution across the 3 scenarios ($\alpha = 1$)

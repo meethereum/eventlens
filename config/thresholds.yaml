@@ -14,6 +14,14 @@
 #     current ratio above 1.5 strong, below 1.0 weak (before the percentile blend).
 # ============================================================
 
+overview_confidence:
+  high:
+    minimum_coverage: 0.8
+    minimum_agreement: 0.55
+  medium:
+    minimum_coverage: 0.5
+    minimum_agreement: 0.3
+
 # Sector rule overrides — which tickers use the bank/broker path
 # Source: rule of thumb; banks don't have meaningful current ratios because
 # their assets are mostly loans, not inventory/receivables.

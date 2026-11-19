@@ -90,7 +90,7 @@ def test_unusual_day_detection_returns_large_series_outlier():
     assert days[0]["robust_score"] >= 3.5
 
 
-def test_invalid_llm_citations_fall_back_to_template(monkeypatch):
+def test_invalid_overview_numbers_fall_back_to_plain_findings(monkeypatch):
     from types import SimpleNamespace
 
     import app.llm.synthesis as synthesis
@@ -104,12 +104,30 @@ def test_invalid_llm_citations_fall_back_to_template(monkeypatch):
         card_contributions={"C1": -0.2},
     )
     llm_output = synthesis.SynthesisOutput(
-        headline="Test",
-        summary="Unsupported citation [C99].",
-        key_drivers=[],
-        counter_evidence=[],
-        scenarios=[],
-        confidence_statement="",
+        headline="Intel has mixed findings",
+        answer="The findings are mixed. Some evidence is positive. Other evidence points the other way.",
+        how_sure=synthesis.ModelHowSure(reason="Only one check returned information, and it is not conclusive."),
+        points=[
+            synthesis.ModelPoint(
+                title="Unsupported figure",
+                explanation="Revenue changed 99% compared with a year ago.",
+                findings=["C1"],
+                direction="against",
+                strength="slight",
+            )
+            for _ in range(4)
+        ],
+        unknowns=["Future results are unknown.", "The cause is unknown."],
+        watch=[
+            synthesis.ModelWatch(what="Dollar", why="Watch this measure.", findings=["C1"]),
+            synthesis.ModelWatch(what="Rates", why="Watch this measure.", findings=["C1"]),
+            synthesis.ModelWatch(what="Oil", why="Watch this measure.", findings=["C1"]),
+        ],
+        scenarios=[
+            synthesis.ModelScenario(id="against", what_it_looks_like="The evidence points against Intel.", signs="No clear signs."),
+            synthesis.ModelScenario(id="mixed", what_it_looks_like="The evidence is mixed.", signs="The findings differ."),
+            synthesis.ModelScenario(id="for", what_it_looks_like="The evidence supports Intel.", signs="No clear signs."),
+        ],
     )
     monkeypatch.setattr(synthesis, "get_settings", lambda: SimpleNamespace(
         llm_api_key="configured",
@@ -131,7 +149,10 @@ def test_invalid_llm_citations_fall_back_to_template(monkeypatch):
 
     assert not verified
     assert verdict.is_fallback
-    assert "[C99]" not in verdict.summary
+    assert verdict.summary == verdict.answer
+    assert verdict.headline.startswith("Intel")
+    assert "INTC" not in verdict.headline + verdict.summary
+    assert "99%" not in " ".join(point.explanation for point in verdict.points)
 
 
 def test_new_api_routes_work_with_a_completed_run(monkeypatch):

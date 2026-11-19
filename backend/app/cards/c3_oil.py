@@ -66,6 +66,10 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
     # ── Quality ───────────────────────────────────────────────────────────
     fields_ok = sum(x is not None and x == x for x in [wti_price, delta_20, delta_60, pct_1y])
     q = quality_score(last_date, fields_ok, 4, TAU_DAILY)
+    if delta_20 is None:
+        warnings.append("Insufficient data for 20-day oil price change")
+    if delta_60 is None:
+        warnings.append("Insufficient data for 60-day oil price change")
 
     # ── Reasoning ─────────────────────────────────────────────────────────
     d20_str = f"{delta_20:+.1f}%" if delta_20 is not None else "N/A"
@@ -88,8 +92,8 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
 
     metrics = [
         Metric(name="WTI price",      value=wti_price,                        unit="$/bbl"),
-        Metric(name="20d change",     value=round(delta_20 or 0, 2),          unit="%"),
-        Metric(name="60d change",     value=round(delta_60 or 0, 2),          unit="%"),
+        Metric(name="20d change",     value=round(delta_20, 2) if delta_20 is not None else None, unit="%"),
+        Metric(name="60d change",     value=round(delta_60, 2) if delta_60 is not None else None, unit="%"),
         Metric(name="1y percentile",  value=round(pct_1y or 0, 0),            unit="%ile"),
     ]
     if brent_price is not None:

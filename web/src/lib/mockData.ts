@@ -71,6 +71,10 @@ export const MOCK_CARDS: CardOutput[] = [
       "Given the CEO change, investor uncertainty about Intel's strategic direction amplifies this currency headwind.",
       'The 60-day trend (+3.4%) suggests persistent USD strength rather than a transitory spike.',
     ],
+    plain_title: 'United States dollar strength',
+    plain_summary: 'The United States dollar changed 1.8% over the past 20 trading days and 3.4% over the past 60 trading days.',
+    direction: 'against',
+    strength: 'moderate',
     math: {
       formula: 's = d × tanh(z / 2)',
       inputs: { z: -1.2, rho: -0.31, d: -1 },
@@ -106,6 +110,10 @@ export const MOCK_CARDS: CardOutput[] = [
       'Intel is in an expensive multi-year capex cycle (Intel Foundry Services); higher-for-longer rates increase the hurdle rate on these investments.',
       'CPI at 2.6% YoY shows inflation cooling but above the Fed target, suggesting rates stay elevated through 2025.',
     ],
+    plain_title: 'Interest rates and inflation',
+    plain_summary: 'The long term United States government borrowing rate is 4.21%, after changing by 12 basis points over 20 trading days. Prices rose 2.6% compared with a year ago.',
+    direction: 'against',
+    strength: 'moderate',
     math: {
       formula: 's = d × tanh(z / 2)',
       inputs: { z: -1.4, rho: -0.52, d: -1 },
@@ -447,9 +455,36 @@ export const MOCK_AGGREGATE: AggregateResult = {
 }
 
 export const MOCK_VERDICT: VerdictOutput = {
-  headline: 'Intel faces compounding headwinds — leadership vacuum amplifies pre-existing fundamental stress',
-  summary:
-    "The CEO departure at Intel [C5] arrives against a backdrop of severe earnings deterioration [C9] and compressed operating margins [C8], creating a leadership vacuum precisely when Intel most needs strategic continuity. Macro conditions are broadly supportive — low volatility [C4] and softening oil [C3] — but these macro tailwinds are insufficient to offset company-specific pressures that dominate 7 of 10 analysis cards. The evidence-weighted scenario distribution strongly favours continued headwinds over the 20-day horizon (71% confidence), though the credible interval is wide, reflecting genuine uncertainty about who leads the company next.",
+  headline: "Intel's evidence after the event is negative",
+  answer: "After the chief executive change you described, the current evidence for Intel leans negative. Over the next 20 days, the evidence leans negative, not toward a definite outcome. Sales and profit trends and the company's financial strength are the strongest findings working against Intel. The interest rate and inflation check also points against the company, while the available findings do not establish that the leadership change caused any of these results.",
+  how_sure_level: 'Medium',
+  how_sure_reason: 'Most checks returned data, though some measures are incomplete and the findings do not all agree.',
+  points: [
+    { title: 'Sales and profit trend', explanation: 'Sales changed minus 6.2% compared with a year ago, and profit per share changed minus 88% compared with a year ago. This points against the company with a strong reading.', findings: ['C9'], direction: 'against', strength: 'strong' },
+    { title: 'Financial strength', explanation: 'The available filing measures show pressure in the company’s financial position. This points against the company with a strong reading.', findings: ['C8'], direction: 'against', strength: 'strong' },
+    { title: 'Compared with its industry', explanation: 'Intel’s share price changed minus 6.4% over 20 trading days, while its industry changed 8.5%. This points against the company with a strong reading.', findings: ['C5'], direction: 'against', strength: 'strong' },
+    { title: 'Interest rates and inflation', explanation: 'The long term United States government borrowing rate is 4.21%, after changing by 12 basis points over 20 trading days. Prices rose 2.6% compared with a year ago. This points against the company with a moderate reading.', findings: ['C2'], direction: 'against', strength: 'moderate' },
+    { title: 'United States dollar strength', explanation: 'The United States dollar changed 1.8% over the past 20 trading days and 3.4% over the past 60 trading days. This points against the company with a moderate reading.', findings: ['C1'], direction: 'against', strength: 'moderate' },
+    { title: 'Market mood', explanation: 'The wider share market remained unsettled over the measured period. This points against the company with a slight reading.', findings: ['C4'], direction: 'against', strength: 'slight' },
+    { title: 'Price and valuation', explanation: 'The share price is below its recent average prices, while the company profit comparison is mixed. This points against the company with a slight reading.', findings: ['C10'], direction: 'against', strength: 'slight' },
+  ],
+  unknowns: [
+    'These checks cannot establish whether the chief executive change caused later share price moves.',
+    'They cannot show what company leaders will do next or whether future results will improve.',
+    'They do not measure every supplier, customer, or decision that could affect the company.',
+  ],
+  watch: [
+    { what: 'Sales and profit trend', why: 'New company reports can show whether sales and profit per share continue to change.', findings: ['C9'] },
+    { what: 'Financial strength', why: 'Later company filings can add information about assets, debt, and costs.', findings: ['C8'] },
+    { what: 'Compared with its industry', why: 'The comparison can show whether the company continues to move differently from similar companies.', findings: ['C5'] },
+  ],
+  scenarios: [
+    { id: 'against', name: 'Things get harder', score: 0.71, what_it_looks_like: 'The findings that work against the company remain more important.', signs: 'Sales and profit trends or financial strength remain weak.' },
+    { id: 'mixed', name: 'A mixed picture', score: 0.21, what_it_looks_like: 'Findings continue to point in different directions.', signs: 'Some company measures improve while other findings remain difficult.' },
+    { id: 'for', name: 'Things improve', score: 0.08, what_it_looks_like: 'The findings that support the company become more important.', signs: 'New company reports show improvement in sales, profit, or financial strength.' },
+  ],
+  scenario_split: { against: 0.71, mixed: 0.21, for: 0.08 },
+  summary: "After the chief executive change you described, the current evidence for Intel leans negative. Over the next 20 days, the evidence leans negative, not toward a definite outcome.",
   key_drivers: [
     { card: 'C9', point: 'Revenue -6.2% YoY and EPS -88% with no visible inflection; last earnings surprise was -9.4% abnormal return.' },
     { card: 'C8', point: 'Interest coverage of 2.1x and operating margin of 1.8% signal structural stress in the foundry transition.' },
@@ -460,34 +495,6 @@ export const MOCK_VERDICT: VerdictOutput = {
     { card: 'C4', point: 'VIX at the 18th percentile signals a low-fear market environment that historically accelerates recovery from idiosyncratic shocks.' },
     { card: 'C3', point: 'Softening oil prices modestly reduce fab energy costs, a small offset to margin pressure.' },
   ],
-  scenarios: [
-    {
-      name: 'Headwind-dominant',
-      score: 0.71,
-      rationale: 'Fundamental deterioration and leadership uncertainty drive continued underperformance.',
-      watch_for: 'New CEO announcement; Q4 guidance reset; any CHIPS Act disbursement news.',
-    },
-    {
-      name: 'Mixed',
-      score: 0.21,
-      rationale: 'Calm macro could limit the downside if a credible successor is named quickly.',
-      watch_for: 'Speed and profile of CEO appointment.',
-    },
-    {
-      name: 'Tailwind-dominant',
-      score: 0.08,
-      rationale: 'Very low probability; would require both a strong CEO hire and a positive macro catalyst.',
-      watch_for: 'Unexpected positive earnings pre-announcement.',
-    },
-  ],
-  confidence_statement:
-    'Evidence strength: 0.74 (high coverage, 10/10 cards with data). Composite signal: −0.52 (moderate headwind). Scenario confidence is evidence-weighted, not calibrated; treat as directional.',
-  data_gaps: [
-    'C6: Dependency edges are curated judgment; citations TODO.',
-    'C7: GPR values for recent months are preliminary.',
-  ],
-  disclaimer:
-    'This output is for informational and analytical purposes only. It does not constitute investment advice, a recommendation to buy or sell any security, or a price target. Past patterns are not predictive of future outcomes.',
   references: [
     { name: 'SEC EDGAR XBRL (CIK 0000050863)', url: 'https://data.sec.gov/api/xbrl/companyfacts/CIK0000050863.json', retrieved_at: '2024-12-02T14:01:25Z' },
     { name: 'FRED DTWEXBGS', url: 'https://fred.stlouisfed.org/series/DTWEXBGS', retrieved_at: '2024-12-02T14:01:00Z' },
@@ -508,8 +515,8 @@ export interface ExampleQuery {
 }
 
 export const EXAMPLE_QUERIES: ExampleQuery[] = [
-  { label: 'INTC CEO ousted',    chipLabel: 'Intel CEO ousted',        query: "Intel's CEO was just ousted. What should I expect?",                                              as_of: '2024-12-02', ticker: 'INTC' },
-  { label: 'XOM oil spike',      chipLabel: 'Oil spike & Exxon',       query: 'Russia has invaded Ukraine and oil is spiking. How does that affect Exxon?',                      as_of: '2022-02-25', ticker: 'XOM'  },
-  { label: 'JPM SVB contagion',  chipLabel: 'SVB collapse & JPMorgan', query: 'Silicon Valley Bank just collapsed. What does that mean for JPMorgan?',                           as_of: '2023-03-13', ticker: 'JPM'  },
-  { label: 'NVDA DeepSeek drop', chipLabel: 'Nvidia & the AI scare',   query: 'Nvidia fell sharply after the DeepSeek news. Is that company-specific or sector-wide?',           as_of: '2025-01-28', ticker: 'NVDA' },
+  { label: 'Intel leadership change', chipLabel: 'Intel leadership change', query: "Intel's chief executive just left. What do the available findings show?", as_of: '2024-12-02', ticker: 'INTC' },
+  { label: 'Oil price change', chipLabel: 'Oil prices and ExxonMobil', query: 'Oil prices are rising. What do the available findings show for ExxonMobil?', as_of: '2022-02-25', ticker: 'XOM' },
+  { label: 'Banking disruption', chipLabel: 'Banking changes and JPMorgan Chase', query: 'A large bank has failed. What do the available findings show for JPMorgan Chase?', as_of: '2023-03-13', ticker: 'JPM' },
+  { label: 'Nvidia share price change', chipLabel: 'Nvidia compared with its industry', query: 'Nvidia shares fell after new artificial intelligence news. How did the company compare with its industry?', as_of: '2025-01-28', ticker: 'NVDA' },
 ]

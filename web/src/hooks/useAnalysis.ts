@@ -211,6 +211,10 @@ function handleEvent(
                 math: null,
                 sources: [],
                 warnings: [],
+                plain_title: '',
+                plain_summary: '',
+                direction: 'neutral',
+                strength: 'slight',
               } as CardOutput,
         },
       }))

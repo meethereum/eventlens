@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
 import type { ParsedQuery } from '@/types'
 import { EXAMPLE_QUERIES } from '@/lib/mockData'
-import { companyName } from '@/lib/companies'
+import { companyName, companyNamesInText } from '@/lib/companies'
 
 export interface SubmitPayload {
   query: string
@@ -72,7 +72,7 @@ export default function QueryBar({ onSubmit, isRunning, parsed }: Props) {
             value={value}
             onChange={e => setValue(e.target.value)}
             onKeyDown={handleKey}
-            placeholder="Ask about a company event — e.g. Intel just ousted its CEO, what should I expect?"
+            placeholder="Ask what happened or why a company event matters, for example, why did Intel's shares fall after its chief executive changed?"
             rows={2}
             disabled={isRunning}
             className={cn(
@@ -95,7 +95,7 @@ export default function QueryBar({ onSubmit, isRunning, parsed }: Props) {
               onClick={submit}
               disabled={!value.trim() || isRunning}
               className={cn(
-                'flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-all',
+                'flex min-h-11 items-center gap-1.5 px-4 py-2 rounded-lg text-base font-medium transition-all',
                 'bg-accent text-white shadow-sm',
                 'hover:bg-accent-glow hover:shadow-glow-accent',
                 'disabled:opacity-40 disabled:cursor-not-allowed disabled:shadow-none',
@@ -106,14 +106,14 @@ export default function QueryBar({ onSubmit, isRunning, parsed }: Props) {
             </button>
           </div>
         </div>
-        <div className="px-4 pb-2.5 text-xs text-text-muted">
-          Press Enter to analyze · Cmd+K to focus
+        <div className="px-4 pb-2.5 text-base text-text-secondary">
+          Press Enter to analyze.
         </div>
       </div>
 
       {/* Example chips */}
       <div className="flex flex-wrap gap-2">
-        <span className="text-xs text-text-muted self-center mr-1">Try:</span>
+        <span className="text-base text-text-secondary self-center mr-1">Try:</span>
         {EXAMPLE_QUERIES.map(eq => (
           <button
             key={eq.label}
@@ -123,7 +123,7 @@ export default function QueryBar({ onSubmit, isRunning, parsed }: Props) {
             }}
             disabled={isRunning}
             className={cn(
-              'inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs border transition-all',
+              'inline-flex min-h-11 items-center gap-1.5 px-3 py-1.5 rounded-full text-base border transition-all',
               'border-border bg-surface-2 text-text-secondary',
               'hover:border-accent/40 hover:text-accent-glow hover:bg-accent-muted',
               'disabled:opacity-40 disabled:cursor-not-allowed',
@@ -145,9 +145,9 @@ export default function QueryBar({ onSubmit, isRunning, parsed }: Props) {
           >
             <ParsedChip
               label="Company"
-              value={companyName(parsed.ticker) || parsed.ticker}
+              value={companyName(parsed.ticker)}
             />
-            <ParsedChip label="Event" value={parsed.event_type} />
+            <ParsedChip label="Event" value={companyNamesInText(parsed.event_type)} />
             {parsed.intent !== 'analysis' && (
               <ParsedChip
                 label="Note"
@@ -178,10 +178,10 @@ function ParsedChip({
   }
   return (
     <span className={cn(
-      'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs border',
+      'inline-flex min-h-11 items-center gap-1.5 px-2.5 py-1 rounded-lg text-base border',
       styles[color],
     )}>
-      <span className="text-text-muted text-2xs uppercase tracking-wide">{label}</span>
+      <span className="text-text-secondary">{label}</span>
       <span className="font-medium">{value}</span>
     </span>
   )

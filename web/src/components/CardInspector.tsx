@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ExternalLink, TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { cn, signalColors, formatDate } from '@/lib/utils'
-import { cardDisplayName, cardDescription } from '@/lib/companies'
+import { cardDisplayName, cardDescription, companyNamesInText } from '@/lib/companies'
 import type { CardOutput } from '@/types'
 import ReactECharts from 'echarts-for-react'
 
@@ -131,10 +131,10 @@ export default function CardInspector({ card, runId, onClose }: Props) {
               <div className="flex items-center gap-3 min-w-0">
                 <div className="min-w-0">
                   <h2 className="text-base font-semibold text-text-primary truncate">
-                    {cardDisplayName(card.id)}
+                    {companyNamesInText(card.plain_title || cardDisplayName(card.id))}
                   </h2>
-                  <div className="text-xs text-text-muted mt-0.5">
-                    {cardDescription(card.id)} · {card.latency_ms}ms
+                  <div className="text-base leading-7 text-text-secondary mt-1">
+                    {companyNamesInText(card.plain_summary || cardDescription(card.id))}
                   </div>
                 </div>
               </div>
@@ -146,7 +146,7 @@ export default function CardInspector({ card, runId, onClose }: Props) {
                   {card.label === 'tailwind' && <TrendingUp className="w-3 h-3" />}
                   {card.label === 'headwind' && <TrendingDown className="w-3 h-3" />}
                   {card.label === 'neutral' && <Minus className="w-3 h-3" />}
-                  {card.label}
+                  {card.label === 'tailwind' ? 'Positive' : card.label === 'headwind' ? 'Negative' : 'Neutral'}
                 </span>
                 <button
                   onClick={onClose}
@@ -159,7 +159,7 @@ export default function CardInspector({ card, runId, onClose }: Props) {
 
             {/* Tabs */}
             <div className="flex border-b border-border px-6 shrink-0">
-              {(['evidence', 'reasoning', 'sources'] as Tab[]).map(t => (
+              {(['evidence'] as Tab[]).map(t => (
                 <button
                   key={t}
                   onClick={() => setTab(t)}
@@ -170,7 +170,7 @@ export default function CardInspector({ card, runId, onClose }: Props) {
                       : 'border-transparent text-text-muted hover:text-text-secondary',
                   )}
                 >
-                  {t}
+                  Finding
                 </button>
               ))}
             </div>
@@ -178,19 +178,27 @@ export default function CardInspector({ card, runId, onClose }: Props) {
             {/* Tab content */}
             <div className="flex-1 overflow-y-auto">
               {tab === 'evidence' && (
-                <EvidenceTab
-                  card={card}
-                  colors={colors}
-                  unusualDays={unusualDays}
-                  onExplainDay={explainDay}
-                  selectedDay={selectedDay}
-                  explanation={explanation}
-                  explanationLoading={explanationLoading}
-                  chartError={chartError}
-                />
+                <div className="p-6">
+                  <p className="text-base leading-7 text-text-secondary">{companyNamesInText(card.plain_summary || card.reasoning[0] || 'No plain language finding is available.')}</p>
+                  <details className="mt-6 rounded-xl border border-border p-4">
+                    <summary className="cursor-pointer text-base font-semibold text-text-primary">Show technical details</summary>
+                    <div className="mt-4 space-y-5">
+                      <EvidenceTab
+                        card={card}
+                        colors={colors}
+                        unusualDays={unusualDays}
+                        onExplainDay={explainDay}
+                        selectedDay={selectedDay}
+                        explanation={explanation}
+                        explanationLoading={explanationLoading}
+                        chartError={chartError}
+                      />
+                      <ReasoningTab card={card} />
+                      <SourcesTab card={card} />
+                    </div>
+                  </details>
+                </div>
               )}
-              {tab === 'reasoning' && <ReasoningTab card={card} />}
-              {tab === 'sources' && <SourcesTab card={card} />}
             </div>
           </motion.div>
         </>
@@ -276,10 +284,10 @@ function EvidenceTab({
   return (
     <div className="p-6 space-y-6">
       {/* Chart */}
-      {card.series.length > 0 && (
+            {card.series.length > 0 && (
         <div>
           <h3 className="text-xs font-medium text-text-secondary mb-3">
-            {card.id === 'C5' ? 'Adjusted closing price' : 'Time Series'}
+                  {card.id === 'C5' ? 'Adjusted share price' : 'Historical series'}
           </h3>
           <div className="glass-panel p-2">
             <ReactECharts option={chartOption} onEvents={chartEvents} style={{ height: 200 }} />
@@ -336,9 +344,9 @@ function EvidenceTab({
               </tr>
             </thead>
             <tbody>
-              {card.metrics.map((m, i) => (
+                {card.metrics.map((m, i) => (
                 <tr key={i} className="border-b border-border/50 last:border-0">
-                  <td className="p-3 text-text-secondary">{m.name}</td>
+                  <td className="p-3 text-text-secondary">{companyNamesInText(m.name)}</td>
                   <td className="p-3 text-right font-mono text-text-primary tabular-nums">
                     {m.value !== null && m.value !== undefined ? String(m.value) : '—'}
                   </td>
@@ -355,19 +363,18 @@ function EvidenceTab({
         <div className="space-y-2">
           {card.warnings.map((w, i) => (
             <div key={i} className="flex items-start gap-2 text-xs text-amber bg-amber-muted border border-amber/20 rounded px-3 py-2">
-              <span>⚠</span> {w}
+              <span>⚠</span> {companyNamesInText(w)}
             </div>
           ))}
         </div>
       )}
-      <details className="rounded-lg border border-border px-4 py-3 text-xs text-text-muted">
-        <summary className="cursor-pointer">How was this calculated?</summary>
-        <p className="mt-2">
-          The chart uses the recorded {card.id === 'C5' ? 'adjusted closing price' : 'time series'}.
-          Unusual days are selected from daily percentage moves using their median and median absolute
-          deviation. The explanation uses only the dated evidence and sources listed above.
-        </p>
-      </details>
+            {card.math && (
+              <details className="rounded-lg border border-border px-4 py-3 text-base text-text-secondary">
+                <summary className="cursor-pointer">Show formula and measurements</summary>
+                <p className="mt-3">Formula: {card.math.formula}</p>
+                <pre className="mt-2 overflow-auto text-sm">{companyNamesInText(JSON.stringify(card.math.inputs, null, 2))}</pre>
+              </details>
+            )}
     </div>
   )
 }
@@ -386,7 +393,7 @@ function ReasoningTab({ card }: { card: CardOutput }) {
             <span className="shrink-0 w-5 h-5 rounded-full bg-surface-3 border border-border text-2xs font-mono text-text-muted flex items-center justify-center mt-0.5">
               {i + 1}
             </span>
-            <p className="text-sm text-text-secondary leading-relaxed">{step}</p>
+            <p className="text-sm text-text-secondary leading-relaxed">{companyNamesInText(step)}</p>
           </li>
         ))}
       </ol>
@@ -405,7 +412,7 @@ function SourcesTab({ card }: { card: CardOutput }) {
       {card.sources.map((src, i) => (
         <div key={i} className="glass-panel p-3 flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <div className="text-sm text-text-primary font-medium truncate">{src.name}</div>
+            <div className="text-sm text-text-primary font-medium truncate">{companyNamesInText(src.name)}</div>
             <div className="text-xs text-text-muted font-mono mt-0.5">
               Retrieved: {formatDate(src.retrieved_at)}
             </div>

@@ -33,6 +33,32 @@ _SECTOR_ALIASES = {
     "health care": "healthcare",
 }
 
+_COMPANY_NAMES = {
+    "NVDA": "Nvidia", "INTC": "Intel", "AAPL": "Apple", "MSFT": "Microsoft",
+    "GM": "General Motors", "SBUX": "Starbucks", "AMZN": "Amazon",
+    "DIS": "Disney", "BA": "Boeing", "RTX": "RTX Corporation",
+    "XOM": "ExxonMobil", "CVX": "Chevron", "JPM": "JPMorgan Chase",
+    "SCHW": "Charles Schwab", "UNH": "UnitedHealth",
+}
+
+
+def _company_name(ticker: str) -> str:
+    return _COMPANY_NAMES.get(ticker.upper(), "the company")
+
+
+def _company_names_in_text(text: str) -> str:
+    import re
+
+    for symbol in sorted(_COMPANY_NAMES, key=len, reverse=True):
+        suffix = r"(?!\s+Corporation\b)" if symbol == "RTX" else ""
+        text = re.sub(
+            rf"\b{re.escape(symbol)}\b{suffix}",
+            _COMPANY_NAMES[symbol],
+            text,
+            flags=re.IGNORECASE,
+        )
+    return text
+
 
 def event_category(event_type: str) -> str:
     text = event_type.lower()
@@ -186,12 +212,17 @@ def synthesize_precedents(
     alpha_20 = cohort["median_alpha_d20"]
     win_rate = cohort["win_rate_60"]
 
-    direction_20 = "gained" if med_20 > 0 else "declined"
-    alpha_dir = "outperformed" if alpha_20 > 0 else "underperformed"
+    direction_20 = "went up" if med_20 > 0 else "fell"
+    direction_60 = "positive" if med_60 > 0 else "negative"
+    comp_direction = "better" if alpha_20 > 0 else "worse"
     template_summary = (
-        f"Across {cohort['cases_count']} historical precedents for {ticker}, stocks {direction_20} by a median of {med_20:+.1f}% over the initial 20 trading days and {med_60:+.1f}% by day 60. "
-        f"Relative to sector benchmarks, the cohort {alpha_dir} by a median alpha spread of {alpha_20:+.1f}%, with {win_rate:.0f}% of cases recording positive absolute returns at 60 days. "
-        f"These patterns reflect how initial post-event volatility resolved historically without predicting future returns."
+        f"Looking at {cohort['cases_count']} similar past events, stocks {direction_20} by about "
+        f"{abs(med_20):.1f}% in the first month and ended {direction_60} after two months "
+        f"(median: {med_60:+.1f}%). "
+        f"Compared to other companies in the same industry, the affected stock did {comp_direction} "
+        f"by roughly {abs(alpha_20):.1f} percentage points. "
+        f"About {win_rate:.0f}% of similar cases saw the stock higher after two months. "
+        f"These are observations from past events — they describe patterns, not predictions."
     )
 
     cfg = get_settings()
@@ -203,7 +234,7 @@ def synthesize_precedents(
 
         top_cases = [
             {
-                "ticker": m["ticker"],
+                "company": _company_name(m["ticker"]),
                 "event_date": m["event_date"],
                 "stock_20d": f"{m['outcomes']['returns']['stock']['d20']:+.1f}%",
                 "sector_20d": f"{m['outcomes']['returns']['sector']['d20']:+.1f}%",
@@ -221,14 +252,41 @@ def synthesize_precedents(
         }
 
         system_prompt = (
-            "You are a senior equity research analyst. Analyze and synthesize these historical precedent cases "
-            "for this corporate event into a concise, high-value 3-sentence analytical briefing.\n"
-            "1. Summarize the historical trajectory across 5d, 20d, and 60d trading windows (initial reaction vs drift).\n"
-            "2. Contrast the stock performance relative to its sector ETF (identifying whether company-specific alpha or broader sector beta dominated).\n"
-            "3. State the core historical takeaway and what differentiated the stronger outcomes from weaker ones, avoiding price predictions or investment advice."
+            "You are helping a trader understand what history tells us about a news event they are researching. "
+            "You have data on similar past events — what happened, how the stock moved, and how it compared to the broader market. "
+            "Write a useful 4-to-5 sentence summary in plain conversational English. No jargon, no ticker symbols, no financial terms a non-expert wouldn't know.\n\n"
+            "Cover these four things:\n"
+            "1. What the numbers show: how did stocks move in the first week, first month, and after two months? Use the actual numbers provided.\n"
+            "2. Did the affected company do better or worse than the rest of its industry during this period — and by roughly how much?\n"
+            "3. What separated the cases that bounced back from the ones that kept falling? Be specific — was it a quick CEO replacement, a government backstop, strong cash reserves, or something else?\n"
+            "4. What is the one practical takeaway a trader should keep in mind given this event type?\n\n"
+            "Rules:\n"
+            "- Write in plain sentences. No bullet points.\n"
+            "- Use company names, never ticker symbols.\n"
+            "- Do not give investment advice or predict what will happen.\n"
+            "- Do not use the words 'alpha', 'beta', 'cohort', 'trajectory', 'precedent', 'historical', or 'metric'.\n"
+            "- If the data covers fewer than 3 cases, say so and note the limited sample.\n"
+            "- Aim for around 120 words."
         )
         user_prompt = json.dumps(
-            {"ticker": ticker, "event_type": event_type, "cohort": cohort_metrics, "cases": top_cases},
+            {
+                "event_type": event_type,
+                "cases_analyzed": cohort["cases_count"],
+                "stock_move_5_days": f"{cohort['median_stock_d5']:+.1f}%",
+                "stock_move_20_days": f"{cohort['median_stock_d20']:+.1f}%",
+                "stock_move_60_days": f"{cohort['median_stock_d60']:+.1f}%",
+                "vs_industry_20_days": f"{cohort['median_alpha_d20']:+.1f}%",
+                "positive_outcome_rate_60d": f"{cohort['win_rate_60']:.0f}%",
+                "example_cases": [
+                    {
+                        "company": _company_name(m["ticker"]),
+                        "what_happened": m["summary"],
+                        "stock_after_20_days": f"{m['outcomes']['returns']['stock']['d20']:+.1f}%",
+                        "industry_after_20_days": f"{m['outcomes']['returns']['sector']['d20']:+.1f}%",
+                    }
+                    for m in matches[:4]
+                ],
+            },
             separators=(",", ":"),
         )
 
@@ -236,17 +294,17 @@ def synthesize_precedents(
             candidate = chat_completion(
                 system_prompt=system_prompt,
                 user_prompt=user_prompt,
-                max_tokens_override=800,
+                max_tokens_override=600,
             )
             if candidate and len(candidate.strip()) > 50:
-                summary = candidate.strip()
+                summary = _company_names_in_text(candidate.strip())
                 used_llm = True
         except LLMError as exc:
             import logging
             logging.getLogger("eventlens.precedents").warning("LLM precedent synthesis failed: %s", exc)
 
     result = {
-        "summary": summary,
+        "summary": _company_names_in_text(summary),
         "used_llm": used_llm,
         "cached": False,
     }

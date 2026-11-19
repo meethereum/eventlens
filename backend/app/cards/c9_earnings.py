@@ -153,8 +153,8 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
         latency_ms=latency_ms,
         headline=Headline(label="Revenue YoY", value=round(rev_yoy or 0, 2), unit="%"),
         metrics=[
-            Metric(name="Revenue YoY", value=round(rev_yoy or 0, 2), unit="%"),
-            Metric(name="Diluted EPS YoY", value=round(eps_yoy or 0, 2), unit="%"),
+            Metric(name="Revenue YoY", value=round(rev_yoy, 2) if rev_yoy is not None else None, unit="%"),
+            Metric(name="Diluted EPS YoY", value=round(eps_yoy, 2) if eps_yoy is not None else None, unit="%"),
             Metric(name="Gross margin trend", value=margin_trend, unit=""),
             Metric(name="Last earnings abnormal return", value=abn_ret, unit="%"),
         ],

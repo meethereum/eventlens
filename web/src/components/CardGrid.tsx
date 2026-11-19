@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion'
 import AnalysisCard from './AnalysisCard'
-import LockedCard from './LockedCard'
 import type { CardOutput } from '@/types'
 import { cardDisplayName } from '@/lib/companies'
 
@@ -49,6 +48,9 @@ export default function CardGrid({ cards, onCardClick }: Props) {
                   headline: null, metrics: [], series: [],
                   signal: 0, label: 'neutral', weight: 0.6, quality: 1,
                   reasoning: [], math: null, sources: [], warnings: [],
+                  plain_title: cardDisplayName(id),
+                  plain_summary: 'This check is waiting for data.',
+                  direction: 'neutral', strength: 'slight',
                 }}
                 onClick={() => {}}
                 disabled
@@ -57,11 +59,6 @@ export default function CardGrid({ cards, onCardClick }: Props) {
           </motion.div>
         )
       })}
-
-      {/* C11 — locked */}
-      <motion.div variants={item}>
-        <LockedCard />
-      </motion.div>
     </motion.div>
   )
 }

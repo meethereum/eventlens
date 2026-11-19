@@ -84,6 +84,10 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
     fields_ok = sum(x is not None and x == x
                     for x in [spy_20d, spy_60d, spy_200d_ma, vix_level, vix_pct])
     q = quality_score(vix_last_date, fields_ok, 5, TAU_DAILY)
+    if spy_20d is None:
+        warnings.append("Insufficient data for SPY 20d return")
+    if spy_60d is None:
+        warnings.append("Insufficient data for SPY 60d return")
 
     # ── Reasoning ─────────────────────────────────────────────────────────
     regime = (
@@ -110,8 +114,8 @@ def fetch(ticker: str, as_of: str) -> CardOutput:
     latency_ms = int((time.time() - t0) * 1000)
 
     metrics = [
-        Metric(name="SPY 20d return",    value=round(spy_20d or 0, 2),    unit="%"),
-        Metric(name="SPY 60d return",    value=round(spy_60d or 0, 2),    unit="%"),
+        Metric(name="SPY 20d return",    value=round(spy_20d, 2) if spy_20d is not None else None, unit="%"),
+        Metric(name="SPY 60d return",    value=round(spy_60d, 2) if spy_60d is not None else None, unit="%"),
         Metric(name="SPY vs 200d MA",    value=spy_200d_ma,               unit="%"),
         Metric(name="VIX level",         value=vix_level,                 unit=""),
         Metric(name="VIX percentile (1y)", value=round(vix_pct or 0, 0), unit="%ile"),

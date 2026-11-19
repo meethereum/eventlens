@@ -34,17 +34,12 @@ class Settings(BaseSettings):
     llm_api_key: str = ""
     llm_model: str = "openai/gpt-oss-120b"
     llm_temperature: float = 0.2
-    llm_max_tokens: int = 1200
+    llm_max_tokens: int = 2000
     llm_max_input_tokens: int = 4000
     llm_timeout_s: int = 60
-    llm_rpm_limit: int = 25
+    llm_rpm_limit: int = 1
     llm_fallback_model: str = ""
     llm_extra_body: str = ""  # JSON string
-
-    # LLM — baseline comparison (plain-LLM toggle)
-    baseline_llm_base_url: str = ""
-    baseline_llm_api_key: str = ""
-    baseline_llm_model: str = ""
 
     @property
     def llm_extra_body_dict(self) -> dict:
@@ -54,18 +49,6 @@ class Settings(BaseSettings):
             return json.loads(self.llm_extra_body)
         except json.JSONDecodeError:
             return {}
-
-    @property
-    def effective_baseline_base_url(self) -> str:
-        return self.baseline_llm_base_url or self.llm_base_url
-
-    @property
-    def effective_baseline_api_key(self) -> str:
-        return self.baseline_llm_api_key or self.llm_api_key
-
-    @property
-    def effective_baseline_model(self) -> str:
-        return self.baseline_llm_model or self.llm_model
 
     @property
     def is_demo_mode(self) -> bool:

@@ -139,7 +139,6 @@ def chat_completion(
     system_prompt: str,
     user_prompt: str,
     model: str | None = None,
-    is_baseline: bool = False,
     max_tokens_override: int | None = None,
 ) -> str:
     """
@@ -153,15 +152,9 @@ def chat_completion(
     """
     cfg = get_settings()
 
-    # Select API key + base URL
-    if is_baseline:
-        base_url = cfg.effective_baseline_base_url
-        api_key = cfg.effective_baseline_api_key
-        use_model = model or cfg.effective_baseline_model
-    else:
-        base_url = cfg.llm_base_url
-        api_key = cfg.llm_api_key
-        use_model = model or cfg.llm_model
+    base_url = cfg.llm_base_url
+    api_key = cfg.llm_api_key
+    use_model = model or cfg.llm_model
 
     if not api_key:
         raise LLMError("LLM_API_KEY not set")
@@ -200,7 +193,7 @@ def chat_completion(
 
     max_retries = 2
     models_to_try = [use_model]
-    if cfg.llm_fallback_model and not is_baseline:
+    if cfg.llm_fallback_model:
         models_to_try.append(cfg.llm_fallback_model)
 
     last_error = None
@@ -261,8 +254,8 @@ def json_completion(
     user_prompt: str,
     output_model: type[BaseModel],
     model: str | None = None,
-    is_baseline: bool = False,
     max_tokens_override: int | None = None,
+    max_attempts: int = 2,
 ) -> tuple[BaseModel | None, str | None, bool]:
     """
     Call LLM, extract JSON, validate with pydantic, retry once on failure.
@@ -270,13 +263,18 @@ def json_completion(
     On failure returns (None, raw_response_or_error, used_fallback).
     """
     used_fallback = False
-    for attempt in range(2):
+    for attempt in range(max(1, max_attempts)):
         try:
-            raw = chat_completion(system_prompt, user_prompt, model, is_baseline, max_tokens_override)
+            raw = chat_completion(
+                system_prompt,
+                user_prompt,
+                model,
+                max_tokens_override=max_tokens_override,
+            )
             json_str = extract_json(raw)
             if not json_str:
                 logger.warning("No JSON found in LLM response (attempt %d)", attempt + 1)
-                if attempt == 0:
+                if attempt + 1 < max(1, max_attempts):
                     continue
                 return None, raw, used_fallback
 
@@ -285,17 +283,17 @@ def json_completion(
 
         except ValidationError as e:
             logger.warning("LLM JSON validation failed (attempt %d): %s", attempt + 1, str(e)[:200])
-            if attempt == 0:
+            if attempt + 1 < max(1, max_attempts):
                 continue
             return None, str(e), used_fallback
         except LLMError as e:
             logger.warning("LLM call failed (attempt %d): %s", attempt + 1, str(e))
-            if attempt == 0:
+            if attempt + 1 < max(1, max_attempts):
                 continue
             return None, str(e), used_fallback
         except Exception as e:
             logger.warning("Unexpected error (attempt %d): %s", attempt + 1, str(e))
-            if attempt == 0:
+            if attempt + 1 < max(1, max_attempts):
                 continue
             return None, str(e), used_fallback
 

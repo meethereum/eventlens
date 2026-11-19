@@ -59,6 +59,10 @@ export interface CardOutput {
   warnings: string[]
 
   error_message?: string | null
+  plain_title?: string
+  plain_summary?: string
+  direction?: 'against' | 'for' | 'neutral'
+  strength?: 'strong' | 'moderate' | 'slight'
 }
 
 export interface ParsedQuery {
@@ -86,24 +90,48 @@ export interface AggregateResult {
   card_contributions: Record<string, number>
 }
 
+export interface OverviewPoint {
+  title: string
+  explanation: string
+  findings: string[]
+  direction: 'against' | 'for'
+  strength: 'strong' | 'moderate' | 'slight'
+}
+
+export interface OverviewWatchItem {
+  what: string
+  why: string
+  findings: string[]
+}
+
+export interface OverviewScenario {
+  id: 'against' | 'mixed' | 'for'
+  name: string
+  score: number
+  what_it_looks_like: string
+  signs: string
+}
+
 export interface VerdictOutput {
-  headline: string
-  summary: string
-  key_drivers: Array<{ card: string; point: string }>
-  counter_evidence: Array<{ card: string; point: string }>
-  scenarios: Array<{
-    name: string
-    score: number
-    rationale: string
-    watch_for: string
-  }>
-  confidence_statement: string
-  data_gaps: string[]
-  disclaimer: string
-  references: Source[]
-  is_fallback: boolean
-  model_used: string
-  is_fallback_model: boolean
+  headline?: string
+  answer?: string
+  how_sure_level?: 'High' | 'Medium' | 'Low'
+  how_sure_reason?: string
+  points?: OverviewPoint[]
+  unknowns?: string[]
+  watch?: OverviewWatchItem[]
+  scenarios?: OverviewScenario[]
+  scenario_split?: Record<'against' | 'mixed' | 'for', number>
+  references?: Source[]
+  is_fallback?: boolean
+  model_used?: string
+  is_fallback_model?: boolean
+  summary?: string
+  key_drivers?: Array<{ card: string; point: string }>
+  counter_evidence?: Array<{ card: string; point: string }>
+  confidence_statement?: string
+  data_gaps?: string[]
+  disclaimer?: string
 }
 
 // SSE event types
