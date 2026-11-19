@@ -162,3 +162,63 @@ export interface HealthResponse {
   data_sources: DataSourceHealth[]
   version: string
 }
+
+// -----------------------------------------------------------------------
+// Deep Research Timeline & Precedent Schemas (from newagent)
+// -----------------------------------------------------------------------
+
+export interface TimelineMilestone {
+  date: string
+  phase: string
+  event: string
+  impact: string
+  stock_price?: number | null
+  stock_change_from_baseline_pct?: number | null
+  trading_volume?: number | null
+}
+
+export interface DailyPricePoint {
+  date: string
+  close: number
+}
+
+export interface StockPerformanceMetrics {
+  ticker: string
+  baseline_date: string
+  baseline_price: number
+  trough_date: string
+  trough_price: number
+  max_drawdown_pct: number
+  daily_series: DailyPricePoint[]
+}
+
+export interface SourceCitation {
+  title: string
+  url: string
+}
+
+export interface CompanyIncidentReport {
+  company_name: string
+  stock_ticker?: string | null
+  industry: string
+  incident_title: string
+  event_timeframe: string
+  summary: string
+  similarity_rationale: string
+  key_parallels: string[]
+  key_differences: string[]
+  timeline: TimelineMilestone[]
+  stock_metrics?: StockPerformanceMetrics | null
+  total_impact_assessment: string
+  sources: SourceCitation[]
+}
+
+export interface DeepResearchTimelineOutput {
+  query_prompt: string
+  generated_at: string
+  incident_category: string
+  core_themes: string[]
+  executive_synthesis: string
+  total_companies_analyzed: number
+  similar_company_events: CompanyIncidentReport[]
+}

@@ -1,0 +1,3944 @@
+{
+  "query_prompt": "Company reports severe Q2 revenue collapse, cuts guidance and slashes 15% workforce",
+  "generated_at": "2026-11-19T13:34:10.229518+00:00",
+  "incident_category": "Earnings & Financial Shocks: Guidance Cliffs, Margin Compression & Mass Restructuring",
+  "core_themes": [
+    "Severe forward revenue guidance cuts and unexpected quarterly losses",
+    "Catastrophic single-day equity drawdowns (-12% to -43%)",
+    "Emergency corporate restructuring, mass layoffs (10% to 20% of staff), and dividend eliminations",
+    "Loss of visibility into core end-market demand (advertising, semiconductor cycles, EV adoption)",
+    "Strategic 'Year of Efficiency' discipline acting as the foundation for long-term equity recovery"
+  ],
+  "executive_synthesis": "**Anatomy of an Earnings Guidance Cliff** — An earnings shock differs fundamentally from operational accidents or regulatory probes because it directly shatters Wall Street's financial modeling assumptions. Across Intel's foundry capex cash drain, Meta's iOS advertising disruption, Snap's intra-quarter ad freeze, Nvidia's crypto mining hangover, and Tesla's automotive price war, each crisis occurred when management's previous forward guidance collided with sudden demand erosion. The resulting revisions forced sell-side analysts into synchronized downward target revisions, producing violent single-day crashes ranging from -12% to an unprecedented -43%.\n\n**Market Reaction Velocity & Multiple Compression** — The initial trading sessions following guidance warnings are marked by indiscriminate institutional liquidation. When Snap filed its unscheduled 8-K in May 2022, it triggered a -43% single-session bloodbath that wiped out $100 billion across the entire digital advertising complex. Similarly, Meta's $232 billion single-day wipeout remains the largest in history. However, financial data reveals a crucial market anomaly: the day of maximum negative disclosure often marks the initiation of the cyclical bottom, provided management demonstrates credible operational discipline.\n\n**Restructuring Discipline & The 'Kitchen Sink' Reversal** — The playbook for recovering from an earnings guidance collapse requires decisive 'kitchen-sinking': slashing unviable capital projects, cutting workforce overhead by 10% to 20% (demonstrated by Meta's 21,000 layoffs, Intel's 15,000 headcount cuts, and Tesla's 14,000 workforce reduction), and re-aligning capital toward high-margin core competencies. When Mark Zuckerberg initiated Meta's 'Year of Efficiency', the stock rallied over 300% over the next 18 months. Similarly, Nvidia's 2022 inventory write-off cleaned channel inventory just in time to capture the enterprise generative AI revolution. For investors, an earnings collapse separates companies with temporary cyclical headwinds and structural moats from those with obsolete business models.",
+  "total_companies_analyzed": 5,
+  "similar_company_events": [
+    {
+      "company_name": "Intel Corporation",
+      "stock_ticker": "INTC",
+      "industry": "Semiconductors & Foundry Services",
+      "incident_title": "Q2 Earnings Collapse, 15% Layoffs & Dividend Suspension",
+      "event_timeframe": "August 2024",
+      "summary": "On August 1, 2024, Intel delivered one of the most disastrous earnings reports in semiconductor history: reporting a $1.6B net loss, cutting fiscal Q3 guidance over $3B below consensus, announcing the elimination of 15,000+ jobs (15% of workforce), and suspending its 32-year dividend. The next day, Intel shares crashed -26.0% in its single worst trading day since 1974.",
+      "similarity_rationale": "The archetypal mega-cap earnings warning: simultaneous guidance collapse, structural restructuring, and dividend elimination.",
+      "key_parallels": [
+        "Massive quarterly earnings and forward guidance miss.",
+        "Aggressive cost-cutting package including 15% global workforce reduction.",
+        "Suspension of long-standing dividend to preserve capital.",
+        "Historical single-day equity collapse (-26%) erasing $32B in market cap.",
+        "Catalyzed subsequent board rebellion and CEO removal 4 months later."
+      ],
+      "key_differences": [
+        "Driven by multi-billion capital expenditure on manufacturing fabs ahead of revenue realization rather than a sudden demand fraud."
+      ],
+      "timeline": [
+        {
+          "date": "2024-07-31",
+          "phase": "Precursor Baseline",
+          "event": "Intel stock trades at $30.74 ahead of earnings announcement.",
+          "impact": "Baseline price established.",
+          "stock_price": 30.55,
+          "stock_change_from_baseline_pct": 0.01,
+          "trading_volume": 56110600
+        },
+        {
+          "date": "2024-08-01",
+          "phase": "Trigger / Catastrophic Earnings Release",
+          "event": "Intel reports $1.6B Q2 loss, slashes Q3 guidance, announces 15,000 layoffs and suspends dividend.",
+          "impact": "After-hours trading plunges -19%; institutional downgrades flood Wall Street.",
+          "stock_price": 28.87,
+          "stock_change_from_baseline_pct": -5.49,
+          "trading_volume": 107672500
+        },
+        {
+          "date": "2024-08-02",
+          "phase": "Historical Single-Day Crash",
+          "event": "INTC stock closes down -26.0% at $21.48 with 300 million shares changing hands.",
+          "impact": "Worst trading session in 50 years; market capitalization falls below book value.",
+          "stock_price": 21.34,
+          "stock_change_from_baseline_pct": -30.14,
+          "trading_volume": 300895900
+        },
+        {
+          "date": "2024-08-19",
+          "phase": "Board Discord & Resignation",
+          "event": "Semiconductor veteran Lip-Bu Tan abruptly resigns from Intel board over disagreements on turnaround pace.",
+          "impact": "Stock slides further to multi-year low of $18.84 (-38% from pre-earnings).",
+          "stock_price": 21.52,
+          "stock_change_from_baseline_pct": -29.55,
+          "trading_volume": 65956300
+        },
+        {
+          "date": "2024-09-16",
+          "phase": "Restructuring Acceleration",
+          "event": "Intel announces separation of Foundry business into independent subsidiary and pauses European expansion.",
+          "impact": "Stock rallies +6.4% on decisive cost preservation, stabilizing in low $20s.",
+          "stock_price": 20.91,
+          "stock_change_from_baseline_pct": -31.55,
+          "trading_volume": 149337000
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "INTC",
+        "baseline_date": "2024-07-31",
+        "baseline_price": 30.55,
+        "trough_date": "2024-09-06",
+        "trough_price": 18.89,
+        "max_drawdown_pct": -38.16,
+        "daily_series": [
+          {
+            "date": "2024-07-08",
+            "close": 33.78
+          },
+          {
+            "date": "2024-07-09",
+            "close": 34.37
+          },
+          {
+            "date": "2024-07-10",
+            "close": 34.65
+          },
+          {
+            "date": "2024-07-11",
+            "close": 33.29
+          },
+          {
+            "date": "2024-07-12",
+            "close": 34.27
+          },
+          {
+            "date": "2024-07-15",
+            "close": 34.24
+          },
+          {
+            "date": "2024-07-16",
+            "close": 34.12
+          },
+          {
+            "date": "2024-07-17",
+            "close": 34.24
+          },
+          {
+            "date": "2024-07-18",
+            "close": 34.65
+          },
+          {
+            "date": "2024-07-19",
+            "close": 32.77
+          },
+          {
+            "date": "2024-07-22",
+            "close": 33.16
+          },
+          {
+            "date": "2024-07-23",
+            "close": 32.74
+          },
+          {
+            "date": "2024-07-24",
+            "close": 31.5
+          },
+          {
+            "date": "2024-07-25",
+            "close": 30.9
+          },
+          {
+            "date": "2024-07-26",
+            "close": 31.15
+          },
+          {
+            "date": "2024-07-29",
+            "close": 30.64
+          },
+          {
+            "date": "2024-07-30",
+            "close": 29.94
+          },
+          {
+            "date": "2024-07-31",
+            "close": 30.55
+          },
+          {
+            "date": "2024-08-01",
+            "close": 28.87
+          },
+          {
+            "date": "2024-08-02",
+            "close": 21.34
+          },
+          {
+            "date": "2024-08-05",
+            "close": 19.98
+          },
+          {
+            "date": "2024-08-06",
+            "close": 19.7
+          },
+          {
+            "date": "2024-08-07",
+            "close": 18.99
+          },
+          {
+            "date": "2024-08-08",
+            "close": 20.49
+          },
+          {
+            "date": "2024-08-09",
+            "close": 19.71
+          },
+          {
+            "date": "2024-08-12",
+            "close": 19.36
+          },
+          {
+            "date": "2024-08-13",
+            "close": 20.47
+          },
+          {
+            "date": "2024-08-14",
+            "close": 19.92
+          },
+          {
+            "date": "2024-08-15",
+            "close": 20.69
+          },
+          {
+            "date": "2024-08-16",
+            "close": 20.87
+          },
+          {
+            "date": "2024-08-19",
+            "close": 21.52
+          },
+          {
+            "date": "2024-08-20",
+            "close": 20.99
+          },
+          {
+            "date": "2024-08-21",
+            "close": 21.41
+          },
+          {
+            "date": "2024-08-22",
+            "close": 20.1
+          },
+          {
+            "date": "2024-08-23",
+            "close": 20.54
+          },
+          {
+            "date": "2024-08-26",
+            "close": 20.13
+          },
+          {
+            "date": "2024-08-27",
+            "close": 20.07
+          },
+          {
+            "date": "2024-08-28",
+            "close": 19.61
+          },
+          {
+            "date": "2024-08-29",
+            "close": 20.13
+          },
+          {
+            "date": "2024-08-30",
+            "close": 22.04
+          },
+          {
+            "date": "2024-09-03",
+            "close": 20.1
+          },
+          {
+            "date": "2024-09-04",
+            "close": 19.43
+          },
+          {
+            "date": "2024-09-05",
+            "close": 19.4
+          },
+          {
+            "date": "2024-09-06",
+            "close": 18.89
+          },
+          {
+            "date": "2024-09-09",
+            "close": 19.07
+          },
+          {
+            "date": "2024-09-10",
+            "close": 18.98
+          },
+          {
+            "date": "2024-09-11",
+            "close": 19.64
+          },
+          {
+            "date": "2024-09-12",
+            "close": 19.36
+          },
+          {
+            "date": "2024-09-13",
+            "close": 19.66
+          },
+          {
+            "date": "2024-09-16",
+            "close": 20.91
+          },
+          {
+            "date": "2024-09-17",
+            "close": 21.47
+          },
+          {
+            "date": "2024-09-18",
+            "close": 20.77
+          },
+          {
+            "date": "2024-09-19",
+            "close": 21.14
+          },
+          {
+            "date": "2024-09-20",
+            "close": 21.84
+          },
+          {
+            "date": "2024-09-23",
+            "close": 22.56
+          },
+          {
+            "date": "2024-09-24",
+            "close": 22.81
+          },
+          {
+            "date": "2024-09-25",
+            "close": 23.54
+          },
+          {
+            "date": "2024-09-26",
+            "close": 23.92
+          },
+          {
+            "date": "2024-09-27",
+            "close": 23.91
+          },
+          {
+            "date": "2024-09-30",
+            "close": 23.46
+          },
+          {
+            "date": "2024-10-01",
+            "close": 22.69
+          },
+          {
+            "date": "2024-10-02",
+            "close": 22.39
+          },
+          {
+            "date": "2024-10-03",
+            "close": 22.26
+          },
+          {
+            "date": "2024-10-04",
+            "close": 22.59
+          },
+          {
+            "date": "2024-10-07",
+            "close": 22.38
+          },
+          {
+            "date": "2024-10-08",
+            "close": 23.32
+          },
+          {
+            "date": "2024-10-09",
+            "close": 23.46
+          },
+          {
+            "date": "2024-10-10",
+            "close": 23.22
+          },
+          {
+            "date": "2024-10-11",
+            "close": 23.56
+          },
+          {
+            "date": "2024-10-14",
+            "close": 23.44
+          },
+          {
+            "date": "2024-10-15",
+            "close": 22.66
+          },
+          {
+            "date": "2024-10-16",
+            "close": 22.31
+          },
+          {
+            "date": "2024-10-17",
+            "close": 22.44
+          },
+          {
+            "date": "2024-10-18",
+            "close": 22.77
+          },
+          {
+            "date": "2024-10-21",
+            "close": 22.84
+          },
+          {
+            "date": "2024-10-22",
+            "close": 22.4
+          },
+          {
+            "date": "2024-10-23",
+            "close": 21.98
+          },
+          {
+            "date": "2024-10-24",
+            "close": 22.34
+          },
+          {
+            "date": "2024-10-25",
+            "close": 22.68
+          },
+          {
+            "date": "2024-10-28",
+            "close": 22.92
+          },
+          {
+            "date": "2024-10-29",
+            "close": 22.9
+          },
+          {
+            "date": "2024-10-30",
+            "close": 22.3
+          }
+        ]
+      },
+      "total_impact_assessment": "Over $35B in market cap eliminated in 24 hours, permanent damage to executive credibility, and forced postponement of international fab projects.",
+      "sources": [
+        {
+          "title": "Intel Shares Plunge 26% in Worst Day in 50 Years",
+          "url": "https://www.wsj.com/tech/intel-intc-q2-earnings-report-2024-e1d51f22"
+        },
+        {
+          "title": "SEC 8-K Intel Q2 Financial Results and Restructuring",
+          "url": "https://www.sec.gov/ix?doc=/Archives/edgar/data/50863/000005086324000078/intc-20240801.htm"
+        }
+      ]
+    },
+    {
+      "company_name": "Meta Platforms, Inc.",
+      "stock_ticker": "META",
+      "industry": "Digital Advertising & Social Media",
+      "incident_title": "First-Ever User Decline & $232 Billion Market Cap Wipeout",
+      "event_timeframe": "February - November 2022",
+      "summary": "On February 2, 2022, Meta reported its first-ever quarterly decline in Facebook daily active users and revealed that Apple's iOS privacy changes (ATT) would wipe out $10 billion in advertising revenue. The following day, Meta shares plummeted -26.4%, erasing $232 billion in market capitalization—the largest single-day market cap destruction in US corporate history.",
+      "similarity_rationale": "Historic precedent for an advertising giant experiencing structural disruption, massive market cap loss, and subsequent 'Year of Efficiency' turnaround.",
+      "key_parallels": [
+        "Unexpected decline in core user engagement metrics and severe guidance cut.",
+        "Record single-day equity loss ($232 billion).",
+        "Massive post-crisis restructuring (slashing 21,000 roles across 2022-2023).",
+        "Spectacular long-term stock rebound (+300%) once operational efficiency was prioritized."
+      ],
+      "key_differences": [
+        "Catalyzed by external platform privacy policy (Apple iOS) and competing app surge (TikTok) rather than hardware defects."
+      ],
+      "timeline": [
+        {
+          "date": "2022-02-01",
+          "phase": "Precursor Baseline",
+          "event": "Meta stock closes at $319.00 before earnings release.",
+          "impact": "Pre-crash valuation near $850B market cap.",
+          "stock_price": 315.97,
+          "stock_change_from_baseline_pct": -0.0,
+          "trading_volume": 18023800
+        },
+        {
+          "date": "2022-02-02",
+          "phase": "Trigger / Earnings Miss",
+          "event": "Meta reports Q4 earnings: Facebook DAUs decline by 500k, guides Q1 revenue far below consensus, cites $10B Apple iOS hit.",
+          "impact": "After-hours crash begins.",
+          "stock_price": 319.94,
+          "stock_change_from_baseline_pct": 1.26,
+          "trading_volume": 58458300
+        },
+        {
+          "date": "2022-02-03",
+          "phase": "Record Single-Day Crash",
+          "event": "META shares plunge -26.4% to $237.76; $232 billion in market cap erased in single trading day.",
+          "impact": "Largest single-day market capitalization loss in Wall Street history.",
+          "stock_price": 235.5,
+          "stock_change_from_baseline_pct": -25.47,
+          "trading_volume": 188119900
+        },
+        {
+          "date": "2022-11-09",
+          "phase": "Mass Headcount Reduction",
+          "event": "Zuckerberg takes accountability and announces first-ever mass layoff of 11,000 employees (13% of staff).",
+          "impact": "Stock begins violent upward reversal as market welcomes capital discipline.",
+          "stock_price": 100.51,
+          "stock_change_from_baseline_pct": -68.19,
+          "trading_volume": 107677300
+        },
+        {
+          "date": "2023-03-14",
+          "phase": "The 'Year of Efficiency'",
+          "event": "Meta announces an additional 10,000 layoffs and cancels non-priority projects.",
+          "impact": "Stock initiates historic multi-quarter rally, ultimately surpassing $500.",
+          "stock_price": 192.18,
+          "stock_change_from_baseline_pct": -39.18,
+          "trading_volume": 41642600
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "META",
+        "baseline_date": "2022-02-01",
+        "baseline_price": 315.97,
+        "trough_date": "2022-11-03",
+        "trough_price": 88.07,
+        "max_drawdown_pct": -72.13,
+        "daily_series": [
+          {
+            "date": "2022-01-07",
+            "close": 328.64
+          },
+          {
+            "date": "2022-01-10",
+            "close": 324.96
+          },
+          {
+            "date": "2022-01-11",
+            "close": 331.2
+          },
+          {
+            "date": "2022-01-12",
+            "close": 330.1
+          },
+          {
+            "date": "2022-01-13",
+            "close": 323.38
+          },
+          {
+            "date": "2022-01-14",
+            "close": 328.75
+          },
+          {
+            "date": "2022-01-18",
+            "close": 315.13
+          },
+          {
+            "date": "2022-01-19",
+            "close": 316.56
+          },
+          {
+            "date": "2022-01-20",
+            "close": 313.56
+          },
+          {
+            "date": "2022-01-21",
+            "close": 300.29
+          },
+          {
+            "date": "2022-01-24",
+            "close": 305.78
+          },
+          {
+            "date": "2022-01-25",
+            "close": 297.3
+          },
+          {
+            "date": "2022-01-26",
+            "close": 291.83
+          },
+          {
+            "date": "2022-01-27",
+            "close": 291.84
+          },
+          {
+            "date": "2022-01-28",
+            "close": 298.85
+          },
+          {
+            "date": "2022-01-31",
+            "close": 310.29
+          },
+          {
+            "date": "2022-02-01",
+            "close": 315.97
+          },
+          {
+            "date": "2022-02-02",
+            "close": 319.94
+          },
+          {
+            "date": "2022-02-03",
+            "close": 235.5
+          },
+          {
+            "date": "2022-02-04",
+            "close": 234.84
+          },
+          {
+            "date": "2022-02-07",
+            "close": 222.78
+          },
+          {
+            "date": "2022-02-08",
+            "close": 218.09
+          },
+          {
+            "date": "2022-02-09",
+            "close": 229.8
+          },
+          {
+            "date": "2022-02-10",
+            "close": 225.91
+          },
+          {
+            "date": "2022-02-11",
+            "close": 217.47
+          },
+          {
+            "date": "2022-02-14",
+            "close": 215.63
+          },
+          {
+            "date": "2022-02-15",
+            "close": 218.9
+          },
+          {
+            "date": "2022-02-16",
+            "close": 214.49
+          },
+          {
+            "date": "2022-02-17",
+            "close": 205.74
+          },
+          {
+            "date": "2022-02-18",
+            "close": 204.2
+          },
+          {
+            "date": "2022-02-22",
+            "close": 200.16
+          },
+          {
+            "date": "2022-02-23",
+            "close": 196.57
+          },
+          {
+            "date": "2022-02-24",
+            "close": 205.63
+          },
+          {
+            "date": "2022-02-25",
+            "close": 208.48
+          },
+          {
+            "date": "2022-02-28",
+            "close": 209.03
+          },
+          {
+            "date": "2022-03-01",
+            "close": 201.56
+          },
+          {
+            "date": "2022-03-02",
+            "close": 206.14
+          },
+          {
+            "date": "2022-03-03",
+            "close": 201.04
+          },
+          {
+            "date": "2022-03-04",
+            "close": 198.16
+          },
+          {
+            "date": "2022-03-07",
+            "close": 185.69
+          },
+          {
+            "date": "2022-03-08",
+            "close": 188.48
+          },
+          {
+            "date": "2022-03-09",
+            "close": 196.62
+          },
+          {
+            "date": "2022-03-10",
+            "close": 193.36
+          },
+          {
+            "date": "2022-03-11",
+            "close": 185.83
+          },
+          {
+            "date": "2022-03-14",
+            "close": 184.86
+          },
+          {
+            "date": "2022-03-15",
+            "close": 190.21
+          },
+          {
+            "date": "2022-03-16",
+            "close": 201.7
+          },
+          {
+            "date": "2022-03-17",
+            "close": 205.87
+          },
+          {
+            "date": "2022-03-18",
+            "close": 214.44
+          },
+          {
+            "date": "2022-03-21",
+            "close": 209.48
+          },
+          {
+            "date": "2022-03-22",
+            "close": 214.59
+          },
+          {
+            "date": "2022-03-23",
+            "close": 211.43
+          },
+          {
+            "date": "2022-03-24",
+            "close": 217.49
+          },
+          {
+            "date": "2022-03-25",
+            "close": 219.72
+          },
+          {
+            "date": "2022-03-28",
+            "close": 221.47
+          },
+          {
+            "date": "2022-03-29",
+            "close": 227.68
+          },
+          {
+            "date": "2022-03-30",
+            "close": 225.69
+          },
+          {
+            "date": "2022-03-31",
+            "close": 220.25
+          },
+          {
+            "date": "2022-04-01",
+            "close": 222.72
+          },
+          {
+            "date": "2022-04-04",
+            "close": 231.67
+          },
+          {
+            "date": "2022-04-05",
+            "close": 229.64
+          },
+          {
+            "date": "2022-04-06",
+            "close": 221.18
+          },
+          {
+            "date": "2022-04-07",
+            "close": 220.83
+          },
+          {
+            "date": "2022-04-08",
+            "close": 220.22
+          },
+          {
+            "date": "2022-04-11",
+            "close": 214.41
+          },
+          {
+            "date": "2022-04-12",
+            "close": 212.11
+          },
+          {
+            "date": "2022-04-13",
+            "close": 212.95
+          },
+          {
+            "date": "2022-04-14",
+            "close": 208.19
+          },
+          {
+            "date": "2022-04-18",
+            "close": 208.77
+          },
+          {
+            "date": "2022-04-19",
+            "close": 215.25
+          },
+          {
+            "date": "2022-04-20",
+            "close": 198.52
+          },
+          {
+            "date": "2022-04-21",
+            "close": 186.29
+          },
+          {
+            "date": "2022-04-22",
+            "close": 182.36
+          },
+          {
+            "date": "2022-04-25",
+            "close": 185.22
+          },
+          {
+            "date": "2022-04-26",
+            "close": 179.23
+          },
+          {
+            "date": "2022-04-27",
+            "close": 173.29
+          },
+          {
+            "date": "2022-04-28",
+            "close": 203.78
+          },
+          {
+            "date": "2022-04-29",
+            "close": 198.57
+          },
+          {
+            "date": "2022-05-02",
+            "close": 209.13
+          },
+          {
+            "date": "2022-05-03",
+            "close": 210.02
+          },
+          {
+            "date": "2022-05-04",
+            "close": 221.29
+          },
+          {
+            "date": "2022-05-05",
+            "close": 206.3
+          },
+          {
+            "date": "2022-05-06",
+            "close": 201.84
+          },
+          {
+            "date": "2022-05-09",
+            "close": 194.35
+          },
+          {
+            "date": "2022-05-10",
+            "close": 195.77
+          },
+          {
+            "date": "2022-05-11",
+            "close": 186.95
+          },
+          {
+            "date": "2022-05-12",
+            "close": 189.43
+          },
+          {
+            "date": "2022-05-13",
+            "close": 196.74
+          },
+          {
+            "date": "2022-05-16",
+            "close": 198.14
+          },
+          {
+            "date": "2022-05-17",
+            "close": 200.7
+          },
+          {
+            "date": "2022-05-18",
+            "close": 190.42
+          },
+          {
+            "date": "2022-05-19",
+            "close": 189.48
+          },
+          {
+            "date": "2022-05-20",
+            "close": 191.7
+          },
+          {
+            "date": "2022-05-23",
+            "close": 194.37
+          },
+          {
+            "date": "2022-05-24",
+            "close": 179.56
+          },
+          {
+            "date": "2022-05-25",
+            "close": 182.09
+          },
+          {
+            "date": "2022-05-26",
+            "close": 189.81
+          },
+          {
+            "date": "2022-05-27",
+            "close": 193.28
+          },
+          {
+            "date": "2022-05-31",
+            "close": 191.8
+          },
+          {
+            "date": "2022-06-01",
+            "close": 186.85
+          },
+          {
+            "date": "2022-06-02",
+            "close": 196.97
+          },
+          {
+            "date": "2022-06-03",
+            "close": 188.97
+          },
+          {
+            "date": "2022-06-06",
+            "close": 192.41
+          },
+          {
+            "date": "2022-06-07",
+            "close": 193.79
+          },
+          {
+            "date": "2022-06-08",
+            "close": 194.77
+          },
+          {
+            "date": "2022-06-09",
+            "close": 182.25
+          },
+          {
+            "date": "2022-06-10",
+            "close": 173.9
+          },
+          {
+            "date": "2022-06-13",
+            "close": 162.7
+          },
+          {
+            "date": "2022-06-14",
+            "close": 162.18
+          },
+          {
+            "date": "2022-06-15",
+            "close": 167.74
+          },
+          {
+            "date": "2022-06-16",
+            "close": 159.34
+          },
+          {
+            "date": "2022-06-17",
+            "close": 162.19
+          },
+          {
+            "date": "2022-06-21",
+            "close": 155.56
+          },
+          {
+            "date": "2022-06-22",
+            "close": 154.37
+          },
+          {
+            "date": "2022-06-23",
+            "close": 157.24
+          },
+          {
+            "date": "2022-06-24",
+            "close": 168.55
+          },
+          {
+            "date": "2022-06-27",
+            "close": 167.88
+          },
+          {
+            "date": "2022-06-28",
+            "close": 159.16
+          },
+          {
+            "date": "2022-06-29",
+            "close": 162.38
+          },
+          {
+            "date": "2022-06-30",
+            "close": 159.72
+          },
+          {
+            "date": "2022-07-01",
+            "close": 158.51
+          },
+          {
+            "date": "2022-07-05",
+            "close": 166.59
+          },
+          {
+            "date": "2022-07-06",
+            "close": 168.16
+          },
+          {
+            "date": "2022-07-07",
+            "close": 170.56
+          },
+          {
+            "date": "2022-07-08",
+            "close": 169.26
+          },
+          {
+            "date": "2022-07-11",
+            "close": 161.33
+          },
+          {
+            "date": "2022-07-12",
+            "close": 161.72
+          },
+          {
+            "date": "2022-07-13",
+            "close": 161.94
+          },
+          {
+            "date": "2022-07-14",
+            "close": 156.55
+          },
+          {
+            "date": "2022-07-15",
+            "close": 163.14
+          },
+          {
+            "date": "2022-07-18",
+            "close": 165.64
+          },
+          {
+            "date": "2022-07-19",
+            "close": 174.11
+          },
+          {
+            "date": "2022-07-20",
+            "close": 181.35
+          },
+          {
+            "date": "2022-07-21",
+            "close": 181.43
+          },
+          {
+            "date": "2022-07-22",
+            "close": 167.66
+          },
+          {
+            "date": "2022-07-25",
+            "close": 165.07
+          },
+          {
+            "date": "2022-07-26",
+            "close": 157.64
+          },
+          {
+            "date": "2022-07-27",
+            "close": 167.97
+          },
+          {
+            "date": "2022-07-28",
+            "close": 159.2
+          },
+          {
+            "date": "2022-07-29",
+            "close": 157.59
+          },
+          {
+            "date": "2022-08-01",
+            "close": 158.41
+          },
+          {
+            "date": "2022-08-02",
+            "close": 158.67
+          },
+          {
+            "date": "2022-08-03",
+            "close": 167.2
+          },
+          {
+            "date": "2022-08-04",
+            "close": 168.95
+          },
+          {
+            "date": "2022-08-05",
+            "close": 165.52
+          },
+          {
+            "date": "2022-08-08",
+            "close": 168.63
+          },
+          {
+            "date": "2022-08-09",
+            "close": 166.93
+          },
+          {
+            "date": "2022-08-10",
+            "close": 176.65
+          },
+          {
+            "date": "2022-08-11",
+            "close": 175.81
+          },
+          {
+            "date": "2022-08-12",
+            "close": 178.79
+          },
+          {
+            "date": "2022-08-15",
+            "close": 179.17
+          },
+          {
+            "date": "2022-08-16",
+            "close": 177.77
+          },
+          {
+            "date": "2022-08-17",
+            "close": 173.19
+          },
+          {
+            "date": "2022-08-18",
+            "close": 173.0
+          },
+          {
+            "date": "2022-08-19",
+            "close": 166.37
+          },
+          {
+            "date": "2022-08-22",
+            "close": 161.5
+          },
+          {
+            "date": "2022-08-23",
+            "close": 159.58
+          },
+          {
+            "date": "2022-08-24",
+            "close": 161.71
+          },
+          {
+            "date": "2022-08-25",
+            "close": 167.18
+          },
+          {
+            "date": "2022-08-26",
+            "close": 160.25
+          },
+          {
+            "date": "2022-08-29",
+            "close": 157.66
+          },
+          {
+            "date": "2022-08-30",
+            "close": 155.67
+          },
+          {
+            "date": "2022-08-31",
+            "close": 161.38
+          },
+          {
+            "date": "2022-09-01",
+            "close": 163.79
+          },
+          {
+            "date": "2022-09-02",
+            "close": 158.8
+          },
+          {
+            "date": "2022-09-06",
+            "close": 157.04
+          },
+          {
+            "date": "2022-09-07",
+            "close": 158.87
+          },
+          {
+            "date": "2022-09-08",
+            "close": 160.52
+          },
+          {
+            "date": "2022-09-09",
+            "close": 167.55
+          },
+          {
+            "date": "2022-09-12",
+            "close": 167.36
+          },
+          {
+            "date": "2022-09-13",
+            "close": 151.68
+          },
+          {
+            "date": "2022-09-14",
+            "close": 150.03
+          },
+          {
+            "date": "2022-09-15",
+            "close": 148.13
+          },
+          {
+            "date": "2022-09-16",
+            "close": 144.9
+          },
+          {
+            "date": "2022-09-19",
+            "close": 146.62
+          },
+          {
+            "date": "2022-09-20",
+            "close": 144.7
+          },
+          {
+            "date": "2022-09-21",
+            "close": 140.77
+          },
+          {
+            "date": "2022-09-22",
+            "close": 141.47
+          },
+          {
+            "date": "2022-09-23",
+            "close": 139.08
+          },
+          {
+            "date": "2022-09-26",
+            "close": 135.08
+          },
+          {
+            "date": "2022-09-27",
+            "close": 133.12
+          },
+          {
+            "date": "2022-09-28",
+            "close": 140.27
+          },
+          {
+            "date": "2022-09-29",
+            "close": 135.12
+          },
+          {
+            "date": "2022-09-30",
+            "close": 134.39
+          },
+          {
+            "date": "2022-10-03",
+            "close": 137.3
+          },
+          {
+            "date": "2022-10-04",
+            "close": 138.95
+          },
+          {
+            "date": "2022-10-05",
+            "close": 137.66
+          },
+          {
+            "date": "2022-10-06",
+            "close": 137.75
+          },
+          {
+            "date": "2022-10-07",
+            "close": 132.18
+          },
+          {
+            "date": "2022-10-10",
+            "close": 132.52
+          },
+          {
+            "date": "2022-10-11",
+            "close": 127.32
+          },
+          {
+            "date": "2022-10-12",
+            "close": 126.29
+          },
+          {
+            "date": "2022-10-13",
+            "close": 129.05
+          },
+          {
+            "date": "2022-10-14",
+            "close": 125.56
+          },
+          {
+            "date": "2022-10-17",
+            "close": 132.77
+          },
+          {
+            "date": "2022-10-18",
+            "close": 131.54
+          },
+          {
+            "date": "2022-10-19",
+            "close": 131.97
+          },
+          {
+            "date": "2022-10-20",
+            "close": 130.28
+          },
+          {
+            "date": "2022-10-21",
+            "close": 128.78
+          },
+          {
+            "date": "2022-10-24",
+            "close": 128.49
+          },
+          {
+            "date": "2022-10-25",
+            "close": 136.21
+          },
+          {
+            "date": "2022-10-26",
+            "close": 128.59
+          },
+          {
+            "date": "2022-10-27",
+            "close": 97.01
+          },
+          {
+            "date": "2022-10-28",
+            "close": 98.26
+          },
+          {
+            "date": "2022-10-31",
+            "close": 92.28
+          },
+          {
+            "date": "2022-11-01",
+            "close": 94.3
+          },
+          {
+            "date": "2022-11-02",
+            "close": 89.68
+          },
+          {
+            "date": "2022-11-03",
+            "close": 88.07
+          },
+          {
+            "date": "2022-11-04",
+            "close": 89.93
+          },
+          {
+            "date": "2022-11-07",
+            "close": 95.8
+          },
+          {
+            "date": "2022-11-08",
+            "close": 95.55
+          },
+          {
+            "date": "2022-11-09",
+            "close": 100.51
+          },
+          {
+            "date": "2022-11-10",
+            "close": 110.81
+          },
+          {
+            "date": "2022-11-11",
+            "close": 111.95
+          },
+          {
+            "date": "2022-11-14",
+            "close": 113.14
+          },
+          {
+            "date": "2022-11-15",
+            "close": 115.97
+          },
+          {
+            "date": "2022-11-16",
+            "close": 112.16
+          },
+          {
+            "date": "2022-11-17",
+            "close": 110.39
+          },
+          {
+            "date": "2022-11-18",
+            "close": 110.99
+          },
+          {
+            "date": "2022-11-21",
+            "close": 108.82
+          },
+          {
+            "date": "2022-11-22",
+            "close": 110.38
+          },
+          {
+            "date": "2022-11-23",
+            "close": 111.18
+          },
+          {
+            "date": "2022-11-25",
+            "close": 110.35
+          },
+          {
+            "date": "2022-11-28",
+            "close": 107.75
+          },
+          {
+            "date": "2022-11-29",
+            "close": 108.42
+          },
+          {
+            "date": "2022-11-30",
+            "close": 116.98
+          },
+          {
+            "date": "2022-12-01",
+            "close": 119.3
+          },
+          {
+            "date": "2022-12-02",
+            "close": 122.32
+          },
+          {
+            "date": "2022-12-05",
+            "close": 121.27
+          },
+          {
+            "date": "2022-12-06",
+            "close": 113.04
+          },
+          {
+            "date": "2022-12-07",
+            "close": 112.85
+          },
+          {
+            "date": "2022-12-08",
+            "close": 114.24
+          },
+          {
+            "date": "2022-12-09",
+            "close": 114.8
+          },
+          {
+            "date": "2022-12-12",
+            "close": 113.62
+          },
+          {
+            "date": "2022-12-13",
+            "close": 119.01
+          },
+          {
+            "date": "2022-12-14",
+            "close": 120.44
+          },
+          {
+            "date": "2022-12-15",
+            "close": 115.05
+          },
+          {
+            "date": "2022-12-16",
+            "close": 118.3
+          },
+          {
+            "date": "2022-12-19",
+            "close": 113.39
+          },
+          {
+            "date": "2022-12-20",
+            "close": 115.98
+          },
+          {
+            "date": "2022-12-21",
+            "close": 118.62
+          },
+          {
+            "date": "2022-12-22",
+            "close": 116.01
+          },
+          {
+            "date": "2022-12-23",
+            "close": 116.92
+          },
+          {
+            "date": "2022-12-27",
+            "close": 115.77
+          },
+          {
+            "date": "2022-12-28",
+            "close": 114.52
+          },
+          {
+            "date": "2022-12-29",
+            "close": 119.12
+          },
+          {
+            "date": "2022-12-30",
+            "close": 119.2
+          },
+          {
+            "date": "2023-01-03",
+            "close": 123.56
+          },
+          {
+            "date": "2023-01-04",
+            "close": 126.16
+          },
+          {
+            "date": "2023-01-05",
+            "close": 125.74
+          },
+          {
+            "date": "2023-01-06",
+            "close": 128.79
+          },
+          {
+            "date": "2023-01-09",
+            "close": 128.24
+          },
+          {
+            "date": "2023-01-10",
+            "close": 131.73
+          },
+          {
+            "date": "2023-01-11",
+            "close": 131.63
+          },
+          {
+            "date": "2023-01-12",
+            "close": 135.41
+          },
+          {
+            "date": "2023-01-13",
+            "close": 135.68
+          },
+          {
+            "date": "2023-01-17",
+            "close": 134.08
+          },
+          {
+            "date": "2023-01-18",
+            "close": 131.76
+          },
+          {
+            "date": "2023-01-19",
+            "close": 134.86
+          },
+          {
+            "date": "2023-01-20",
+            "close": 138.05
+          },
+          {
+            "date": "2023-01-23",
+            "close": 141.91
+          },
+          {
+            "date": "2023-01-24",
+            "close": 141.78
+          },
+          {
+            "date": "2023-01-25",
+            "close": 140.16
+          },
+          {
+            "date": "2023-01-26",
+            "close": 145.9
+          },
+          {
+            "date": "2023-01-27",
+            "close": 150.3
+          },
+          {
+            "date": "2023-01-30",
+            "close": 145.66
+          },
+          {
+            "date": "2023-01-31",
+            "close": 147.56
+          },
+          {
+            "date": "2023-02-01",
+            "close": 151.67
+          },
+          {
+            "date": "2023-02-02",
+            "close": 186.98
+          },
+          {
+            "date": "2023-02-03",
+            "close": 184.76
+          },
+          {
+            "date": "2023-02-06",
+            "close": 184.29
+          },
+          {
+            "date": "2023-02-07",
+            "close": 189.8
+          },
+          {
+            "date": "2023-02-08",
+            "close": 181.69
+          },
+          {
+            "date": "2023-02-09",
+            "close": 176.23
+          },
+          {
+            "date": "2023-02-10",
+            "close": 172.5
+          },
+          {
+            "date": "2023-02-13",
+            "close": 177.73
+          },
+          {
+            "date": "2023-02-14",
+            "close": 177.78
+          },
+          {
+            "date": "2023-02-15",
+            "close": 175.48
+          },
+          {
+            "date": "2023-02-16",
+            "close": 170.8
+          },
+          {
+            "date": "2023-02-17",
+            "close": 171.24
+          },
+          {
+            "date": "2023-02-21",
+            "close": 170.45
+          },
+          {
+            "date": "2023-02-22",
+            "close": 169.5
+          },
+          {
+            "date": "2023-02-23",
+            "close": 170.41
+          },
+          {
+            "date": "2023-02-24",
+            "close": 168.77
+          },
+          {
+            "date": "2023-02-27",
+            "close": 167.93
+          },
+          {
+            "date": "2023-02-28",
+            "close": 173.28
+          },
+          {
+            "date": "2023-03-01",
+            "close": 171.77
+          },
+          {
+            "date": "2023-03-02",
+            "close": 172.87
+          },
+          {
+            "date": "2023-03-03",
+            "close": 183.49
+          },
+          {
+            "date": "2023-03-06",
+            "close": 183.15
+          },
+          {
+            "date": "2023-03-07",
+            "close": 182.76
+          },
+          {
+            "date": "2023-03-08",
+            "close": 183.22
+          },
+          {
+            "date": "2023-03-09",
+            "close": 179.97
+          },
+          {
+            "date": "2023-03-10",
+            "close": 177.81
+          },
+          {
+            "date": "2023-03-13",
+            "close": 179.18
+          },
+          {
+            "date": "2023-03-14",
+            "close": 192.18
+          },
+          {
+            "date": "2023-03-15",
+            "close": 195.87
+          },
+          {
+            "date": "2023-03-16",
+            "close": 202.99
+          },
+          {
+            "date": "2023-03-17",
+            "close": 193.75
+          },
+          {
+            "date": "2023-03-20",
+            "close": 195.93
+          },
+          {
+            "date": "2023-03-21",
+            "close": 200.24
+          },
+          {
+            "date": "2023-03-22",
+            "close": 197.91
+          },
+          {
+            "date": "2023-03-23",
+            "close": 202.34
+          },
+          {
+            "date": "2023-03-24",
+            "close": 204.06
+          },
+          {
+            "date": "2023-03-27",
+            "close": 200.92
+          },
+          {
+            "date": "2023-03-28",
+            "close": 198.78
+          },
+          {
+            "date": "2023-03-29",
+            "close": 203.4
+          },
+          {
+            "date": "2023-03-30",
+            "close": 205.87
+          },
+          {
+            "date": "2023-03-31",
+            "close": 209.93
+          },
+          {
+            "date": "2023-04-03",
+            "close": 211.05
+          },
+          {
+            "date": "2023-04-04",
+            "close": 212.68
+          },
+          {
+            "date": "2023-04-05",
+            "close": 209.47
+          },
+          {
+            "date": "2023-04-06",
+            "close": 214.05
+          },
+          {
+            "date": "2023-04-10",
+            "close": 212.71
+          },
+          {
+            "date": "2023-04-11",
+            "close": 211.82
+          },
+          {
+            "date": "2023-04-12",
+            "close": 211.97
+          },
+          {
+            "date": "2023-04-13",
+            "close": 218.26
+          },
+          {
+            "date": "2023-04-14",
+            "close": 219.39
+          },
+          {
+            "date": "2023-04-17",
+            "close": 216.78
+          },
+          {
+            "date": "2023-04-18",
+            "close": 215.82
+          },
+          {
+            "date": "2023-04-19",
+            "close": 213.65
+          },
+          {
+            "date": "2023-04-20",
+            "close": 211.05
+          },
+          {
+            "date": "2023-04-21",
+            "close": 210.87
+          },
+          {
+            "date": "2023-04-24",
+            "close": 210.77
+          },
+          {
+            "date": "2023-04-25",
+            "close": 205.58
+          },
+          {
+            "date": "2023-04-26",
+            "close": 207.41
+          },
+          {
+            "date": "2023-04-27",
+            "close": 236.3
+          }
+        ]
+      },
+      "total_impact_assessment": "Immediate $232B market cap destruction, followed by aggressive cost restructuring that set the benchmark for Big Tech efficiency.",
+      "sources": [
+        {
+          "title": "Meta Plunges 26% on Disappointing Earnings and Forecast",
+          "url": "https://www.cnbc.com/2022/02/02/meta-shares-plunge-after-earnings-miss.html"
+        },
+        {
+          "title": "Mark Zuckerberg Announces 11,000 Layoffs",
+          "url": "https://about.fb.com/news/2022/11/mark-zuckerberg-layoff-announcement/"
+        }
+      ]
+    },
+    {
+      "company_name": "Snap Inc.",
+      "stock_ticker": "SNAP",
+      "industry": "Digital Media & Ad Tech",
+      "incident_title": "Emergency SEC 8-K Guidance Warning & 43% Single-Day Crash",
+      "event_timeframe": "May 2022",
+      "summary": "On May 23, 2022, Snap CEO Evan Spiegel filed an unscheduled emergency SEC Form 8-K warning that the macroeconomic environment had deteriorated faster than anticipated and Snap would miss its own revenue and EBITDA guidance issued just a month prior. The next morning, Snap stock cratered -43.1% in a single day, dragging down the entire digital advertising and tech sector.",
+      "similarity_rationale": "Extreme intraday repricing triggered by an unscheduled intra-quarter guidance withdrawal and sudden ad market freeze.",
+      "key_parallels": [
+        "Unscheduled intra-quarter guidance warning via surprise SEC 8-K filing.",
+        "Devastating single-day collapse (-43%) reflecting total loss of visibility.",
+        "Drag-along effect crashing competitor stocks across the digital ad ecosystem.",
+        "Subsequent restructuring eliminating 20% of workforce and shutting hardware units."
+      ],
+      "key_differences": [
+        "Smaller mid-cap digital ad company with higher beta than diversified mega-caps."
+      ],
+      "timeline": [
+        {
+          "date": "2022-05-20",
+          "phase": "Precursor Baseline",
+          "event": "Snap stock closes at $22.47 after modest tech rally.",
+          "impact": "Pre-warning baseline valuation.",
+          "stock_price": 23.26,
+          "stock_change_from_baseline_pct": -0.0,
+          "trading_volume": 29598700
+        },
+        {
+          "date": "2022-05-23",
+          "phase": "Trigger / Emergency 8-K Warning",
+          "event": "Snap files surprise SEC 8-K post-market warning it will miss Q2 guidance due to rapid macroeconomic degradation.",
+          "impact": "Stock plunges -30% in after-hours trading.",
+          "stock_price": 22.47,
+          "stock_change_from_baseline_pct": -3.4,
+          "trading_volume": 43386300
+        },
+        {
+          "date": "2022-05-24",
+          "phase": "The -43% Bloodbath",
+          "event": "Snap shares open down and close -43.1% at $12.79 on 250M shares traded.",
+          "impact": "One of the steepest crashes for a tech stock; drags down Meta (-7%), Google (-5%), and Pinterest (-24%).",
+          "stock_price": 12.79,
+          "stock_change_from_baseline_pct": -45.01,
+          "trading_volume": 286479900
+        },
+        {
+          "date": "2022-08-31",
+          "phase": "Strategic Restructuring",
+          "event": "Snap announces 20% headcount reduction, cancels Pixy flying drone, and refocuses on direct response ads.",
+          "impact": "Cash burn stabilized; stock forms a base around $10.",
+          "stock_price": 10.88,
+          "stock_change_from_baseline_pct": -53.22,
+          "trading_volume": 199520700
+        },
+        {
+          "date": "2023-02-01",
+          "phase": "Operational Re-architecture",
+          "event": "Snap reports progress in machine learning ad-ranking models to adapt to privacy changes.",
+          "impact": "Volatility stabilizes; company transitions to disciplined growth model.",
+          "stock_price": 10.37,
+          "stock_change_from_baseline_pct": -55.42,
+          "trading_volume": 118212400
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "SNAP",
+        "baseline_date": "2022-05-20",
+        "baseline_price": 23.26,
+        "trough_date": "2022-10-21",
+        "trough_price": 7.76,
+        "max_drawdown_pct": -66.64,
+        "daily_series": [
+          {
+            "date": "2022-04-25",
+            "close": 29.91
+          },
+          {
+            "date": "2022-04-26",
+            "close": 28.69
+          },
+          {
+            "date": "2022-04-27",
+            "close": 27.09
+          },
+          {
+            "date": "2022-04-28",
+            "close": 28.81
+          },
+          {
+            "date": "2022-04-29",
+            "close": 28.46
+          },
+          {
+            "date": "2022-05-02",
+            "close": 29.52
+          },
+          {
+            "date": "2022-05-03",
+            "close": 28.93
+          },
+          {
+            "date": "2022-05-04",
+            "close": 30.16
+          },
+          {
+            "date": "2022-05-05",
+            "close": 27.27
+          },
+          {
+            "date": "2022-05-06",
+            "close": 24.92
+          },
+          {
+            "date": "2022-05-09",
+            "close": 23.39
+          },
+          {
+            "date": "2022-05-10",
+            "close": 22.89
+          },
+          {
+            "date": "2022-05-11",
+            "close": 21.84
+          },
+          {
+            "date": "2022-05-12",
+            "close": 22.77
+          },
+          {
+            "date": "2022-05-13",
+            "close": 24.75
+          },
+          {
+            "date": "2022-05-16",
+            "close": 23.42
+          },
+          {
+            "date": "2022-05-17",
+            "close": 24.54
+          },
+          {
+            "date": "2022-05-18",
+            "close": 22.73
+          },
+          {
+            "date": "2022-05-19",
+            "close": 23.2
+          },
+          {
+            "date": "2022-05-20",
+            "close": 23.26
+          },
+          {
+            "date": "2022-05-23",
+            "close": 22.47
+          },
+          {
+            "date": "2022-05-24",
+            "close": 12.79
+          },
+          {
+            "date": "2022-05-25",
+            "close": 14.16
+          },
+          {
+            "date": "2022-05-26",
+            "close": 14.81
+          },
+          {
+            "date": "2022-05-27",
+            "close": 15.58
+          },
+          {
+            "date": "2022-05-31",
+            "close": 14.11
+          },
+          {
+            "date": "2022-06-01",
+            "close": 13.93
+          },
+          {
+            "date": "2022-06-02",
+            "close": 14.9
+          },
+          {
+            "date": "2022-06-03",
+            "close": 14.49
+          },
+          {
+            "date": "2022-06-06",
+            "close": 15.15
+          },
+          {
+            "date": "2022-06-07",
+            "close": 15.28
+          },
+          {
+            "date": "2022-06-08",
+            "close": 15.17
+          },
+          {
+            "date": "2022-06-09",
+            "close": 14.1
+          },
+          {
+            "date": "2022-06-10",
+            "close": 13.28
+          },
+          {
+            "date": "2022-06-13",
+            "close": 12.02
+          },
+          {
+            "date": "2022-06-14",
+            "close": 11.91
+          },
+          {
+            "date": "2022-06-15",
+            "close": 13.2
+          },
+          {
+            "date": "2022-06-16",
+            "close": 12.22
+          },
+          {
+            "date": "2022-06-17",
+            "close": 12.42
+          },
+          {
+            "date": "2022-06-21",
+            "close": 12.85
+          },
+          {
+            "date": "2022-06-22",
+            "close": 13.08
+          },
+          {
+            "date": "2022-06-23",
+            "close": 13.94
+          },
+          {
+            "date": "2022-06-24",
+            "close": 14.7
+          },
+          {
+            "date": "2022-06-27",
+            "close": 14.56
+          },
+          {
+            "date": "2022-06-28",
+            "close": 13.73
+          },
+          {
+            "date": "2022-06-29",
+            "close": 13.96
+          },
+          {
+            "date": "2022-06-30",
+            "close": 13.13
+          },
+          {
+            "date": "2022-07-01",
+            "close": 13.17
+          },
+          {
+            "date": "2022-07-05",
+            "close": 14.38
+          },
+          {
+            "date": "2022-07-06",
+            "close": 14.28
+          },
+          {
+            "date": "2022-07-07",
+            "close": 15.1
+          },
+          {
+            "date": "2022-07-08",
+            "close": 14.96
+          },
+          {
+            "date": "2022-07-11",
+            "close": 14.06
+          },
+          {
+            "date": "2022-07-12",
+            "close": 14.04
+          },
+          {
+            "date": "2022-07-13",
+            "close": 13.83
+          },
+          {
+            "date": "2022-07-14",
+            "close": 13.17
+          },
+          {
+            "date": "2022-07-15",
+            "close": 13.65
+          },
+          {
+            "date": "2022-07-18",
+            "close": 13.92
+          },
+          {
+            "date": "2022-07-19",
+            "close": 14.15
+          },
+          {
+            "date": "2022-07-20",
+            "close": 15.51
+          },
+          {
+            "date": "2022-07-21",
+            "close": 16.35
+          },
+          {
+            "date": "2022-07-22",
+            "close": 9.96
+          },
+          {
+            "date": "2022-07-25",
+            "close": 9.95
+          },
+          {
+            "date": "2022-07-26",
+            "close": 9.63
+          },
+          {
+            "date": "2022-07-27",
+            "close": 9.55
+          },
+          {
+            "date": "2022-07-28",
+            "close": 9.67
+          },
+          {
+            "date": "2022-07-29",
+            "close": 9.88
+          },
+          {
+            "date": "2022-08-01",
+            "close": 9.54
+          },
+          {
+            "date": "2022-08-02",
+            "close": 9.87
+          },
+          {
+            "date": "2022-08-03",
+            "close": 10.32
+          },
+          {
+            "date": "2022-08-04",
+            "close": 10.25
+          },
+          {
+            "date": "2022-08-05",
+            "close": 10.18
+          },
+          {
+            "date": "2022-08-08",
+            "close": 10.41
+          },
+          {
+            "date": "2022-08-09",
+            "close": 10.16
+          },
+          {
+            "date": "2022-08-10",
+            "close": 10.57
+          },
+          {
+            "date": "2022-08-11",
+            "close": 11.11
+          },
+          {
+            "date": "2022-08-12",
+            "close": 11.62
+          },
+          {
+            "date": "2022-08-15",
+            "close": 12.24
+          },
+          {
+            "date": "2022-08-16",
+            "close": 12.61
+          },
+          {
+            "date": "2022-08-17",
+            "close": 12.09
+          },
+          {
+            "date": "2022-08-18",
+            "close": 12.56
+          },
+          {
+            "date": "2022-08-19",
+            "close": 11.56
+          },
+          {
+            "date": "2022-08-22",
+            "close": 11.01
+          },
+          {
+            "date": "2022-08-23",
+            "close": 10.6
+          },
+          {
+            "date": "2022-08-24",
+            "close": 10.86
+          },
+          {
+            "date": "2022-08-25",
+            "close": 11.21
+          },
+          {
+            "date": "2022-08-26",
+            "close": 10.67
+          },
+          {
+            "date": "2022-08-29",
+            "close": 10.27
+          },
+          {
+            "date": "2022-08-30",
+            "close": 10.01
+          },
+          {
+            "date": "2022-08-31",
+            "close": 10.88
+          },
+          {
+            "date": "2022-09-01",
+            "close": 11.64
+          },
+          {
+            "date": "2022-09-02",
+            "close": 11.22
+          },
+          {
+            "date": "2022-09-06",
+            "close": 10.77
+          },
+          {
+            "date": "2022-09-07",
+            "close": 11.46
+          },
+          {
+            "date": "2022-09-08",
+            "close": 12.53
+          },
+          {
+            "date": "2022-09-09",
+            "close": 12.65
+          },
+          {
+            "date": "2022-09-12",
+            "close": 12.65
+          },
+          {
+            "date": "2022-09-13",
+            "close": 11.77
+          },
+          {
+            "date": "2022-09-14",
+            "close": 11.52
+          },
+          {
+            "date": "2022-09-15",
+            "close": 11.9
+          },
+          {
+            "date": "2022-09-16",
+            "close": 11.3
+          },
+          {
+            "date": "2022-09-19",
+            "close": 11.35
+          },
+          {
+            "date": "2022-09-20",
+            "close": 11.12
+          },
+          {
+            "date": "2022-09-21",
+            "close": 10.85
+          },
+          {
+            "date": "2022-09-22",
+            "close": 10.46
+          },
+          {
+            "date": "2022-09-23",
+            "close": 10.32
+          },
+          {
+            "date": "2022-09-26",
+            "close": 10.18
+          },
+          {
+            "date": "2022-09-27",
+            "close": 10.45
+          },
+          {
+            "date": "2022-09-28",
+            "close": 10.76
+          },
+          {
+            "date": "2022-09-29",
+            "close": 10.19
+          },
+          {
+            "date": "2022-09-30",
+            "close": 9.82
+          },
+          {
+            "date": "2022-10-03",
+            "close": 9.98
+          },
+          {
+            "date": "2022-10-04",
+            "close": 10.82
+          },
+          {
+            "date": "2022-10-05",
+            "close": 11.2
+          },
+          {
+            "date": "2022-10-06",
+            "close": 11.35
+          },
+          {
+            "date": "2022-10-07",
+            "close": 10.66
+          },
+          {
+            "date": "2022-10-10",
+            "close": 10.41
+          },
+          {
+            "date": "2022-10-11",
+            "close": 10.31
+          },
+          {
+            "date": "2022-10-12",
+            "close": 10.51
+          },
+          {
+            "date": "2022-10-13",
+            "close": 10.58
+          },
+          {
+            "date": "2022-10-14",
+            "close": 9.99
+          },
+          {
+            "date": "2022-10-17",
+            "close": 10.59
+          },
+          {
+            "date": "2022-10-18",
+            "close": 10.6
+          },
+          {
+            "date": "2022-10-19",
+            "close": 10.86
+          },
+          {
+            "date": "2022-10-20",
+            "close": 10.79
+          },
+          {
+            "date": "2022-10-21",
+            "close": 7.76
+          },
+          {
+            "date": "2022-10-24",
+            "close": 8.31
+          },
+          {
+            "date": "2022-10-25",
+            "close": 9.6
+          },
+          {
+            "date": "2022-10-26",
+            "close": 9.58
+          },
+          {
+            "date": "2022-10-27",
+            "close": 9.56
+          },
+          {
+            "date": "2022-10-28",
+            "close": 10.08
+          },
+          {
+            "date": "2022-10-31",
+            "close": 9.91
+          },
+          {
+            "date": "2022-11-01",
+            "close": 10.25
+          },
+          {
+            "date": "2022-11-02",
+            "close": 9.54
+          },
+          {
+            "date": "2022-11-03",
+            "close": 9.16
+          },
+          {
+            "date": "2022-11-04",
+            "close": 9.14
+          },
+          {
+            "date": "2022-11-07",
+            "close": 10.01
+          },
+          {
+            "date": "2022-11-08",
+            "close": 10.28
+          },
+          {
+            "date": "2022-11-09",
+            "close": 9.56
+          },
+          {
+            "date": "2022-11-10",
+            "close": 10.73
+          },
+          {
+            "date": "2022-11-11",
+            "close": 11.58
+          },
+          {
+            "date": "2022-11-14",
+            "close": 11.29
+          },
+          {
+            "date": "2022-11-15",
+            "close": 11.78
+          },
+          {
+            "date": "2022-11-16",
+            "close": 11.07
+          },
+          {
+            "date": "2022-11-17",
+            "close": 10.92
+          },
+          {
+            "date": "2022-11-18",
+            "close": 10.52
+          },
+          {
+            "date": "2022-11-21",
+            "close": 9.96
+          },
+          {
+            "date": "2022-11-22",
+            "close": 9.91
+          },
+          {
+            "date": "2022-11-23",
+            "close": 10.32
+          },
+          {
+            "date": "2022-11-25",
+            "close": 10.18
+          },
+          {
+            "date": "2022-11-28",
+            "close": 9.84
+          },
+          {
+            "date": "2022-11-29",
+            "close": 9.82
+          },
+          {
+            "date": "2022-11-30",
+            "close": 10.31
+          },
+          {
+            "date": "2022-12-01",
+            "close": 10.87
+          },
+          {
+            "date": "2022-12-02",
+            "close": 10.5
+          },
+          {
+            "date": "2022-12-05",
+            "close": 10.1
+          },
+          {
+            "date": "2022-12-06",
+            "close": 9.42
+          },
+          {
+            "date": "2022-12-07",
+            "close": 9.3
+          },
+          {
+            "date": "2022-12-08",
+            "close": 9.4
+          },
+          {
+            "date": "2022-12-09",
+            "close": 9.45
+          },
+          {
+            "date": "2022-12-12",
+            "close": 9.46
+          },
+          {
+            "date": "2022-12-13",
+            "close": 9.41
+          },
+          {
+            "date": "2022-12-14",
+            "close": 9.54
+          },
+          {
+            "date": "2022-12-15",
+            "close": 8.76
+          },
+          {
+            "date": "2022-12-16",
+            "close": 8.47
+          },
+          {
+            "date": "2022-12-19",
+            "close": 8.19
+          },
+          {
+            "date": "2022-12-20",
+            "close": 8.21
+          },
+          {
+            "date": "2022-12-21",
+            "close": 8.64
+          },
+          {
+            "date": "2022-12-22",
+            "close": 8.68
+          },
+          {
+            "date": "2022-12-23",
+            "close": 8.58
+          },
+          {
+            "date": "2022-12-27",
+            "close": 8.56
+          },
+          {
+            "date": "2022-12-28",
+            "close": 8.55
+          },
+          {
+            "date": "2022-12-29",
+            "close": 8.81
+          },
+          {
+            "date": "2022-12-30",
+            "close": 8.95
+          },
+          {
+            "date": "2023-01-03",
+            "close": 8.85
+          },
+          {
+            "date": "2023-01-04",
+            "close": 9.3
+          },
+          {
+            "date": "2023-01-05",
+            "close": 9.14
+          },
+          {
+            "date": "2023-01-06",
+            "close": 9.22
+          },
+          {
+            "date": "2023-01-09",
+            "close": 9.2
+          },
+          {
+            "date": "2023-01-10",
+            "close": 9.42
+          },
+          {
+            "date": "2023-01-11",
+            "close": 9.66
+          },
+          {
+            "date": "2023-01-12",
+            "close": 9.64
+          },
+          {
+            "date": "2023-01-13",
+            "close": 9.8
+          },
+          {
+            "date": "2023-01-17",
+            "close": 9.67
+          },
+          {
+            "date": "2023-01-18",
+            "close": 9.41
+          },
+          {
+            "date": "2023-01-19",
+            "close": 9.62
+          },
+          {
+            "date": "2023-01-20",
+            "close": 9.99
+          },
+          {
+            "date": "2023-01-23",
+            "close": 10.2
+          },
+          {
+            "date": "2023-01-24",
+            "close": 10.26
+          },
+          {
+            "date": "2023-01-25",
+            "close": 9.67
+          },
+          {
+            "date": "2023-01-26",
+            "close": 10.19
+          },
+          {
+            "date": "2023-01-27",
+            "close": 10.91
+          },
+          {
+            "date": "2023-01-30",
+            "close": 11.09
+          },
+          {
+            "date": "2023-01-31",
+            "close": 11.56
+          },
+          {
+            "date": "2023-02-01",
+            "close": 10.37
+          },
+          {
+            "date": "2023-02-02",
+            "close": 11.4
+          },
+          {
+            "date": "2023-02-03",
+            "close": 11.0
+          },
+          {
+            "date": "2023-02-06",
+            "close": 12.07
+          },
+          {
+            "date": "2023-02-07",
+            "close": 12.21
+          },
+          {
+            "date": "2023-02-08",
+            "close": 11.56
+          },
+          {
+            "date": "2023-02-09",
+            "close": 10.98
+          },
+          {
+            "date": "2023-02-10",
+            "close": 10.65
+          },
+          {
+            "date": "2023-02-13",
+            "close": 10.71
+          },
+          {
+            "date": "2023-02-14",
+            "close": 10.85
+          },
+          {
+            "date": "2023-02-15",
+            "close": 11.26
+          },
+          {
+            "date": "2023-02-16",
+            "close": 10.73
+          },
+          {
+            "date": "2023-02-17",
+            "close": 10.36
+          },
+          {
+            "date": "2023-02-21",
+            "close": 9.81
+          },
+          {
+            "date": "2023-02-22",
+            "close": 9.9
+          },
+          {
+            "date": "2023-02-23",
+            "close": 10.1
+          },
+          {
+            "date": "2023-02-24",
+            "close": 9.81
+          },
+          {
+            "date": "2023-02-27",
+            "close": 9.88
+          },
+          {
+            "date": "2023-02-28",
+            "close": 10.15
+          },
+          {
+            "date": "2023-03-01",
+            "close": 10.14
+          },
+          {
+            "date": "2023-03-02",
+            "close": 10.1
+          },
+          {
+            "date": "2023-03-03",
+            "close": 10.65
+          },
+          {
+            "date": "2023-03-06",
+            "close": 11.66
+          },
+          {
+            "date": "2023-03-07",
+            "close": 11.72
+          },
+          {
+            "date": "2023-03-08",
+            "close": 11.05
+          },
+          {
+            "date": "2023-03-09",
+            "close": 10.66
+          },
+          {
+            "date": "2023-03-10",
+            "close": 10.34
+          },
+          {
+            "date": "2023-03-13",
+            "close": 10.23
+          },
+          {
+            "date": "2023-03-14",
+            "close": 10.37
+          },
+          {
+            "date": "2023-03-15",
+            "close": 10.34
+          },
+          {
+            "date": "2023-03-16",
+            "close": 11.09
+          },
+          {
+            "date": "2023-03-17",
+            "close": 10.7
+          }
+        ]
+      },
+      "total_impact_assessment": "Erased $16B in market value in 24 hours, wiped out $100B+ across advertising peers, forced abandonment of drone and Web3 projects.",
+      "sources": [
+        {
+          "title": "Snap Plummets 43% After Warning It Will Miss Earnings Targets",
+          "url": "https://www.cnbc.com/2022/05/24/snap-stock-plummets-after-earnings-warning.html"
+        },
+        {
+          "title": "SEC 8-K Snap Intra-Quarter Guidance Update",
+          "url": "https://www.sec.gov/ix?doc=/Archives/edgar/data/1564408/000156440822000049/snap-20220523.htm"
+        }
+      ]
+    },
+    {
+      "company_name": "NVIDIA Corporation",
+      "stock_ticker": "NVDA",
+      "industry": "Semiconductors & GPU Computing",
+      "incident_title": "Gaming Demand Collapse & $1.3B Inventory Write-Down",
+      "event_timeframe": "August - October 2022",
+      "summary": "On August 8, 2022, Nvidia issued a preliminary Q2 revenue warning of $6.70 billion versus $8.10 billion guidance due to a sudden demand cliff in gaming GPUs as cryptocurrency mining crashed. When official earnings were released, Nvidia reported a 33% sequential decline in gaming revenue and booked $1.32 billion in inventory write-downs, driving the stock down over 55% from its highs before the generative AI boom began.",
+      "similarity_rationale": "Semiconductor demand cyclicality shock: sudden end-market collapse leading to severe inventory write-offs before a structural secular breakout.",
+      "key_parallels": [
+        "Preliminary pre-announcement of severe revenue shortfall.",
+        "Massive inventory write-downs and margin compression.",
+        "Cyclical bottoming process accompanied by widespread Wall Street downgrades.",
+        "Subsequent historic pivot into enterprise generative AI (ChatGPT launched Nov 2022)."
+      ],
+      "key_differences": [
+        "Nvidia had the nascent AI datacenter architecture ready to take off just as gaming collapsed.",
+        "Did not require mass layoffs to restore profitability."
+      ],
+      "timeline": [
+        {
+          "date": "2022-08-05",
+          "phase": "Precursor Baseline",
+          "event": "Nvidia trades at $189.89 with investors anticipating modest gaming moderation.",
+          "impact": "Baseline price before warning.",
+          "stock_price": 18.92,
+          "stock_change_from_baseline_pct": 0.03,
+          "trading_volume": 386068000
+        },
+        {
+          "date": "2022-08-08",
+          "phase": "Trigger / Preliminary Revenue Warning",
+          "event": "Nvidia issues pre-announcement slashing Q2 revenue guidance by $1.4B; gaming down 33% sequentially.",
+          "impact": "NVDA stock drops -6.3% as crypto mining GPU glut impacts channels.",
+          "stock_price": 17.72,
+          "stock_change_from_baseline_pct": -6.32,
+          "trading_volume": 981859000
+        },
+        {
+          "date": "2022-08-24",
+          "phase": "Official Earnings & Write-Downs",
+          "event": "Official Q2 report confirms $1.32B inventory charge; gross margin collapses from 65% to 43.5%.",
+          "impact": "Stock slides another -4.6% to $172 as analysts lower 2023 EPS estimates.",
+          "stock_price": 17.16,
+          "stock_change_from_baseline_pct": -9.28,
+          "trading_volume": 522661000
+        },
+        {
+          "date": "2022-10-14",
+          "phase": "Cyclical Trough",
+          "event": "US export controls on high-end chips to China announced; NVDA hits cyclical bottom of $112.27.",
+          "impact": "Maximum pessimism priced in; stock down 66% from prior peak.",
+          "stock_price": 11.19,
+          "stock_change_from_baseline_pct": -40.84,
+          "trading_volume": 713432000
+        },
+        {
+          "date": "2022-11-30",
+          "phase": "Generative AI Catalyst",
+          "event": "OpenAI releases ChatGPT to the public, igniting unprecedented demand for Nvidia H100 datacenter GPUs.",
+          "impact": "The greatest tech rally in history commences; NVDA begins ascent to $3+ trillion valuation.",
+          "stock_price": 16.87,
+          "stock_change_from_baseline_pct": -10.81,
+          "trading_volume": 565298000
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "NVDA",
+        "baseline_date": "2022-08-05",
+        "baseline_price": 18.92,
+        "trough_date": "2022-10-14",
+        "trough_price": 11.19,
+        "max_drawdown_pct": -40.86,
+        "daily_series": [
+          {
+            "date": "2022-07-11",
+            "close": 15.09
+          },
+          {
+            "date": "2022-07-12",
+            "close": 15.02
+          },
+          {
+            "date": "2022-07-13",
+            "close": 15.11
+          },
+          {
+            "date": "2022-07-14",
+            "close": 15.31
+          },
+          {
+            "date": "2022-07-15",
+            "close": 15.7
+          },
+          {
+            "date": "2022-07-18",
+            "close": 16.04
+          },
+          {
+            "date": "2022-07-19",
+            "close": 16.93
+          },
+          {
+            "date": "2022-07-20",
+            "close": 17.74
+          },
+          {
+            "date": "2022-07-21",
+            "close": 17.98
+          },
+          {
+            "date": "2022-07-22",
+            "close": 17.25
+          },
+          {
+            "date": "2022-07-25",
+            "close": 16.96
+          },
+          {
+            "date": "2022-07-26",
+            "close": 16.47
+          },
+          {
+            "date": "2022-07-27",
+            "close": 17.72
+          },
+          {
+            "date": "2022-07-28",
+            "close": 17.91
+          },
+          {
+            "date": "2022-07-29",
+            "close": 18.09
+          },
+          {
+            "date": "2022-08-01",
+            "close": 18.37
+          },
+          {
+            "date": "2022-08-02",
+            "close": 18.45
+          },
+          {
+            "date": "2022-08-03",
+            "close": 18.82
+          },
+          {
+            "date": "2022-08-04",
+            "close": 19.14
+          },
+          {
+            "date": "2022-08-05",
+            "close": 18.92
+          },
+          {
+            "date": "2022-08-08",
+            "close": 17.72
+          },
+          {
+            "date": "2022-08-09",
+            "close": 17.02
+          },
+          {
+            "date": "2022-08-10",
+            "close": 18.03
+          },
+          {
+            "date": "2022-08-11",
+            "close": 17.87
+          },
+          {
+            "date": "2022-08-12",
+            "close": 18.64
+          },
+          {
+            "date": "2022-08-15",
+            "close": 18.96
+          },
+          {
+            "date": "2022-08-16",
+            "close": 18.81
+          },
+          {
+            "date": "2022-08-17",
+            "close": 18.26
+          },
+          {
+            "date": "2022-08-18",
+            "close": 18.7
+          },
+          {
+            "date": "2022-08-19",
+            "close": 17.78
+          },
+          {
+            "date": "2022-08-22",
+            "close": 16.97
+          },
+          {
+            "date": "2022-08-23",
+            "close": 17.11
+          },
+          {
+            "date": "2022-08-24",
+            "close": 17.16
+          },
+          {
+            "date": "2022-08-25",
+            "close": 17.84
+          },
+          {
+            "date": "2022-08-26",
+            "close": 16.2
+          },
+          {
+            "date": "2022-08-29",
+            "close": 15.74
+          },
+          {
+            "date": "2022-08-30",
+            "close": 15.41
+          },
+          {
+            "date": "2022-08-31",
+            "close": 15.04
+          },
+          {
+            "date": "2022-09-01",
+            "close": 13.88
+          },
+          {
+            "date": "2022-09-02",
+            "close": 13.59
+          },
+          {
+            "date": "2022-09-06",
+            "close": 13.41
+          },
+          {
+            "date": "2022-09-07",
+            "close": 13.66
+          },
+          {
+            "date": "2022-09-08",
+            "close": 13.94
+          },
+          {
+            "date": "2022-09-09",
+            "close": 14.34
+          },
+          {
+            "date": "2022-09-12",
+            "close": 14.45
+          },
+          {
+            "date": "2022-09-13",
+            "close": 13.08
+          },
+          {
+            "date": "2022-09-14",
+            "close": 13.08
+          },
+          {
+            "date": "2022-09-15",
+            "close": 12.88
+          },
+          {
+            "date": "2022-09-16",
+            "close": 13.15
+          },
+          {
+            "date": "2022-09-19",
+            "close": 13.33
+          },
+          {
+            "date": "2022-09-20",
+            "close": 13.13
+          },
+          {
+            "date": "2022-09-21",
+            "close": 13.21
+          },
+          {
+            "date": "2022-09-22",
+            "close": 12.52
+          },
+          {
+            "date": "2022-09-23",
+            "close": 12.47
+          },
+          {
+            "date": "2022-09-26",
+            "close": 12.18
+          },
+          {
+            "date": "2022-09-27",
+            "close": 12.37
+          },
+          {
+            "date": "2022-09-28",
+            "close": 12.69
+          },
+          {
+            "date": "2022-09-29",
+            "close": 12.18
+          },
+          {
+            "date": "2022-09-30",
+            "close": 12.1
+          },
+          {
+            "date": "2022-10-03",
+            "close": 12.47
+          },
+          {
+            "date": "2022-10-04",
+            "close": 13.12
+          },
+          {
+            "date": "2022-10-05",
+            "close": 13.16
+          },
+          {
+            "date": "2022-10-06",
+            "close": 13.08
+          },
+          {
+            "date": "2022-10-07",
+            "close": 12.03
+          },
+          {
+            "date": "2022-10-10",
+            "close": 11.63
+          },
+          {
+            "date": "2022-10-11",
+            "close": 11.54
+          },
+          {
+            "date": "2022-10-12",
+            "close": 11.46
+          },
+          {
+            "date": "2022-10-13",
+            "close": 11.92
+          },
+          {
+            "date": "2022-10-14",
+            "close": 11.19
+          },
+          {
+            "date": "2022-10-17",
+            "close": 11.85
+          },
+          {
+            "date": "2022-10-18",
+            "close": 11.92
+          },
+          {
+            "date": "2022-10-19",
+            "close": 12.01
+          },
+          {
+            "date": "2022-10-20",
+            "close": 12.15
+          },
+          {
+            "date": "2022-10-21",
+            "close": 12.42
+          },
+          {
+            "date": "2022-10-24",
+            "close": 12.55
+          },
+          {
+            "date": "2022-10-25",
+            "close": 13.21
+          },
+          {
+            "date": "2022-10-26",
+            "close": 12.85
+          },
+          {
+            "date": "2022-10-27",
+            "close": 13.13
+          },
+          {
+            "date": "2022-10-28",
+            "close": 13.78
+          },
+          {
+            "date": "2022-10-31",
+            "close": 13.45
+          },
+          {
+            "date": "2022-11-01",
+            "close": 13.49
+          },
+          {
+            "date": "2022-11-02",
+            "close": 13.17
+          },
+          {
+            "date": "2022-11-03",
+            "close": 13.37
+          },
+          {
+            "date": "2022-11-04",
+            "close": 14.11
+          },
+          {
+            "date": "2022-11-07",
+            "close": 14.25
+          },
+          {
+            "date": "2022-11-08",
+            "close": 14.55
+          },
+          {
+            "date": "2022-11-09",
+            "close": 13.73
+          },
+          {
+            "date": "2022-11-10",
+            "close": 15.69
+          },
+          {
+            "date": "2022-11-11",
+            "close": 16.27
+          },
+          {
+            "date": "2022-11-14",
+            "close": 16.24
+          },
+          {
+            "date": "2022-11-15",
+            "close": 16.61
+          },
+          {
+            "date": "2022-11-16",
+            "close": 15.85
+          },
+          {
+            "date": "2022-11-17",
+            "close": 15.62
+          },
+          {
+            "date": "2022-11-18",
+            "close": 15.35
+          },
+          {
+            "date": "2022-11-21",
+            "close": 15.26
+          },
+          {
+            "date": "2022-11-22",
+            "close": 15.98
+          },
+          {
+            "date": "2022-11-23",
+            "close": 16.46
+          },
+          {
+            "date": "2022-11-25",
+            "close": 16.21
+          },
+          {
+            "date": "2022-11-28",
+            "close": 15.77
+          },
+          {
+            "date": "2022-11-29",
+            "close": 15.58
+          },
+          {
+            "date": "2022-11-30",
+            "close": 16.87
+          },
+          {
+            "date": "2022-12-01",
+            "close": 17.08
+          },
+          {
+            "date": "2022-12-02",
+            "close": 16.82
+          },
+          {
+            "date": "2022-12-05",
+            "close": 16.55
+          },
+          {
+            "date": "2022-12-06",
+            "close": 15.93
+          },
+          {
+            "date": "2022-12-07",
+            "close": 16.07
+          },
+          {
+            "date": "2022-12-08",
+            "close": 17.11
+          },
+          {
+            "date": "2022-12-09",
+            "close": 16.94
+          },
+          {
+            "date": "2022-12-12",
+            "close": 17.48
+          },
+          {
+            "date": "2022-12-13",
+            "close": 18.01
+          },
+          {
+            "date": "2022-12-14",
+            "close": 17.62
+          },
+          {
+            "date": "2022-12-15",
+            "close": 16.9
+          },
+          {
+            "date": "2022-12-16",
+            "close": 16.52
+          },
+          {
+            "date": "2022-12-19",
+            "close": 16.2
+          },
+          {
+            "date": "2022-12-20",
+            "close": 16.03
+          },
+          {
+            "date": "2022-12-21",
+            "close": 16.45
+          },
+          {
+            "date": "2022-12-22",
+            "close": 15.29
+          },
+          {
+            "date": "2022-12-23",
+            "close": 15.16
+          },
+          {
+            "date": "2022-12-27",
+            "close": 14.07
+          },
+          {
+            "date": "2022-12-28",
+            "close": 13.99
+          },
+          {
+            "date": "2022-12-29",
+            "close": 14.55
+          },
+          {
+            "date": "2022-12-30",
+            "close": 14.57
+          },
+          {
+            "date": "2023-01-03",
+            "close": 14.27
+          },
+          {
+            "date": "2023-01-04",
+            "close": 14.7
+          },
+          {
+            "date": "2023-01-05",
+            "close": 14.22
+          },
+          {
+            "date": "2023-01-06",
+            "close": 14.81
+          },
+          {
+            "date": "2023-01-09",
+            "close": 15.58
+          },
+          {
+            "date": "2023-01-10",
+            "close": 15.86
+          },
+          {
+            "date": "2023-01-11",
+            "close": 15.95
+          },
+          {
+            "date": "2023-01-12",
+            "close": 16.46
+          },
+          {
+            "date": "2023-01-13",
+            "close": 16.84
+          }
+        ]
+      },
+      "total_impact_assessment": "Pushed stock to cyclical trough of $112, followed by a historic 1,000%+ surge over the next 24 months to become the world's most valuable company.",
+      "sources": [
+        {
+          "title": "Nvidia Reports Preliminary Second Quarter Fiscal 2023 Revenue",
+          "url": "https://nvidianews.nvidia.com/news/nvidia-reports-preliminary-second-quarter-fiscal-2023-financial-results"
+        }
+      ]
+    },
+    {
+      "company_name": "Tesla, Inc.",
+      "stock_ticker": "TSLA",
+      "industry": "Electric Vehicles & Clean Energy",
+      "incident_title": "Growth Warning, Margin Squeeze & 10% Global Workforce Cut",
+      "event_timeframe": "January - April 2024",
+      "summary": "In January 2024, Tesla warned that its vehicle volume growth rate in 2024 'may be notably lower' as it worked between two major growth waves. Over the subsequent quarter, aggressive price cuts in China compressed automotive gross margins, culminating in an April 15 internal memo from Elon Musk cutting more than 10% of Tesla's global workforce (>14,000 employees) and the departure of key battery executive Drew Baglino.",
+      "similarity_rationale": "High-growth tech darling facing demand deceleration, margin erosion, executive departures, and aggressive restructuring.",
+      "key_parallels": [
+        "Explicit forward guidance downgrade warning of slower delivery growth.",
+        "Gross margin compression from price-cutting wars.",
+        "Mass layoffs cutting 10%+ of global headcount.",
+        "Abrupt departure of core senior engineering executives."
+      ],
+      "key_differences": [
+        "Turnaround narrative quickly shifted to autonomous robotaxis and humanoid robotics rather than traditional manufacturing metrics."
+      ],
+      "timeline": [
+        {
+          "date": "2024-01-24",
+          "phase": "Precursor / Earnings Release",
+          "event": "Tesla reports Q4 earnings: operating margin drops to 8.2%; warns 2024 volume growth may be notably lower.",
+          "impact": "Investors shocked by absence of specific annual vehicle delivery guidance.",
+          "stock_price": 207.83,
+          "stock_change_from_baseline_pct": -0.0,
+          "trading_volume": 123369900
+        },
+        {
+          "date": "2024-01-25",
+          "phase": "Trigger / The -12% Plunge",
+          "event": "TSLA shares plunge -12.1% to $182.63, losing $80 billion in market value in one session.",
+          "impact": "Tech mega-cap sell-off commences; Wall Street slashes price targets.",
+          "stock_price": 182.63,
+          "stock_change_from_baseline_pct": -12.13,
+          "trading_volume": 198076800
+        },
+        {
+          "date": "2024-04-15",
+          "phase": "Mass Headcount Layoff Memo",
+          "event": "Musk sends company-wide memo cutting >10% of staff (>14,000 workers); VP Drew Baglino resigns.",
+          "impact": "TSLA drops -5.6% to $161.48 as market worries about product roadmap delays.",
+          "stock_price": 161.48,
+          "stock_change_from_baseline_pct": -22.3,
+          "trading_volume": 100245300
+        },
+        {
+          "date": "2024-04-22",
+          "phase": "Cyclical Low",
+          "event": "Tesla cuts prices across global lineup; stock touches multi-year low of $142.05.",
+          "impact": "Drawdown reaches -44% from December highs; sentiment at extreme pessimism.",
+          "stock_price": 142.05,
+          "stock_change_from_baseline_pct": -31.65,
+          "trading_volume": 107097600
+        },
+        {
+          "date": "2024-04-23",
+          "phase": "Pivot to Autonomous AI",
+          "event": "Tesla reports Q1 earnings: misses numbers but announces accelerated timeline for affordable models and Robotaxi.",
+          "impact": "Stock rallies +12% after hours, initiating powerful recovery back above $250.",
+          "stock_price": 144.68,
+          "stock_change_from_baseline_pct": -30.39,
+          "trading_volume": 124545100
+        }
+      ],
+      "stock_metrics": {
+        "ticker": "TSLA",
+        "baseline_date": "2024-01-24",
+        "baseline_price": 207.83,
+        "trough_date": "2024-04-22",
+        "trough_price": 142.05,
+        "max_drawdown_pct": -31.65,
+        "daily_series": [
+          {
+            "date": "2024-01-02",
+            "close": 248.42
+          },
+          {
+            "date": "2024-01-03",
+            "close": 238.45
+          },
+          {
+            "date": "2024-01-04",
+            "close": 237.93
+          },
+          {
+            "date": "2024-01-05",
+            "close": 237.49
+          },
+          {
+            "date": "2024-01-08",
+            "close": 240.45
+          },
+          {
+            "date": "2024-01-09",
+            "close": 234.96
+          },
+          {
+            "date": "2024-01-10",
+            "close": 233.94
+          },
+          {
+            "date": "2024-01-11",
+            "close": 227.22
+          },
+          {
+            "date": "2024-01-12",
+            "close": 218.89
+          },
+          {
+            "date": "2024-01-16",
+            "close": 219.91
+          },
+          {
+            "date": "2024-01-17",
+            "close": 215.55
+          },
+          {
+            "date": "2024-01-18",
+            "close": 211.88
+          },
+          {
+            "date": "2024-01-19",
+            "close": 212.19
+          },
+          {
+            "date": "2024-01-22",
+            "close": 208.8
+          },
+          {
+            "date": "2024-01-23",
+            "close": 209.14
+          },
+          {
+            "date": "2024-01-24",
+            "close": 207.83
+          },
+          {
+            "date": "2024-01-25",
+            "close": 182.63
+          },
+          {
+            "date": "2024-01-26",
+            "close": 183.25
+          },
+          {
+            "date": "2024-01-29",
+            "close": 190.93
+          },
+          {
+            "date": "2024-01-30",
+            "close": 191.59
+          },
+          {
+            "date": "2024-01-31",
+            "close": 187.29
+          },
+          {
+            "date": "2024-02-01",
+            "close": 188.86
+          },
+          {
+            "date": "2024-02-02",
+            "close": 187.91
+          },
+          {
+            "date": "2024-02-05",
+            "close": 181.06
+          },
+          {
+            "date": "2024-02-06",
+            "close": 185.1
+          },
+          {
+            "date": "2024-02-07",
+            "close": 187.58
+          },
+          {
+            "date": "2024-02-08",
+            "close": 189.56
+          },
+          {
+            "date": "2024-02-09",
+            "close": 193.57
+          },
+          {
+            "date": "2024-02-12",
+            "close": 188.13
+          },
+          {
+            "date": "2024-02-13",
+            "close": 184.02
+          },
+          {
+            "date": "2024-02-14",
+            "close": 188.71
+          },
+          {
+            "date": "2024-02-15",
+            "close": 200.45
+          },
+          {
+            "date": "2024-02-16",
+            "close": 199.95
+          },
+          {
+            "date": "2024-02-20",
+            "close": 193.76
+          },
+          {
+            "date": "2024-02-21",
+            "close": 194.77
+          },
+          {
+            "date": "2024-02-22",
+            "close": 197.41
+          },
+          {
+            "date": "2024-02-23",
+            "close": 191.97
+          },
+          {
+            "date": "2024-02-26",
+            "close": 199.4
+          },
+          {
+            "date": "2024-02-27",
+            "close": 199.73
+          },
+          {
+            "date": "2024-02-28",
+            "close": 202.04
+          },
+          {
+            "date": "2024-02-29",
+            "close": 201.88
+          },
+          {
+            "date": "2024-03-01",
+            "close": 202.64
+          },
+          {
+            "date": "2024-03-04",
+            "close": 188.14
+          },
+          {
+            "date": "2024-03-05",
+            "close": 180.74
+          },
+          {
+            "date": "2024-03-06",
+            "close": 176.54
+          },
+          {
+            "date": "2024-03-07",
+            "close": 178.65
+          },
+          {
+            "date": "2024-03-08",
+            "close": 175.34
+          },
+          {
+            "date": "2024-03-11",
+            "close": 177.77
+          },
+          {
+            "date": "2024-03-12",
+            "close": 177.54
+          },
+          {
+            "date": "2024-03-13",
+            "close": 169.48
+          },
+          {
+            "date": "2024-03-14",
+            "close": 162.5
+          },
+          {
+            "date": "2024-03-15",
+            "close": 163.57
+          },
+          {
+            "date": "2024-03-18",
+            "close": 173.8
+          },
+          {
+            "date": "2024-03-19",
+            "close": 171.32
+          },
+          {
+            "date": "2024-03-20",
+            "close": 175.66
+          },
+          {
+            "date": "2024-03-21",
+            "close": 172.82
+          },
+          {
+            "date": "2024-03-22",
+            "close": 170.83
+          },
+          {
+            "date": "2024-03-25",
+            "close": 172.63
+          },
+          {
+            "date": "2024-03-26",
+            "close": 177.67
+          },
+          {
+            "date": "2024-03-27",
+            "close": 179.83
+          },
+          {
+            "date": "2024-03-28",
+            "close": 175.79
+          },
+          {
+            "date": "2024-04-01",
+            "close": 175.22
+          },
+          {
+            "date": "2024-04-02",
+            "close": 166.63
+          },
+          {
+            "date": "2024-04-03",
+            "close": 168.38
+          },
+          {
+            "date": "2024-04-04",
+            "close": 171.11
+          },
+          {
+            "date": "2024-04-05",
+            "close": 164.9
+          },
+          {
+            "date": "2024-04-08",
+            "close": 172.98
+          },
+          {
+            "date": "2024-04-09",
+            "close": 176.88
+          },
+          {
+            "date": "2024-04-10",
+            "close": 171.76
+          },
+          {
+            "date": "2024-04-11",
+            "close": 174.6
+          },
+          {
+            "date": "2024-04-12",
+            "close": 171.05
+          },
+          {
+            "date": "2024-04-15",
+            "close": 161.48
+          },
+          {
+            "date": "2024-04-16",
+            "close": 157.11
+          },
+          {
+            "date": "2024-04-17",
+            "close": 155.45
+          },
+          {
+            "date": "2024-04-18",
+            "close": 149.93
+          },
+          {
+            "date": "2024-04-19",
+            "close": 147.05
+          },
+          {
+            "date": "2024-04-22",
+            "close": 142.05
+          },
+          {
+            "date": "2024-04-23",
+            "close": 144.68
+          },
+          {
+            "date": "2024-04-24",
+            "close": 162.13
+          },
+          {
+            "date": "2024-04-25",
+            "close": 170.18
+          },
+          {
+            "date": "2024-04-26",
+            "close": 168.29
+          },
+          {
+            "date": "2024-04-29",
+            "close": 194.05
+          },
+          {
+            "date": "2024-04-30",
+            "close": 183.28
+          },
+          {
+            "date": "2024-05-01",
+            "close": 179.99
+          },
+          {
+            "date": "2024-05-02",
+            "close": 180.01
+          },
+          {
+            "date": "2024-05-03",
+            "close": 181.19
+          },
+          {
+            "date": "2024-05-06",
+            "close": 184.76
+          },
+          {
+            "date": "2024-05-07",
+            "close": 177.81
+          },
+          {
+            "date": "2024-05-08",
+            "close": 174.72
+          },
+          {
+            "date": "2024-05-09",
+            "close": 171.97
+          },
+          {
+            "date": "2024-05-10",
+            "close": 168.47
+          },
+          {
+            "date": "2024-05-13",
+            "close": 171.89
+          },
+          {
+            "date": "2024-05-14",
+            "close": 177.55
+          },
+          {
+            "date": "2024-05-15",
+            "close": 173.99
+          },
+          {
+            "date": "2024-05-16",
+            "close": 174.84
+          },
+          {
+            "date": "2024-05-17",
+            "close": 177.46
+          },
+          {
+            "date": "2024-05-20",
+            "close": 174.95
+          },
+          {
+            "date": "2024-05-21",
+            "close": 186.6
+          },
+          {
+            "date": "2024-05-22",
+            "close": 180.11
+          },
+          {
+            "date": "2024-05-23",
+            "close": 173.74
+          },
+          {
+            "date": "2024-05-24",
+            "close": 179.24
+          },
+          {
+            "date": "2024-05-28",
+            "close": 176.75
+          },
+          {
+            "date": "2024-05-29",
+            "close": 176.19
+          },
+          {
+            "date": "2024-05-30",
+            "close": 178.79
+          },
+          {
+            "date": "2024-05-31",
+            "close": 178.08
+          },
+          {
+            "date": "2024-06-03",
+            "close": 176.29
+          },
+          {
+            "date": "2024-06-04",
+            "close": 174.77
+          },
+          {
+            "date": "2024-06-05",
+            "close": 175.0
+          },
+          {
+            "date": "2024-06-06",
+            "close": 177.94
+          }
+        ]
+      },
+      "total_impact_assessment": "Stock drawdown of over 40% from 2023 highs, elimination of 14,000 jobs, followed by an autonomous AI-driven multiple expansion.",
+      "sources": [
+        {
+          "title": "Tesla Shares Plunge 12% After Earnings Warning of Slower Growth",
+          "url": "https://www.cnbc.com/2024/01/25/tesla-tsla-earnings-q4-2023.html"
+        },
+        {
+          "title": "Tesla to Lay Off More Than 10% of Global Workforce",
+          "url": "https://www.reuters.com/business/autos-transportation/tesla-lay-off-more-than-10-its-workforce-electrek-reports-2024-04-15/"
+        }
+      ]
+    }
+  ]
+}
